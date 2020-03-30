@@ -1,1 +1,2 @@
-# 2020-03-otus-java-zhegalov
+# 2020-03-otus-java
+Жегалов Андрей
