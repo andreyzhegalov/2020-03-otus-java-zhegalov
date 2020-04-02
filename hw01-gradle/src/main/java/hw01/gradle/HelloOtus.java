@@ -1,8 +1,15 @@
 package hw01.gradle;
 
-class HelloOtus{
+import com.google.common.math.IntMath;
 
-    boolean someMethod(){
-        return true;
+class HelloOtus{
+    private int value;
+
+    public HelloOtus(int value) {
+        this.value = value;
+    }
+
+    int getFactorial(){
+        return IntMath.factorial(value);
     }
 }
