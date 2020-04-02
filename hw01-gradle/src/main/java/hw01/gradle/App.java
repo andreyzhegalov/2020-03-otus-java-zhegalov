@@ -9,6 +9,13 @@ package hw01.gradle;
  */
 public class App {
     public static void main(String... args) {
-        System.out.println("This message from main");
+        if (args.length != 1) {
+            System.out.println("Should be one input argument");
+            return;
+        }
+
+        int value= Integer.valueOf(args[0]);
+        HelloOtus helloOtus= new HelloOtus(value);
+        System.out.println(String.format("Factorial %d equals %d", value, helloOtus.getFactorial()));
     }
 }
