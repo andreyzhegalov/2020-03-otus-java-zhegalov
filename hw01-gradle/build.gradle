@@ -10,6 +10,7 @@ targetCompatibility = JavaVersion.VERSION_13
 dependencies {
     // This dependency is used by the application.
     implementation 'com.google.guava:guava'
+    testImplementation 'junit:junit'
 }
 
 shadowJar {
