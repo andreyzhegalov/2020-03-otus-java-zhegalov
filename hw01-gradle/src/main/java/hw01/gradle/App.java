@@ -14,7 +14,7 @@ public class App {
             return;
         }
 
-        int value= Integer.valueOf(args[0]);
+        int value= Integer.parseInt(args[0]);
         HelloOtus helloOtus= new HelloOtus(value);
         System.out.println(String.format("Factorial %d equals %d", value, helloOtus.getFactorial()));
     }
