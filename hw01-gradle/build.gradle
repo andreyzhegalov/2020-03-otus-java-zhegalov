@@ -10,7 +10,12 @@ targetCompatibility = JavaVersion.VERSION_13
 dependencies {
     // This dependency is used by the application.
     implementation 'com.google.guava:guava'
-    testImplementation 'junit:junit'
+
+    // Use JUnit Jupiter API for testing.
+    testImplementation 'org.junit.jupiter:junit-jupiter-api'
+
+    // Use JUnit Jupiter Engine for testing.
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
 }
 
 shadowJar {
@@ -23,3 +28,8 @@ shadowJar {
 }
 
 tasks.build.dependsOn tasks.shadowJar
+
+test {
+    // Use junit platform for unit tests
+    useJUnitPlatform()
+}
