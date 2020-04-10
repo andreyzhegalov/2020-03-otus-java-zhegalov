@@ -18,6 +18,8 @@ idea {
 
 allprojects {
 
+    group "hw.zhegalov"
+
     repositories {
         mavenCentral()
     }
