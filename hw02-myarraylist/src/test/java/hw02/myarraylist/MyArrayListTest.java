@@ -1,18 +1,23 @@
 package hw02.myarraylist;
 
-import org.junit.jupiter.api.Test;
-
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class MyArrayListTest {
+//	@Test
+//	public void testCollectionsAddAllForOneElement() {
+//		List<String> myArray = new MyArrayList<>();
+//		boolean result = Collections.addAll(myArray, "first");
+//	}
+//
 	@Test
 	public void testSize() {
-		Assertions.assertThrows(UnsupportedOperationException.class, () -> {
-			new MyArrayList<Object>().size();
-		});
+		MyArrayList<String> array = new MyArrayList<>();
+		Assertions.assertEquals(0, array.size());
 	}
 
 	@Test
@@ -52,9 +57,11 @@ public class MyArrayListTest {
 
 	@Test
 	public void testAdd() {
-		Assertions.assertThrows(UnsupportedOperationException.class, () -> {
-			new MyArrayList<Object>().add(new Object());
-		});
+		MyArrayList<String> array = new MyArrayList<>(1);
+		Assertions.assertTrue(array.add("First"));
+		Assertions.assertEquals(1, array.size());
+		Assertions.assertTrue(array.add("Second"));
+		Assertions.assertEquals(2, array.size());
 	}
 
 	@Test
@@ -129,15 +136,18 @@ public class MyArrayListTest {
 
 	@Test
 	public void testIdexOf() {
-		Assertions.assertThrows(UnsupportedOperationException.class, () -> {
-			new MyArrayList<Object>().indexOf(new Object());
-		});
+		MyArrayList<String> array = new MyArrayList<>();
+		array.add("1");
+		array.add("2");
+		Assertions.assertEquals( 0, array.indexOf("1"));
+		Assertions.assertEquals( 1, array.indexOf("2"));
+		Assertions.assertEquals( -1, array.indexOf("3"));
 	}
 
 	@Test
 	public void testLastIndexOf() {
 		Assertions.assertThrows(UnsupportedOperationException.class, () -> {
-			new MyArrayList<Object>().indexOf(new Object());
+			new MyArrayList<Object>().lastIndexOf(new Object());
 		});
 	}
 
