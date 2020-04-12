@@ -36,7 +36,7 @@ class MyArrayList<T>  implements List<T>{
 
 	@Override
 	public boolean contains(Object o) {
-		throw new UnsupportedOperationException();
+		return indexOf(o) >= 0;
 	}
 
 	@Override

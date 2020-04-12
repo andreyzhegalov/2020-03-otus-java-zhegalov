@@ -29,9 +29,10 @@ public class MyArrayListTest {
 
 	@Test
 	public void testContains() {
-		Assertions.assertThrows(UnsupportedOperationException.class, () -> {
-			new MyArrayList<Object>().contains(null);
-		});
+		MyArrayList<String> array = new MyArrayList<>();
+		array.add("1");
+		Assertions.assertTrue(array.contains("1"));
+		Assertions.assertFalse(array.contains("2"));
 	}
 
 	@Test
@@ -58,9 +59,9 @@ public class MyArrayListTest {
 	@Test
 	public void testAdd() {
 		MyArrayList<String> array = new MyArrayList<>(1);
-		Assertions.assertTrue(array.add("First"));
+		Assertions.assertTrue(array.add("1"));
 		Assertions.assertEquals(1, array.size());
-		Assertions.assertTrue(array.add("Second"));
+		Assertions.assertTrue(array.add("2"));
 		Assertions.assertEquals(2, array.size());
 	}
 
