@@ -8,12 +8,19 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 public class MyArrayListTest {
-//	@Test
-//	public void testCollectionsAddAllForOneElement() {
-//		List<String> myArray = new MyArrayList<>();
-//		boolean result = Collections.addAll(myArray, "first");
-//	}
-//
+	@Test
+	public void testCollectionsAddAll() {
+		List<String> myArray = new MyArrayList<>();
+		Assertions.assertTrue(Collections.addAll(myArray, "first"));
+		Assertions.assertTrue(Collections.addAll(myArray, "first", "second"));
+	}
+
+	@Test
+	public void testCollectionsAddAllForOtherCollection() {
+		List<String> myArray = new MyArrayList<>();
+		Assertions.assertTrue(Collections.addAll(myArray, "first"));
+	}
+
 	@Test
 	public void testSize() {
 		MyArrayList<String> array = new MyArrayList<>();
