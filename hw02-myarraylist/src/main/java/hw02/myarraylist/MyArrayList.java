@@ -20,6 +20,8 @@ class MyArrayList<T>  implements List<T>{
 	}
 
 	public MyArrayList(int arraySize) {
+		if (arraySize > MAX_ARRAY_LENGTH)
+			throw new RuntimeException( String.format("Array size must be smaller %d", MAX_ARRAY_LENGTH));
 		innerStorage = new Object[arraySize];
 		this.arraySize = arraySize;
 	}
@@ -57,7 +59,7 @@ class MyArrayList<T>  implements List<T>{
 	private boolean increaseCapacity()
 	{
 		int newArraySize = arraySize << 1;
-		if (newArraySize < 0 ) {
+		if (newArraySize < 0 && newArraySize > MAX_ARRAY_LENGTH) {
 			return false;
 		}
 		innerStorage = Arrays.copyOf(innerStorage, newArraySize);

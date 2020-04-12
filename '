@@ -8,24 +8,17 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 public class MyArrayListTest {
-	@Test
-	public void testCollectionsAddAll() {
-		List<String> myArray = new MyArrayList<>();
-		Assertions.assertTrue(Collections.addAll(myArray, "first"));
-		Assertions.assertTrue(Collections.addAll(myArray, "first", "second"));
-	}
-
-	@Test
-	public void testCtrMaxSizeArray() {
-		Assertions.assertThrows(RuntimeException.class, () -> {
-			new MyArrayList<Object>(Integer.MAX_VALUE);
-		});
-	}
-
+//	@Test
+//	public void testCollectionsAddAllForOneElement() {
+//		List<String> myArray = new MyArrayList<>();
+//		boolean result = Collections.addAll(myArray, "first");
+//	}
+//
 	@Test
 	public void testSize() {
-		MyArrayList<String> array = new MyArrayList<>();
-		Assertions.assertEquals(0, array.size());
+		Assertions.assertThrows(UnsupportedOperationException.class, () -> {
+			new MyArrayList<Object>().size();
+		});
 	}
 
 	@Test
@@ -37,10 +30,9 @@ public class MyArrayListTest {
 
 	@Test
 	public void testContains() {
-		MyArrayList<String> array = new MyArrayList<>();
-		array.add("1");
-		Assertions.assertTrue(array.contains("1"));
-		Assertions.assertFalse(array.contains("2"));
+		Assertions.assertThrows(UnsupportedOperationException.class, () -> {
+			new MyArrayList<Object>().contains(null);
+		});
 	}
 
 	@Test
@@ -66,11 +58,9 @@ public class MyArrayListTest {
 
 	@Test
 	public void testAdd() {
-		MyArrayList<String> array = new MyArrayList<>(1);
-		Assertions.assertTrue(array.add("1"));
-		Assertions.assertEquals(1, array.size());
-		Assertions.assertTrue(array.add("2"));
-		Assertions.assertEquals(2, array.size());
+		MyArrayList<String> array = new MyArrayList<>();
+//		Assertions.assertTrue(array.add("First"));
+//Assertions.assertEquals(1, array.size());
 	}
 
 	@Test
@@ -145,18 +135,15 @@ public class MyArrayListTest {
 
 	@Test
 	public void testIdexOf() {
-		MyArrayList<String> array = new MyArrayList<>();
-		array.add("1");
-		array.add("2");
-		Assertions.assertEquals( 0, array.indexOf("1"));
-		Assertions.assertEquals( 1, array.indexOf("2"));
-		Assertions.assertEquals( -1, array.indexOf("3"));
+		Assertions.assertThrows(UnsupportedOperationException.class, () -> {
+			new MyArrayList<Object>().indexOf(new Object());
+		});
 	}
 
 	@Test
 	public void testLastIndexOf() {
 		Assertions.assertThrows(UnsupportedOperationException.class, () -> {
-			new MyArrayList<Object>().lastIndexOf(new Object());
+			new MyArrayList<Object>().indexOf(new Object());
 		});
 	}
 
