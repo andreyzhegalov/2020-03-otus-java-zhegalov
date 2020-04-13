@@ -9,20 +9,20 @@ import org.junit.jupiter.api.Test;
 
 public class MyArrayListTest {
 	@Test
-	public void testCollectionsAddAll() {
+	public void testAddAllFromCollections() {
 		List<String> myArray = new MyArrayList<>();
 		Assertions.assertTrue(Collections.addAll(myArray, "first"));
 		Assertions.assertTrue(Collections.addAll(myArray, "first", "second"));
 	}
 
 	@Test
-	public void testCopyFromCollectionsForMyArrayList(){
+	public void testCopyFromCollectionsForMyArrayList() {
 		List<String> src = new MyArrayList<>();
 		src.add("src");
 		List<String> dest = new MyArrayList<>();
 		dest.add("dest");
 		Collections.copy(dest, src);
-		Assertions.assertArrayEquals( src.toArray(), dest.toArray() );
+		Assertions.assertArrayEquals(src.toArray(), dest.toArray());
 	}
 
 	@Test
@@ -157,7 +157,7 @@ public class MyArrayListTest {
 	}
 
 	@Test
-	public void testSetByIndex(){
+	public void testSetByIndex() {
 		MyArrayList<String> myArray = new MyArrayList<>();
 		myArray.add("1");
 		Assertions.assertEquals("1", myArray.set(0, "2"));
@@ -183,9 +183,9 @@ public class MyArrayListTest {
 		MyArrayList<String> array = new MyArrayList<>();
 		array.add("1");
 		array.add("2");
-		Assertions.assertEquals( 0, array.indexOf("1"));
-		Assertions.assertEquals( 1, array.indexOf("2"));
-		Assertions.assertEquals( -1, array.indexOf("3"));
+		Assertions.assertEquals(0, array.indexOf("1"));
+		Assertions.assertEquals(1, array.indexOf("2"));
+		Assertions.assertEquals(-1, array.indexOf("3"));
 	}
 
 	@Test

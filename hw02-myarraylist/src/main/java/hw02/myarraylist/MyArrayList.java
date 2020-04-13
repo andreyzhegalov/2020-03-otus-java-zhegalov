@@ -1,6 +1,5 @@
 package hw02.myarraylist;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
@@ -8,13 +7,13 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Objects;
 
-class MyArrayList<T>  implements List<T>{
-    private static final int DEFAULT_CAPACITY = 10;
-    public static final int MAX_ARRAY_LENGTH = Integer.MAX_VALUE - 8;
+class MyArrayList<T> implements List<T> {
+	private static final int DEFAULT_CAPACITY = 10;
+	public static final int MAX_ARRAY_LENGTH = Integer.MAX_VALUE - 8;
 
 	private Object[] innerStorage;
 	private int arraySize;
-	private int dataIndex = -1;
+	private int dataSize = 0;
 
 	public MyArrayList() {
 		innerStorage = new Object[DEFAULT_CAPACITY];
@@ -23,14 +22,14 @@ class MyArrayList<T>  implements List<T>{
 
 	public MyArrayList(int arraySize) {
 		if (arraySize > MAX_ARRAY_LENGTH)
-			throw new RuntimeException( String.format("Array size must be smaller %d", MAX_ARRAY_LENGTH));
+			throw new RuntimeException(String.format("Array size must be smaller %d", MAX_ARRAY_LENGTH));
 		innerStorage = new Object[arraySize];
 		this.arraySize = arraySize;
 	}
 
 	@Override
 	public int size() {
-		return dataIndex + 1;
+		return dataSize;
 	}
 
 	@Override
@@ -50,7 +49,7 @@ class MyArrayList<T>  implements List<T>{
 
 	@Override
 	public Object[] toArray() {
-        return Arrays.copyOf(innerStorage, size());
+		return Arrays.copyOf(innerStorage, size());
 	}
 
 	@Override
@@ -58,8 +57,7 @@ class MyArrayList<T>  implements List<T>{
 		throw new UnsupportedOperationException();
 	}
 
-	private boolean increaseCapacity()
-	{
+	private boolean increaseCapacity() {
 		int newArraySize = arraySize << 1;
 		if (newArraySize < 0 && newArraySize > MAX_ARRAY_LENGTH) {
 			return false;
@@ -71,11 +69,12 @@ class MyArrayList<T>  implements List<T>{
 
 	@Override
 	public boolean add(T e) {
-		if (size() == arraySize ){
-			if (!increaseCapacity()) return false;
+		if (size() == arraySize) {
+			if (!increaseCapacity())
+				return false;
 		}
-		dataIndex++;
-		innerStorage[dataIndex] = e;
+		innerStorage[dataSize] = e;
+		dataSize++;
 		return true;
 	}
 
@@ -118,16 +117,16 @@ class MyArrayList<T>  implements List<T>{
 	@SuppressWarnings("unchecked")
 	public T get(int index) {
 		Objects.checkIndex(index, size());
-		return (T)innerStorage[index];
+		return (T) innerStorage[index];
 	}
 
 	@Override
 	@SuppressWarnings("unchecked")
 	public T set(int index, T element) {
-        Objects.checkIndex(index, size());
-        Object oldValue = innerStorage[index];
-        innerStorage[index] = element;
-        return (T)oldValue;
+		Objects.checkIndex(index, size());
+		Object oldValue = innerStorage[index];
+		innerStorage[index] = element;
+		return (T) oldValue;
 	}
 
 	@Override
@@ -143,22 +142,22 @@ class MyArrayList<T>  implements List<T>{
 	@Override
 	public int indexOf(Object o) {
 		int start = 0;
-		int end = dataIndex+1;
-        Object[] es = innerStorage;
-        if (o == null) {
-            for (int i = start; i < end; i++) {
-                if (es[i] == null) {
-                    return i;
-                }
-            }
-        } else {
-            for (int i = start; i < end; i++) {
-                if (o.equals(es[i])) {
-                    return i;
-                }
-            }
-        }
-        return -1;
+		int end = size();
+		Object[] es = innerStorage;
+		if (o == null) {
+			for (int i = start; i < end; i++) {
+				if (es[i] == null) {
+					return i;
+				}
+			}
+		} else {
+			for (int i = start; i < end; i++) {
+				if (o.equals(es[i])) {
+					return i;
+				}
+			}
+		}
+		return -1;
 	}
 
 	@Override
@@ -181,7 +180,3 @@ class MyArrayList<T>  implements List<T>{
 		throw new UnsupportedOperationException();
 	}
 }
-
-
-
-
