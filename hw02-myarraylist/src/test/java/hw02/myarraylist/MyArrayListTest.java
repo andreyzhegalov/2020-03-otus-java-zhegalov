@@ -16,6 +16,16 @@ public class MyArrayListTest {
 	}
 
 	@Test
+	public void testCopyFromCollectionsForMyArrayList(){
+		List<String> src = new MyArrayList<>();
+		src.add("src");
+		List<String> dest = new MyArrayList<>();
+		dest.add("dest");
+		Collections.copy(dest, src);
+		Assertions.assertArrayEquals( src.toArray(), dest.toArray() );
+	}
+
+	@Test
 	public void testCtrMaxSizeArray() {
 		Assertions.assertThrows(RuntimeException.class, () -> {
 			new MyArrayList<Object>(Integer.MAX_VALUE);
@@ -52,9 +62,11 @@ public class MyArrayListTest {
 
 	@Test
 	public void testToArray() {
-		Assertions.assertThrows(UnsupportedOperationException.class, () -> {
-			new MyArrayList<Object>().toArray();
-		});
+		MyArrayList<String> myArray = new MyArrayList<>();
+		myArray.add("1");
+		Object[] array = myArray.toArray();
+		Assertions.assertEquals(1, array.length);
+		Assertions.assertEquals("1", array[0]);
 	}
 
 	@Test
@@ -116,17 +128,40 @@ public class MyArrayListTest {
 	}
 
 	@Test
-	public void testGet() {
-		Assertions.assertThrows(UnsupportedOperationException.class, () -> {
+	public void testGetOutOfBounds() {
+		Assertions.assertThrows(IndexOutOfBoundsException.class, () -> {
 			new MyArrayList<Object>().get(0);
+		});
+
+		MyArrayList<String> myArray = new MyArrayList<>();
+		myArray.add("1");
+		myArray.add("2");
+		Assertions.assertEquals("1", myArray.get(0));
+		Assertions.assertEquals("2", myArray.get(1));
+	}
+
+	@Test
+	public void testGetByIndex() {
+		MyArrayList<String> myArray = new MyArrayList<>();
+		myArray.add("1");
+		myArray.add("2");
+		Assertions.assertEquals("1", myArray.get(0));
+		Assertions.assertEquals("2", myArray.get(1));
+	}
+
+	@Test
+	public void testSetOutOfBounds() {
+		Assertions.assertThrows(IndexOutOfBoundsException.class, () -> {
+			new MyArrayList<Object>().set(0, new Object());
 		});
 	}
 
 	@Test
-	public void testSet() {
-		Assertions.assertThrows(UnsupportedOperationException.class, () -> {
-			new MyArrayList<Object>().set(0, new Object());
-		});
+	public void testSetByIndex(){
+		MyArrayList<String> myArray = new MyArrayList<>();
+		myArray.add("1");
+		Assertions.assertEquals("1", myArray.set(0, "2"));
+		Assertions.assertEquals("2", myArray.get(0));
 	}
 
 	@Test
