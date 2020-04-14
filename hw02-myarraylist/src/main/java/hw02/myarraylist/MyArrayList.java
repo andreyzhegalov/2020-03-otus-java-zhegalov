@@ -235,7 +235,9 @@ class MyArrayList<T> implements List<T> {
 
 		@Override
 		public void set(T e) {
-			throw new UnsupportedOperationException();
+            if (lastRet < 0)
+                throw new IllegalStateException();
+			MyArrayList.this.set(lastRet, e);
 		}
 
 		@Override

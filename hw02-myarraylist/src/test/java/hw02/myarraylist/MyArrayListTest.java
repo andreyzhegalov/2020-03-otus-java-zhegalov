@@ -284,10 +284,25 @@ public class MyArrayListTest {
 	}
 
 	@Test
-	public void testListIteratorSet() {
-		Assertions.assertThrows(UnsupportedOperationException.class, () -> {
+	public void testListIteratorSetShouldException() {
+		Assertions.assertThrows(IllegalStateException.class, () -> {
 			new MyArrayList<Object>().listIterator(0).set(new Object());
 		});
+	}
+
+	@Test
+	public void testListIteratorSet() {
+		MyArrayList<Integer> myArray = new MyArrayList<>();
+		myArray.add(1);
+		myArray.add(2);
+		Assertions.assertArrayEquals(new Integer[] {1, 2}, myArray.toArray());
+
+		ListIterator<Integer> listIter = myArray.listIterator(0);
+		listIter.next();
+		listIter.set(11);
+		listIter.next();
+		listIter.set(22);
+		Assertions.assertArrayEquals(new Integer[] {11, 22}, myArray.toArray());
 	}
 
 	@Test
