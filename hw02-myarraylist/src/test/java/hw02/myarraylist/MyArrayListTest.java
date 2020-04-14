@@ -18,13 +18,22 @@ public class MyArrayListTest {
 	}
 
 	@Test
-	public void testCopyFromCollectionsForMyArrayList() {
+	public void testCopyFromCollections() {
 		List<String> src = new MyArrayList<>();
 		src.add("src");
 		List<String> dest = new MyArrayList<>();
 		dest.add("dest");
 		Collections.copy(dest, src);
 		Assertions.assertArrayEquals(src.toArray(), dest.toArray());
+	}
+
+	@Test
+	public void testSortFromCollections() {
+		MyArrayList<Integer> myArray = new MyArrayList<>();
+		myArray.add(1);
+		myArray.add(2);
+		Collections.sort(myArray, Collections.reverseOrder());
+		Assertions.assertArrayEquals(new Integer[] { 2, 1 }, myArray.toArray());
 	}
 
 	@Test
@@ -199,7 +208,7 @@ public class MyArrayListTest {
 
 	@Test
 	public void testListIterator() {
-		Assertions.assertThrows(UnsupportedOperationException.class, () -> {
+		Assertions.assertDoesNotThrow(() -> {
 			new MyArrayList<Object>().listIterator();
 		});
 	}
@@ -240,8 +249,8 @@ public class MyArrayListTest {
 	@Test
 	public void testListIteratorNext() {
 		MyArrayList<Object> myArray = new MyArrayList<>();
-		myArray.add( new Object() );
-		myArray.add( new Object() );
+		myArray.add(new Object());
+		myArray.add(new Object());
 
 		ListIterator<Object> listIter = myArray.listIterator(0);
 		listIter.next();
@@ -295,14 +304,14 @@ public class MyArrayListTest {
 		MyArrayList<Integer> myArray = new MyArrayList<>();
 		myArray.add(1);
 		myArray.add(2);
-		Assertions.assertArrayEquals(new Integer[] {1, 2}, myArray.toArray());
+		Assertions.assertArrayEquals(new Integer[] { 1, 2 }, myArray.toArray());
 
 		ListIterator<Integer> listIter = myArray.listIterator(0);
 		listIter.next();
 		listIter.set(11);
 		listIter.next();
 		listIter.set(22);
-		Assertions.assertArrayEquals(new Integer[] {11, 22}, myArray.toArray());
+		Assertions.assertArrayEquals(new Integer[] { 11, 22 }, myArray.toArray());
 	}
 
 	@Test

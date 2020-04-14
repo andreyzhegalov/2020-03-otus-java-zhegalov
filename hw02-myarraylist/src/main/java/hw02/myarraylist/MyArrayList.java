@@ -2,7 +2,6 @@ package hw02.myarraylist;
 
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.ConcurrentModificationException;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
@@ -169,7 +168,7 @@ class MyArrayList<T> implements List<T> {
 
 	@Override
 	public ListIterator<T> listIterator() {
-		throw new UnsupportedOperationException();
+		return new ListItr(0);
 	}
 
 	@Override
@@ -198,14 +197,14 @@ class MyArrayList<T> implements List<T> {
 		}
 
 		@Override
-        @SuppressWarnings("unchecked")
+		@SuppressWarnings("unchecked")
 		public T next() {
-           // checkForComodification();
-            int i = cursor;
-            if (i >= size())
-                throw new NoSuchElementException();
-            cursor = i + 1;
-            return (T) MyArrayList.this.innerStorage[lastRet = i];
+			// checkForComodification();
+			int i = cursor;
+			if (i >= size())
+				throw new NoSuchElementException();
+			cursor = i + 1;
+			return (T) MyArrayList.this.innerStorage[lastRet = i];
 		}
 
 		@Override
@@ -235,8 +234,8 @@ class MyArrayList<T> implements List<T> {
 
 		@Override
 		public void set(T e) {
-            if (lastRet < 0)
-                throw new IllegalStateException();
+			if (lastRet < 0)
+				throw new IllegalStateException();
 			MyArrayList.this.set(lastRet, e);
 		}
 
