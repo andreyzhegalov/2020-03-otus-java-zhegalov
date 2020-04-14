@@ -3,6 +3,7 @@ package hw02.myarraylist;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.ListIterator;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -203,16 +204,84 @@ public class MyArrayListTest {
 	}
 
 	@Test
-	public void testListIteratorByIndex() {
-		Assertions.assertThrows(UnsupportedOperationException.class, () -> {
-			new MyArrayList<Object>().listIterator(0);
+	public void testListIteratorByIndexShouldException() {
+		Assertions.assertThrows(IndexOutOfBoundsException.class, () -> {
+			new MyArrayList<Object>().listIterator(1);
 		});
+	}
+
+	@Test
+	public void testListIteratorByIndex() {
+		Assertions.assertDoesNotThrow(() -> new MyArrayList<Object>().listIterator(0));
 	}
 
 	@Test
 	public void testSubList() {
 		Assertions.assertThrows(UnsupportedOperationException.class, () -> {
 			new MyArrayList<Object>().subList(0, 0);
+		});
+	}
+
+	@Test
+	public void testListIteratorHasNext() {
+		Assertions.assertThrows(UnsupportedOperationException.class, () -> {
+			new MyArrayList<Object>().listIterator(0).hasNext();
+		});
+	}
+
+	@Test
+	public void testListIteratorNext() {
+		Assertions.assertThrows(UnsupportedOperationException.class, () -> {
+			new MyArrayList<Object>().listIterator(0).next();
+		});
+	}
+
+	@Test
+	public void testListIteratorHasPrevious() {
+		Assertions.assertThrows(UnsupportedOperationException.class, () -> {
+			new MyArrayList<Object>().listIterator(0).hasPrevious();
+		});
+	}
+
+	@Test
+	public void testListIteratorPrevious() {
+		Assertions.assertThrows(UnsupportedOperationException.class, () -> {
+			new MyArrayList<Object>().listIterator(0).previous();
+		});
+	}
+
+	@Test
+	public void testListIteratorNextIndex() {
+		Assertions.assertThrows(UnsupportedOperationException.class, () -> {
+			new MyArrayList<Object>().listIterator(0).nextIndex();
+		});
+	}
+
+	@Test
+	public void testListIteratorPreviousIndex() {
+		Assertions.assertThrows(UnsupportedOperationException.class, () -> {
+			new MyArrayList<Object>().listIterator(0).previousIndex();
+		});
+	}
+
+	@Test
+	public void testListIteratorRemove() {
+		Assertions.assertThrows(UnsupportedOperationException.class, () -> {
+			new MyArrayList<Object>().listIterator(0).remove();
+		});
+	}
+
+	@Test
+	public void testListIteratorSet() {
+		Assertions.assertThrows(UnsupportedOperationException.class, () -> {
+			new MyArrayList<Object>().listIterator(0).set(new Object());
+		});
+	}
+
+	@Test
+	public void testListIteratorAdd() {
+		Assertions.assertThrows(UnsupportedOperationException.class, () -> {
+			new MyArrayList<Object>().listIterator(0).add(new Object());
 		});
 	}
 }

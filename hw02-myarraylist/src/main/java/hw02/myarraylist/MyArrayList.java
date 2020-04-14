@@ -172,11 +172,66 @@ class MyArrayList<T> implements List<T> {
 
 	@Override
 	public ListIterator<T> listIterator(int index) {
-		throw new UnsupportedOperationException();
+		if (index > size() || index < 0)
+			throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size());
+		return new ListItr(index);
 	}
 
 	@Override
 	public List<T> subList(int fromIndex, int toIndex) {
 		throw new UnsupportedOperationException();
+	}
+
+	private class ListItr implements ListIterator<T> {
+		private int cursor;
+
+		ListItr(int index) {
+			cursor = index;
+		}
+
+		@Override
+		public boolean hasNext() {
+			throw new UnsupportedOperationException();
+		}
+
+		@Override
+		public T next() {
+			throw new UnsupportedOperationException();
+		}
+
+		@Override
+		public boolean hasPrevious() {
+			throw new UnsupportedOperationException();
+		}
+
+		@Override
+		public T previous() {
+			throw new UnsupportedOperationException();
+		}
+
+		@Override
+		public int nextIndex() {
+			throw new UnsupportedOperationException();
+		}
+
+		@Override
+		public int previousIndex() {
+			throw new UnsupportedOperationException();
+		}
+
+		@Override
+		public void remove() {
+			throw new UnsupportedOperationException();
+		}
+
+		@Override
+		public void set(T e) {
+			throw new UnsupportedOperationException();
+		}
+
+		@Override
+		public void add(T e) {
+			throw new UnsupportedOperationException();
+		}
 	}
 }
