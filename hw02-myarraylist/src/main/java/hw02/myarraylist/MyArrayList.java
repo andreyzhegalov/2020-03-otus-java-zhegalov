@@ -2,9 +2,11 @@ package hw02.myarraylist;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.ConcurrentModificationException;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.NoSuchElementException;
 import java.util.Objects;
 
 class MyArrayList<T> implements List<T> {
@@ -184,6 +186,7 @@ class MyArrayList<T> implements List<T> {
 
 	private class ListItr implements ListIterator<T> {
 		private int cursor;
+		private int lastRet = -1;
 
 		ListItr(int index) {
 			cursor = index;
@@ -195,8 +198,14 @@ class MyArrayList<T> implements List<T> {
 		}
 
 		@Override
+        @SuppressWarnings("unchecked")
 		public T next() {
-			throw new UnsupportedOperationException();
+           // checkForComodification();
+            int i = cursor;
+            if (i >= size())
+                throw new NoSuchElementException();
+            cursor = i + 1;
+            return (T) MyArrayList.this.innerStorage[lastRet = i];
 		}
 
 		@Override

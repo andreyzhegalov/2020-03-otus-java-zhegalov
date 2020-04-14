@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.NoSuchElementException;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -230,10 +231,21 @@ public class MyArrayListTest {
 	}
 
 	@Test
-	public void testListIteratorNext() {
-		Assertions.assertThrows(UnsupportedOperationException.class, () -> {
+	public void testListIteratorNextShouldException() {
+		Assertions.assertThrows(NoSuchElementException.class, () -> {
 			new MyArrayList<Object>().listIterator(0).next();
 		});
+	}
+
+	@Test
+	public void testListIteratorNext() {
+		MyArrayList<Object> myArray = new MyArrayList<>();
+		myArray.add( new Object() );
+		myArray.add( new Object() );
+
+		ListIterator<Object> listIter = myArray.listIterator(0);
+		listIter.next();
+		listIter.next();
 	}
 
 	@Test
