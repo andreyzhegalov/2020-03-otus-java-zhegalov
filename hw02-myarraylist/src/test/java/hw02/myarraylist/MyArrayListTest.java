@@ -18,11 +18,41 @@ public class MyArrayListTest {
 	}
 
 	@Test
+	public void testAddAllFromCollectionsMoreThan20() {
+		Integer[] array = new Integer[30];
+		for( int i=0; i < array.length; i++)
+		{
+			array[i] = i;
+		}
+
+		List<Integer> myArray = new MyArrayList<>();
+		Assertions.assertTrue(Collections.addAll(myArray, array));
+		Assertions.assertEquals(30, myArray.size());
+	}
+
+	@Test
 	public void testCopyFromCollections() {
 		List<String> src = new MyArrayList<>();
 		src.add("src");
 		List<String> dest = new MyArrayList<>();
 		dest.add("dest");
+		Collections.copy(dest, src);
+		Assertions.assertArrayEquals(src.toArray(), dest.toArray());
+	}
+
+	@Test
+	public void testCopyFromCollectionsMoreThan20() {
+		int size = 30;
+		List<Integer> src = new MyArrayList<>();
+		for( int i=0; i < size; i++)
+		{
+			src.add(i);
+		}
+		List<Integer> dest = new MyArrayList<>();
+		for( int i=0; i < size; i++)
+		{
+			dest.add(0);
+		}
 		Collections.copy(dest, src);
 		Assertions.assertArrayEquals(src.toArray(), dest.toArray());
 	}
@@ -34,6 +64,26 @@ public class MyArrayListTest {
 		myArray.add(2);
 		Collections.sort(myArray, Collections.reverseOrder());
 		Assertions.assertArrayEquals(new Integer[] { 2, 1 }, myArray.toArray());
+	}
+
+
+	@Test
+	public void testSortFromCollectionsMoreThan20() {
+		int size = 30;
+		MyArrayList<Integer> myArray = new MyArrayList<>();
+		for( int i=0; i < size; i++)
+		{
+			myArray.add(i);
+		}
+
+		Collections.sort(myArray, Collections.reverseOrder());
+
+		int mustBe = size - 1;
+		for( int i=0; i < size; i++ )
+		{
+			Assertions.assertEquals( mustBe, myArray.get(i));
+			mustBe--;
+		}
 	}
 
 	@Test
