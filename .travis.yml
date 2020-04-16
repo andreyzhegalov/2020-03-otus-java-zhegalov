@@ -7,3 +7,5 @@ before_install:
   - export GRADLE_HOME=$PWD/gradle-6.3
   - export PATH=$GRADLE_HOME/bin:$PATH
   - gradle -v
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
