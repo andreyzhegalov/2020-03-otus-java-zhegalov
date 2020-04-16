@@ -1,76 +1,80 @@
 package hw02.myarraylist;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.NoSuchElementException;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 public class MyArrayListTest {
+
 	@Test
 	public void testAddAllFromCollections() {
-		List<String> myArray = new MyArrayList<>();
-		Assertions.assertTrue(Collections.addAll(myArray, "first"));
-		Assertions.assertTrue(Collections.addAll(myArray, "first", "second"));
+		final List<String> myArray = new MyArrayList<>();
+		assertTrue(Collections.addAll(myArray, "first", "second"));
 	}
 
 	@Test
 	public void testAddAllFromCollectionsMoreThan20() {
-		Integer[] array = new Integer[30];
+		final Integer[] array = new Integer[30];
 		for( int i=0; i < array.length; i++)
 		{
 			array[i] = i;
 		}
-
-		List<Integer> myArray = new MyArrayList<>();
-		Assertions.assertTrue(Collections.addAll(myArray, array));
-		Assertions.assertEquals(30, myArray.size());
+		final List<Integer> myArray = new MyArrayList<>();
+		assertTrue(Collections.addAll(myArray, array));
 	}
 
 	@Test
 	public void testCopyFromCollections() {
-		List<String> src = new MyArrayList<>();
+		final List<String> src = new MyArrayList<>();
 		src.add("src");
-		List<String> dest = new MyArrayList<>();
+		final List<String> dest = new MyArrayList<>();
 		dest.add("dest");
 		Collections.copy(dest, src);
-		Assertions.assertArrayEquals(src.toArray(), dest.toArray());
+		assertArrayEquals(src.toArray(), dest.toArray());
 	}
 
 	@Test
 	public void testCopyFromCollectionsMoreThan20() {
-		int size = 30;
-		List<Integer> src = new MyArrayList<>();
+		final int size = 30;
+		final List<Integer> src = new MyArrayList<>();
 		for( int i=0; i < size; i++)
 		{
 			src.add(i);
 		}
-		List<Integer> dest = new MyArrayList<>();
+		final List<Integer> dest = new MyArrayList<>();
 		for( int i=0; i < size; i++)
 		{
 			dest.add(0);
 		}
 		Collections.copy(dest, src);
-		Assertions.assertArrayEquals(src.toArray(), dest.toArray());
+		assertArrayEquals(src.toArray(), dest.toArray());
 	}
 
 	@Test
 	public void testSortFromCollections() {
-		MyArrayList<Integer> myArray = new MyArrayList<>();
+		final MyArrayList<Integer> myArray = new MyArrayList<>();
 		myArray.add(1);
 		myArray.add(2);
 		Collections.sort(myArray, Collections.reverseOrder());
-		Assertions.assertArrayEquals(new Integer[] { 2, 1 }, myArray.toArray());
+		assertArrayEquals(new Integer[] { 2, 1 }, myArray.toArray());
 	}
 
 
 	@Test
 	public void testSortFromCollectionsMoreThan20() {
-		int size = 30;
-		MyArrayList<Integer> myArray = new MyArrayList<>();
+		final int size = 30;
+		final MyArrayList<Integer> myArray = new MyArrayList<>();
 		for( int i=0; i < size; i++)
 		{
 			myArray.add(i);
@@ -81,292 +85,286 @@ public class MyArrayListTest {
 		int mustBe = size - 1;
 		for( int i=0; i < size; i++ )
 		{
-			Assertions.assertEquals( mustBe, myArray.get(i));
+			assertEquals( mustBe, myArray.get(i));
 			mustBe--;
 		}
 	}
 
 	@Test
 	public void testCtrMaxSizeArray() {
-		Assertions.assertThrows(RuntimeException.class, () -> {
+		assertThrows(RuntimeException.class, () -> {
 			new MyArrayList<Object>(Integer.MAX_VALUE);
 		});
 	}
 
 	@Test
 	public void testSize() {
-		MyArrayList<String> array = new MyArrayList<>();
-		Assertions.assertEquals(0, array.size());
+		final MyArrayList<String> array = new MyArrayList<>();
+		assertEquals(0, array.size());
 	}
 
 	@Test
 	public void testIsEmpty() {
-		Assertions.assertThrows(UnsupportedOperationException.class, () -> {
+		assertThrows(UnsupportedOperationException.class, () -> {
 			new MyArrayList<Object>().isEmpty();
 		});
 	}
 
 	@Test
-	public void testContains() {
-		MyArrayList<String> array = new MyArrayList<>();
+	public void testContainsTrue() {
+		final MyArrayList<String> array = new MyArrayList<>();
 		array.add("1");
-		Assertions.assertTrue(array.contains("1"));
-		Assertions.assertFalse(array.contains("2"));
+		assertTrue(array.contains("1"));
+	}
+
+	@Test
+	public void testContainsFalse() {
+		final MyArrayList<String> array = new MyArrayList<>();
+		array.add("1");
+		assertFalse(array.contains("2"));
 	}
 
 	@Test
 	public void testIterator() {
-		Assertions.assertThrows(UnsupportedOperationException.class, () -> {
+		assertThrows(UnsupportedOperationException.class, () -> {
 			new MyArrayList<Object>().iterator();
 		});
 	}
 
 	@Test
 	public void testToArray() {
-		MyArrayList<String> myArray = new MyArrayList<>();
+		final MyArrayList<String> myArray = new MyArrayList<>();
 		myArray.add("1");
-		Object[] array = myArray.toArray();
-		Assertions.assertEquals(1, array.length);
-		Assertions.assertEquals("1", array[0]);
+		final Object[] array = myArray.toArray();
+		assertEquals("1", array[0]);
 	}
 
 	@Test
 	public void testToArrayFromArray() {
-		Assertions.assertThrows(UnsupportedOperationException.class, () -> {
+		assertThrows(UnsupportedOperationException.class, () -> {
 			new MyArrayList<Object>().toArray(new Object[10]);
 		});
 	}
 
 	@Test
 	public void testAdd() {
-		MyArrayList<String> array = new MyArrayList<>(1);
-		Assertions.assertTrue(array.add("1"));
-		Assertions.assertEquals(1, array.size());
-		Assertions.assertTrue(array.add("2"));
-		Assertions.assertEquals(2, array.size());
+		final MyArrayList<String> array = new MyArrayList<>(1);
+		assertTrue(array.add("1"));
 	}
 
 	@Test
 	public void testRemove() {
-		Assertions.assertThrows(UnsupportedOperationException.class, () -> {
+		assertThrows(UnsupportedOperationException.class, () -> {
 			new MyArrayList<Object>().remove(new Object());
 		});
 	}
 
 	@Test
 	public void testContainsAll() {
-		Assertions.assertThrows(UnsupportedOperationException.class, () -> {
+		assertThrows(UnsupportedOperationException.class, () -> {
 			new MyArrayList<Object>().containsAll(new ArrayList<Object>());
 		});
 	}
 
 	@Test
 	public void testAddAll() {
-		Assertions.assertThrows(UnsupportedOperationException.class, () -> {
+		assertThrows(UnsupportedOperationException.class, () -> {
 			new MyArrayList<Object>().addAll(1, new ArrayList<Object>());
 		});
 	}
 
 	@Test
 	public void testRemoveAll() {
-		Assertions.assertThrows(UnsupportedOperationException.class, () -> {
+		assertThrows(UnsupportedOperationException.class, () -> {
 			new MyArrayList<Object>().removeAll(new ArrayList<Object>());
 		});
 	}
 
 	@Test
 	public void testRetainAll() {
-		Assertions.assertThrows(UnsupportedOperationException.class, () -> {
+		assertThrows(UnsupportedOperationException.class, () -> {
 			new MyArrayList<Object>().retainAll(new ArrayList<Object>());
 		});
 	}
 
 	@Test
 	public void testClear() {
-		Assertions.assertThrows(UnsupportedOperationException.class, () -> {
+		assertThrows(UnsupportedOperationException.class, () -> {
 			new MyArrayList<Object>().clear();
 		});
 	}
 
 	@Test
-	public void testGetOutOfBounds() {
-		Assertions.assertThrows(IndexOutOfBoundsException.class, () -> {
+	public void testGetOutOfBoundsException() {
+		assertThrows(IndexOutOfBoundsException.class, () -> {
 			new MyArrayList<Object>().get(0);
 		});
-
-		MyArrayList<String> myArray = new MyArrayList<>();
-		myArray.add("1");
-		myArray.add("2");
-		Assertions.assertEquals("1", myArray.get(0));
-		Assertions.assertEquals("2", myArray.get(1));
 	}
 
 	@Test
 	public void testGetByIndex() {
-		MyArrayList<String> myArray = new MyArrayList<>();
+		final MyArrayList<String> myArray = new MyArrayList<>();
 		myArray.add("1");
-		myArray.add("2");
-		Assertions.assertEquals("1", myArray.get(0));
-		Assertions.assertEquals("2", myArray.get(1));
+		assertEquals("1", myArray.get(0));
 	}
 
 	@Test
 	public void testSetOutOfBounds() {
-		Assertions.assertThrows(IndexOutOfBoundsException.class, () -> {
+		assertThrows(IndexOutOfBoundsException.class, () -> {
 			new MyArrayList<Object>().set(0, new Object());
 		});
 	}
 
 	@Test
 	public void testSetByIndex() {
-		MyArrayList<String> myArray = new MyArrayList<>();
+		final MyArrayList<String> myArray = new MyArrayList<>();
 		myArray.add("1");
-		Assertions.assertEquals("1", myArray.set(0, "2"));
-		Assertions.assertEquals("2", myArray.get(0));
+		assertEquals("1", myArray.set(0, "2"));
+		assertEquals("2", myArray.get(0));
 	}
 
 	@Test
 	public void testAddByIndex() {
-		Assertions.assertThrows(UnsupportedOperationException.class, () -> {
+		assertThrows(UnsupportedOperationException.class, () -> {
 			new MyArrayList<Object>().add(0, new Object());
 		});
 	}
 
 	@Test
 	public void testRemoveByIndex() {
-		Assertions.assertThrows(UnsupportedOperationException.class, () -> {
+		assertThrows(UnsupportedOperationException.class, () -> {
 			new MyArrayList<Object>().remove(0);
 		});
 	}
 
 	@Test
+	public void testIdexOfNotExistingElements() {
+		final MyArrayList<String> array = new MyArrayList<>();
+		assertEquals(-1, array.indexOf("1"));
+	}
+
+	@Test
 	public void testIdexOf() {
-		MyArrayList<String> array = new MyArrayList<>();
+		final MyArrayList<String> array = new MyArrayList<>();
 		array.add("1");
-		array.add("2");
-		Assertions.assertEquals(0, array.indexOf("1"));
-		Assertions.assertEquals(1, array.indexOf("2"));
-		Assertions.assertEquals(-1, array.indexOf("3"));
+		assertEquals(0, array.indexOf("1"));
 	}
 
 	@Test
 	public void testLastIndexOf() {
-		Assertions.assertThrows(UnsupportedOperationException.class, () -> {
+		assertThrows(UnsupportedOperationException.class, () -> {
 			new MyArrayList<Object>().lastIndexOf(new Object());
 		});
 	}
 
 	@Test
 	public void testListIterator() {
-		Assertions.assertDoesNotThrow(() -> {
+		assertDoesNotThrow(() -> {
 			new MyArrayList<Object>().listIterator();
 		});
 	}
 
 	@Test
 	public void testListIteratorByIndexShouldException() {
-		Assertions.assertThrows(IndexOutOfBoundsException.class, () -> {
+		assertThrows(IndexOutOfBoundsException.class, () -> {
 			new MyArrayList<Object>().listIterator(1);
 		});
 	}
 
 	@Test
 	public void testListIteratorByIndex() {
-		Assertions.assertDoesNotThrow(() -> new MyArrayList<Object>().listIterator(0));
+		assertDoesNotThrow(() -> new MyArrayList<Object>().listIterator(0));
 	}
 
 	@Test
 	public void testSubList() {
-		Assertions.assertThrows(UnsupportedOperationException.class, () -> {
+		assertThrows(UnsupportedOperationException.class, () -> {
 			new MyArrayList<Object>().subList(0, 0);
 		});
 	}
 
 	@Test
 	public void testListIteratorHasNext() {
-		Assertions.assertThrows(UnsupportedOperationException.class, () -> {
+		assertThrows(UnsupportedOperationException.class, () -> {
 			new MyArrayList<Object>().listIterator(0).hasNext();
 		});
 	}
 
 	@Test
 	public void testListIteratorNextShouldException() {
-		Assertions.assertThrows(NoSuchElementException.class, () -> {
+		assertThrows(NoSuchElementException.class, () -> {
 			new MyArrayList<Object>().listIterator(0).next();
 		});
 	}
 
 	@Test
 	public void testListIteratorNext() {
-		MyArrayList<Object> myArray = new MyArrayList<>();
-		myArray.add(new Object());
-		myArray.add(new Object());
+		final MyArrayList<Integer> myArray = new MyArrayList<>();
+		myArray.add(1);
 
-		ListIterator<Object> listIter = myArray.listIterator(0);
-		listIter.next();
-		listIter.next();
+		final ListIterator<Integer> listIter = myArray.listIterator(0);
+		assertEquals(1, listIter.next());
 	}
 
 	@Test
 	public void testListIteratorHasPrevious() {
-		Assertions.assertThrows(UnsupportedOperationException.class, () -> {
+		assertThrows(UnsupportedOperationException.class, () -> {
 			new MyArrayList<Object>().listIterator(0).hasPrevious();
 		});
 	}
 
 	@Test
 	public void testListIteratorPrevious() {
-		Assertions.assertThrows(UnsupportedOperationException.class, () -> {
+		assertThrows(UnsupportedOperationException.class, () -> {
 			new MyArrayList<Object>().listIterator(0).previous();
 		});
 	}
 
 	@Test
 	public void testListIteratorNextIndex() {
-		Assertions.assertThrows(UnsupportedOperationException.class, () -> {
+		assertThrows(UnsupportedOperationException.class, () -> {
 			new MyArrayList<Object>().listIterator(0).nextIndex();
 		});
 	}
 
 	@Test
 	public void testListIteratorPreviousIndex() {
-		Assertions.assertThrows(UnsupportedOperationException.class, () -> {
+		assertThrows(UnsupportedOperationException.class, () -> {
 			new MyArrayList<Object>().listIterator(0).previousIndex();
 		});
 	}
 
 	@Test
 	public void testListIteratorRemove() {
-		Assertions.assertThrows(UnsupportedOperationException.class, () -> {
+		assertThrows(UnsupportedOperationException.class, () -> {
 			new MyArrayList<Object>().listIterator(0).remove();
 		});
 	}
 
 	@Test
 	public void testListIteratorSetShouldException() {
-		Assertions.assertThrows(IllegalStateException.class, () -> {
+		assertThrows(IllegalStateException.class, () -> {
 			new MyArrayList<Object>().listIterator(0).set(new Object());
 		});
 	}
 
 	@Test
 	public void testListIteratorSet() {
-		MyArrayList<Integer> myArray = new MyArrayList<>();
+		final MyArrayList<Integer> myArray = new MyArrayList<>();
 		myArray.add(1);
 		myArray.add(2);
-		Assertions.assertArrayEquals(new Integer[] { 1, 2 }, myArray.toArray());
 
-		ListIterator<Integer> listIter = myArray.listIterator(0);
+		final ListIterator<Integer> listIter = myArray.listIterator(0);
 		listIter.next();
 		listIter.set(11);
 		listIter.next();
 		listIter.set(22);
-		Assertions.assertArrayEquals(new Integer[] { 11, 22 }, myArray.toArray());
+		assertArrayEquals(new Integer[] { 11, 22 }, myArray.toArray());
 	}
 
 	@Test
 	public void testListIteratorAdd() {
-		Assertions.assertThrows(UnsupportedOperationException.class, () -> {
+		assertThrows(UnsupportedOperationException.class, () -> {
 			new MyArrayList<Object>().listIterator(0).add(new Object());
 		});
 	}

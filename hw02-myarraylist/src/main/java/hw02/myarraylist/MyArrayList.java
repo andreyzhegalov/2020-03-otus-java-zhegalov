@@ -22,8 +22,9 @@ class MyArrayList<T> implements List<T> {
 	}
 
 	public MyArrayList(int arraySize) {
-		if (arraySize > MAX_ARRAY_LENGTH)
+		if (arraySize > MAX_ARRAY_LENGTH) {
 			throw new RuntimeException(String.format("Array size must be smaller %d", MAX_ARRAY_LENGTH));
+		}
 		innerStorage = new Object[arraySize];
 		this.arraySize = arraySize;
 	}
@@ -59,7 +60,7 @@ class MyArrayList<T> implements List<T> {
 	}
 
 	private boolean increaseCapacity() {
-		int newArraySize = arraySize << 1;
+		final int newArraySize = arraySize << 1;
 		if (newArraySize < 0 && newArraySize > MAX_ARRAY_LENGTH) {
 			return false;
 		}
@@ -71,8 +72,9 @@ class MyArrayList<T> implements List<T> {
 	@Override
 	public boolean add(T e) {
 		if (size() == arraySize) {
-			if (!increaseCapacity())
+			if (!increaseCapacity()) {
 				return false;
+			}
 		}
 		innerStorage[dataSize] = e;
 		dataSize++;
@@ -125,7 +127,7 @@ class MyArrayList<T> implements List<T> {
 	@SuppressWarnings("unchecked")
 	public T set(int index, T element) {
 		Objects.checkIndex(index, size());
-		Object oldValue = innerStorage[index];
+		final Object oldValue = innerStorage[index];
 		innerStorage[index] = element;
 		return (T) oldValue;
 	}
@@ -144,16 +146,15 @@ class MyArrayList<T> implements List<T> {
 	public int indexOf(Object o) {
 		int start = 0;
 		int end = size();
-		Object[] es = innerStorage;
 		if (o == null) {
 			for (int i = start; i < end; i++) {
-				if (es[i] == null) {
+				if (innerStorage[i] == null) {
 					return i;
 				}
 			}
 		} else {
 			for (int i = start; i < end; i++) {
-				if (o.equals(es[i])) {
+				if (o.equals(innerStorage[i])) {
 					return i;
 				}
 			}
@@ -173,8 +174,9 @@ class MyArrayList<T> implements List<T> {
 
 	@Override
 	public ListIterator<T> listIterator(int index) {
-		if (index > size() || index < 0)
+		if (index > size() || index < 0) {
 			throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size());
+		}
 		return new ListItr(index);
 	}
 
@@ -199,10 +201,10 @@ class MyArrayList<T> implements List<T> {
 		@Override
 		@SuppressWarnings("unchecked")
 		public T next() {
-			// checkForComodification();
-			int i = cursor;
-			if (i >= size())
+			final int i = cursor;
+			if (cursor >= size()) {
 				throw new NoSuchElementException();
+			}
 			cursor = i + 1;
 			return (T) MyArrayList.this.innerStorage[lastRet = i];
 		}
@@ -234,8 +236,9 @@ class MyArrayList<T> implements List<T> {
 
 		@Override
 		public void set(T e) {
-			if (lastRet < 0)
+			if (lastRet < 0) {
 				throw new IllegalStateException();
+			}
 			MyArrayList.this.set(lastRet, e);
 		}
 
