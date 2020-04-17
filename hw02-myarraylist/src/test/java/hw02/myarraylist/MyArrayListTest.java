@@ -166,10 +166,18 @@ public class MyArrayListTest {
 		});
 	}
 
-	@Test
-	public void testAddAll() {
+	@Test 
+	public void testAdddAll(){
 		assertThrows(UnsupportedOperationException.class, () -> {
-			new MyArrayList<Object>().addAll(1, new ArrayList<Object>());
+			new MyArrayList<Object>().addAll(new ArrayList<Object>());
+		});
+
+	}
+
+	@Test
+	public void testAddAllWithIndex() {
+		assertThrows(UnsupportedOperationException.class, () -> {
+			new MyArrayList<Object>().addAll(0, new ArrayList<Object>());
 		});
 	}
 
@@ -251,6 +259,20 @@ public class MyArrayListTest {
 	}
 
 	@Test
+	public void testIdexOfForNullObject() {
+		final MyArrayList<String> array = new MyArrayList<>();
+		array.add(null);
+		assertEquals(0, array.indexOf(null));
+	}
+
+	@Test
+	public void testIdexOfForNullObjectNotFounded() {
+		final MyArrayList<String> array = new MyArrayList<>();
+		array.add("1");
+		assertEquals(-1, array.indexOf(null));
+	}
+
+	@Test
 	public void testLastIndexOf() {
 		assertThrows(UnsupportedOperationException.class, () -> {
 			new MyArrayList<Object>().lastIndexOf(new Object());
@@ -265,9 +287,16 @@ public class MyArrayListTest {
 	}
 
 	@Test
-	public void testListIteratorByIndexShouldException() {
+	public void testListIteratorByIndexShouldBoundException() {
 		assertThrows(IndexOutOfBoundsException.class, () -> {
 			new MyArrayList<Object>().listIterator(1);
+		});
+	}
+
+	@Test
+	public void testListIteratorByIndexInvalidIndex() {
+		assertThrows(IndexOutOfBoundsException.class, () -> {
+			new MyArrayList<Object>().listIterator(-1);
 		});
 	}
 
