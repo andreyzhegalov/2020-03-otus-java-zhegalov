@@ -1,3 +1,5 @@
+[![codecov](https://codecov.io/gh/andreyzhegalov/2020-03-otus-java-zhegalov/branch/feature/hw02-myarraylist/graph/badge.svg)](https://codecov.io/gh/andreyzhegalov/2020-03-otus-java-zhegalov)
+
 # DIY ArrayList
 **Цель:**
 Изучить как устроена стандартная коллекция ArrayList. Попрактиковаться в создании своей коллекции.
