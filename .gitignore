@@ -29,3 +29,13 @@ hs_err_pid*
 .project
 
 .settings
+
+.classpath
+
+.idea
+
+gradle/*
+
+gradlew
+
+gradlew.bat
