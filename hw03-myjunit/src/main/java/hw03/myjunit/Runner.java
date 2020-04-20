@@ -1,6 +1,5 @@
 package hw03.myjunit;
 
-
 public class Runner {
     private final Object test;
     private TestMethod testMethod;
@@ -17,4 +16,3 @@ public class Runner {
         }
     }
 }
-

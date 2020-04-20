@@ -8,18 +8,17 @@ import java.util.List;
 class TestClass {
     private Class<?> klass;
 
-    TestClass(Class<?> klass ) {
+    TestClass(Class<?> klass) {
         this.klass = klass;
     }
 
     public List<Method> getTestMethods() {
         var list = new ArrayList<Method>();
         Method testMethod;
-        try{
+        try {
             testMethod = klass.getMethod("someMethodTest");
             list.add(testMethod);
-        }
-        catch(Exception e){
+        } catch (Exception e) {
         }
         return list;
     }

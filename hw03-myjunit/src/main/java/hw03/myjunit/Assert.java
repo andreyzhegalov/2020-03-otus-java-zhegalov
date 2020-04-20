@@ -2,14 +2,13 @@ package hw03.myjunit;
 
 public class Assert {
 
-    public static void assertTrue(boolean condition){
-        if(!condition){
+    public static void assertTrue(boolean condition) {
+        if (!condition) {
             fail();
         }
     }
 
-    public static void fail(){
+    public static void fail() {
         throw new AssertionError();
     }
 }
-
