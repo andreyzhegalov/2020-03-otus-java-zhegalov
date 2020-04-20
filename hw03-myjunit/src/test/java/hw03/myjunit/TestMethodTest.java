@@ -3,8 +3,7 @@
  */
 package hw03.myjunit;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -28,6 +27,7 @@ public class TestMethodTest {
 
     @Test
     public void ctrTest() {
+        assertTrue(false);
         assertDoesNotThrow(() -> {
             new TestMethod(failMethod, testClass);
         });

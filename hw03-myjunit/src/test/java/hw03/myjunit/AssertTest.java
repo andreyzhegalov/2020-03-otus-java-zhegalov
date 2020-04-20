@@ -9,7 +9,7 @@ public class AssertTest {
     @Test
     public void failTest() {
         assertThrows(AssertionError.class, () -> {
-            Assert.fail();
+            Assert.fail(null);
         });
     }
 

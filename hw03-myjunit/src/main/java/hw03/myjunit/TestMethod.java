@@ -15,5 +15,6 @@ public class TestMethod {
     public void invoke(Object test) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException {
         method.invoke(test);
     }
+
 }
 

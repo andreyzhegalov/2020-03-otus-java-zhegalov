@@ -4,8 +4,8 @@ public class Runner {
     private final Object test;
     private TestMethod testMethod;
 
-    public Runner(Object test, TestMethod method) {
-        this.test = test;
+    public Runner(Object testIstance, TestMethod method) {
+        this.test = testIstance;
         testMethod = method;
     }
 
