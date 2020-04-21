@@ -1,3 +1,5 @@
+[![codecov](https://codecov.io/gh/andreyzhegalov/2020-03-otus-java-zhegalov/branch/feature/feature/hw03-testing-framework/graph/badge.svg)](https://codecov.io/gh/andreyzhegalov/2020-03-otus-java-zhegalov)
+
 # Свой тестовый фреймворк
 **Цель:**
 1. Научиться работать с reflection и аннотациями, понять принцип работы фреймворка junit.
@@ -16,3 +18,11 @@
 5) для каждой такой "тройки" надо создать **СВОЙ** объект класса-теста.
 6) Исключение в одном тесте не должно прерывать весь процесс тестирования.
 7) На основании возникших во время тестирования исключений вывести статистику выполнения тестов (сколько прошло успешно, сколько упало, сколько было всего)
+
+**Сборка**
+Выполнить ```gradle build```
+
+**Использование**
+Пример работы для тестового класса из проекта ( ./hw03-myjunit/src/test/java/hw03/myjunit/SomeClassTest.java )
+```java -classpath ./hw03-myjunit/build/libs/hw03-myjunit.jar:./hw03-myjunit/build/classes/java/test/  hw03.myjunit.Starter hw03.myjunit.SomeClassTest```
+
