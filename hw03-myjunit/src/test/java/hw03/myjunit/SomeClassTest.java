@@ -16,10 +16,12 @@ class SomeClassTest {
 
     @Test
     public void successTest() {
+        System.out.println("Success test");
     }
 
     @Test
     public void failTest() {
+        System.out.println("Fail test");
         Assert.fail(null);
     }
 }

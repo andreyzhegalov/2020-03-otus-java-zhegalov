@@ -48,4 +48,16 @@ public class TestMethodTest {
             testMethod.invoke(istance);
         });
     }
+
+    @Test
+    public void getBefore() {
+        final var testMethod = new TestMethod(failMethod, testClass);
+        assertNotNull( testMethod.getBefore());
+    }
+
+    @Test
+    public void getAfter() {
+        final var testMethod = new TestMethod(failMethod, testClass);
+        assertNotNull( testMethod.getAfter());
+    }
 }

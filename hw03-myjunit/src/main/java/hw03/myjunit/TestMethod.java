@@ -16,5 +16,12 @@ public class TestMethod {
         method.invoke(test);
     }
 
+    public Method getBefore(){
+        return testClass.getBefore();
+    }
+
+    public Method getAfter(){
+        return testClass.getAfter();
+    }
 }
 

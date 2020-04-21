@@ -35,16 +35,46 @@ public class RunnerTest {
     @Test
     public void runSuccessTestTest() {
         final var testMethod = new TestMethod(successMethod, testClass);
+        final var runner = new Runner(testIstance, testMethod);
         assertDoesNotThrow(() -> {
-            new Runner(testIstance, testMethod).run();
+            runner.runTest();
         });
     }
 
     @Test
     public void runFailTestTest() {
         final var testMethod = new TestMethod(failMethod, testClass);
+        final var runner = new Runner(testIstance, testMethod);
         assertDoesNotThrow(() -> {
-            new Runner(testIstance, testMethod).run();
+            runner.runTest();
         });
     }
+
+    @Test
+    public void runBeforeTest() {
+        final var testMethod = new TestMethod(failMethod, testClass);
+        final var runner = new Runner(testIstance, testMethod);
+        assertDoesNotThrow(() -> {
+            runner.runBefore();
+        });
+    }
+
+    @Test
+    public void runAfterTest() {
+        final var testMethod = new TestMethod(failMethod, testClass);
+        final var runner = new Runner(testIstance, testMethod);
+        assertDoesNotThrow(() -> {
+            runner.runAfter();
+        });
+    }
+
+    @Test
+    public void runTest() {
+        final var testMethod = new TestMethod(failMethod, testClass);
+        final var runner = new Runner(testIstance, testMethod);
+        assertDoesNotThrow(() -> {
+            runner.run();
+        });
+    }
+
 }
