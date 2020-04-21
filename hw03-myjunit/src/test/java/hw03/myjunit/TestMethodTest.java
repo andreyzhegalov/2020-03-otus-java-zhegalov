@@ -27,7 +27,6 @@ public class TestMethodTest {
 
     @Test
     public void ctrTest() {
-        assertTrue(false);
         assertDoesNotThrow(() -> {
             new TestMethod(failMethod, testClass);
         });
