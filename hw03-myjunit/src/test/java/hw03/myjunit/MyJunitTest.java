@@ -3,8 +3,10 @@
  */
 package hw03.myjunit;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
 
 public class MyJunitTest {
     @Test
@@ -18,6 +20,16 @@ public class MyJunitTest {
     @Test
     public void runTest() {
         final var clazz = SomeClassTest.class;
-        new MyJunit(clazz).run();
+        assertDoesNotThrow(() -> {
+            new MyJunit(clazz).run();
+        });
+    }
+
+    @Test
+    public void getReportTest() {
+        final var clazz = SomeClassTest.class;
+        var myjunit = new MyJunit(clazz);
+        myjunit.run();
+        assertFalse(myjunit.getReport().isEmpty());
     }
 }

@@ -17,6 +17,10 @@ public class MyJunit {
         }
     }
 
+    public String getReport() {
+        return report.make();
+    }
+
     private Object testIstance() {
         final Object testIstance;
         try {
