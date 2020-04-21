@@ -3,7 +3,10 @@
  */
 package hw03.myjunit;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -51,17 +54,17 @@ public class TestMethodTest {
     @Test
     public void getBefore() {
         final var testMethod = new TestMethod(failMethod, testClass);
-        assertNotNull( testMethod.getBefore());
+        assertNotNull(testMethod.getBefore());
     }
 
     @Test
     public void getAfter() {
         final var testMethod = new TestMethod(failMethod, testClass);
-        assertNotNull( testMethod.getAfter());
+        assertNotNull(testMethod.getAfter());
     }
 
     @Test
-    public void getNameTest(){
+    public void getNameTest() {
         final var testMethod = new TestMethod(failMethod, testClass);
         assertEquals("failTest", testMethod.getName());
     }

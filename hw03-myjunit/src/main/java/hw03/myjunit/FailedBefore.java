@@ -1,5 +1,4 @@
 package hw03.myjunit;
 
-public class FailedBefore extends Exception{
+public class FailedBefore extends Exception {
 }
-

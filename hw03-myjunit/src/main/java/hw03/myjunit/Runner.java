@@ -25,15 +25,15 @@ public class Runner {
     }
 
     public void runTest() {
-        report.addLine( "[ RUN  ] " + testMethod.getName());
+        report.addLine("[ RUN  ] " + testMethod.getName());
         try {
             testMethod.invoke(testIstance);
             report.testSuccessfull();
-            report.addLine( "[ OK   ] " + testMethod.getName());
+            report.addLine("[ OK   ] " + testMethod.getName());
         } catch (Throwable e) {
             report.testFailed();
-            report.addLine(  e.getCause().toString() );
-            report.addLine( "[ FAIL ] " + testMethod.getName());
+            report.addLine(e.getCause().toString());
+            report.addLine("[ FAIL ] " + testMethod.getName());
         }
     }
 

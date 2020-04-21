@@ -16,16 +16,15 @@ public class TestMethod {
         method.invoke(test);
     }
 
-    public Method getBefore(){
+    public Method getBefore() {
         return testClass.getBefore();
     }
 
-    public Method getAfter(){
+    public Method getAfter() {
         return testClass.getAfter();
     }
 
-    public String getName(){
+    public String getName() {
         return method.getName();
     }
 }
-
