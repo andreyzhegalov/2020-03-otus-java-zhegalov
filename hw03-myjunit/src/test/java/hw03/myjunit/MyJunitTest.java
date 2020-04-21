@@ -9,6 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import org.junit.jupiter.api.Test;
 
 public class MyJunitTest {
+
     @Test
     public void ctrTest() {
         final var clazz = SomeClassTest.class;
@@ -28,7 +29,7 @@ public class MyJunitTest {
     @Test
     public void getReportTest() {
         final var clazz = SomeClassTest.class;
-        var myjunit = new MyJunit(clazz);
+        final var myjunit = new MyJunit(clazz);
         myjunit.run();
         assertFalse(myjunit.getReport().isEmpty());
     }

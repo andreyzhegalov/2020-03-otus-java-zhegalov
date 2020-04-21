@@ -6,7 +6,7 @@ public class MyJunit {
     private TestClass testClass;
     private Report report;
 
-    public MyJunit(Class<?> klass) {
+    public MyJunit(final Class<?> klass) {
         testClass = new TestClass(klass);
         report = new Report();
     }
@@ -22,7 +22,7 @@ public class MyJunit {
     }
 
     private Object testIstance() {
-        final Object testIstance;
+        Object testIstance;
         try {
             testIstance = testClass.getConstructor().newInstance();
         } catch (Exception e) {
@@ -31,7 +31,7 @@ public class MyJunit {
         return testIstance;
     }
 
-    private TestMethod testMethod(Method method) {
+    private TestMethod testMethod(final Method method) {
         return new TestMethod(method, testClass);
     }
 }

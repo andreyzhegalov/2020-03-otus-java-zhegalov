@@ -9,27 +9,27 @@ public class Report {
     private int failTest;
 
     Report() {
-        report = new ArrayList<String>();
+        report = new ArrayList<>();
     }
 
-    void addLine(String line) {
+    public void addLine(final String line) {
         report.add(line);
     }
 
-    void testSuccessfull() {
+    public void testSuccessfull() {
         okTest++;
     }
 
-    void testFailed() {
+    public void testFailed() {
         failTest++;
     }
 
-    String make() {
-        var result = new StringBuilder();
+    public String make() {
+        final var result = new StringBuilder();
         result.append(System.getProperty("line.separator"));
         result.append(header());
         result.append(System.getProperty("line.separator"));
-        for (var line : report) {
+        for (final var line : report) {
             result.append(line);
             result.append(System.getProperty("line.separator"));
         }
@@ -37,11 +37,11 @@ public class Report {
         return result.toString();
     }
 
-    String footer() {
+    public String footer() {
         return String.format("Total:%d Success:%d Fail:%d", okTest + failTest, okTest, failTest);
     }
 
-    String header() {
+    public String header() {
         return "TESTING RESULT";
     }
 }

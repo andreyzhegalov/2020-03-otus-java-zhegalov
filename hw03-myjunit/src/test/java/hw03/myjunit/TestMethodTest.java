@@ -37,7 +37,7 @@ public class TestMethodTest {
 
     @Test
     public void invokeTest() {
-        var testMethod = new TestMethod(successMethod, testClass);
+        final var testMethod = new TestMethod(successMethod, testClass);
         assertDoesNotThrow(() -> {
             testMethod.invoke(istance);
         });
@@ -45,20 +45,20 @@ public class TestMethodTest {
 
     @Test
     public void invokeTestFail() {
-        var testMethod = new TestMethod(failMethod, testClass);
+        final var testMethod = new TestMethod(failMethod, testClass);
         assertThrows(InvocationTargetException.class, () -> {
             testMethod.invoke(istance);
         });
     }
 
     @Test
-    public void getBefore() {
+    public void getBeforeTest() {
         final var testMethod = new TestMethod(failMethod, testClass);
         assertNotNull(testMethod.getBefore());
     }
 
     @Test
-    public void getAfter() {
+    public void getAfterTest() {
         final var testMethod = new TestMethod(failMethod, testClass);
         assertNotNull(testMethod.getAfter());
     }

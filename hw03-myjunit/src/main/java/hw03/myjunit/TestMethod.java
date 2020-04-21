@@ -7,12 +7,12 @@ public class TestMethod {
     private final Method method;
     private TestClass testClass;
 
-    public TestMethod(Method method, TestClass testClass) {
+    public TestMethod(final Method method, final TestClass testClass) {
         this.method = method;
         this.testClass = testClass;
     }
 
-    public void invoke(Object test) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException {
+    public void invoke(final Object test) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException {
         method.invoke(test);
     }
 

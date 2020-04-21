@@ -5,7 +5,7 @@ public class Runner {
     private TestMethod testMethod;
     private Report report;
 
-    public Runner(Object testIstance, TestMethod method, Report report) {
+    public Runner(final Object testIstance, final TestMethod method, final Report report) {
         this.testIstance = testIstance;
         testMethod = method;
         this.report = report;

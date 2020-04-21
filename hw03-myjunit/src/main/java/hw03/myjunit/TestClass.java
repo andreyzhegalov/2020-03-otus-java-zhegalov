@@ -9,7 +9,7 @@ import java.util.List;
 class TestClass {
     private Class<?> klass;
 
-    TestClass(Class<?> klass) {
+    TestClass(final Class<?> klass) {
         this.klass = klass;
     }
 
@@ -23,17 +23,17 @@ class TestClass {
 
     public Method getBefore() {
         final var methodsList = getAnnotatedMethods(Before.class);
-        return (methodsList.isEmpty()) ? null : methodsList.get(0);
+        return methodsList.isEmpty() ? null : methodsList.get(0);
     }
 
     public Method getAfter() {
-        var methodsList = getAnnotatedMethods(After.class);
-        return (methodsList.isEmpty()) ? null : methodsList.get(0);
+        final var methodsList = getAnnotatedMethods(After.class);
+        return methodsList.isEmpty() ? null : methodsList.get(0);
     }
 
-    private List<Method> getAnnotatedMethods(Class<? extends Annotation> annotation) {
-        List<Method> result = new ArrayList<Method>();
-        for (var method : klass.getMethods()) {
+    private List<Method> getAnnotatedMethods(final Class<? extends Annotation> annotation) {
+        final List<Method> result = new ArrayList<>();
+        for (final var method : klass.getMethods()) {
             if (method.isAnnotationPresent(annotation)) {
                 result.add(method);
             }

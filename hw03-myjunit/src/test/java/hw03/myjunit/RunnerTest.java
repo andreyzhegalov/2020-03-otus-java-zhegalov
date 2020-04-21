@@ -10,11 +10,11 @@ import java.lang.reflect.Method;
 import org.junit.jupiter.api.Test;
 
 public class RunnerTest {
-    final Object testIstance;
-    final TestClass testClass;
-    final Method successMethod;
-    final Method failMethod;
-    final Report report;
+    private final Object testIstance;
+    private final TestClass testClass;
+    private final Method successMethod;
+    private final Method failMethod;
+    private final Report report;
 
     public RunnerTest() {
         final var testHelper = new TestHelper();
