@@ -26,6 +26,7 @@ public class Report {
 
     String make() {
         var result = new StringBuilder();
+        result.append(System.getProperty("line.separator"));
         result.append(header());
         result.append(System.getProperty("line.separator"));
         for (var line : report) {
@@ -41,6 +42,6 @@ public class Report {
     }
 
     String header() {
-        return "Testing Result";
+        return "TESTING RESULT";
     }
 }

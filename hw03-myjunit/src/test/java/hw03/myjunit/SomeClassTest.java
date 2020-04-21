@@ -22,6 +22,6 @@ class SomeClassTest {
     @Test
     public void failTest() {
         System.out.println("Fail test");
-        Assert.fail(null);
+        Assert.assertTrue(false);
     }
 }

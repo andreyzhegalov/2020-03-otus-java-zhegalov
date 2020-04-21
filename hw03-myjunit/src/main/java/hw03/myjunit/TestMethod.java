@@ -23,5 +23,9 @@ public class TestMethod {
     public Method getAfter(){
         return testClass.getAfter();
     }
+
+    public String getName(){
+        return method.getName();
+    }
 }
 

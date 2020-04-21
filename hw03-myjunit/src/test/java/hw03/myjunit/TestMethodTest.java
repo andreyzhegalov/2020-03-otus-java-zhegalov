@@ -59,4 +59,10 @@ public class TestMethodTest {
         final var testMethod = new TestMethod(failMethod, testClass);
         assertNotNull( testMethod.getAfter());
     }
+
+    @Test
+    public void getNameTest(){
+        final var testMethod = new TestMethod(failMethod, testClass);
+        assertEquals("failTest", testMethod.getName());
+    }
 }

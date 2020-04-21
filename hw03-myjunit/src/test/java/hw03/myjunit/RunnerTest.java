@@ -14,6 +14,7 @@ public class RunnerTest {
     final TestClass testClass;
     final Method successMethod;
     final Method failMethod;
+    final Report report;
 
     public RunnerTest() {
         final var testHelper = new TestHelper();
@@ -21,20 +22,21 @@ public class RunnerTest {
         testClass = testHelper.getTestClass();
         successMethod = testHelper.getSuccessMethod();
         failMethod = testHelper.getFailMethod();
+        report = new Report();
     }
 
     @Test
     public void ctrTest() {
         final var testMethod = new TestMethod(failMethod, testClass);
         assertDoesNotThrow(() -> {
-            new Runner(testIstance, testMethod);
+            new Runner(testIstance, testMethod, report);
         });
     }
 
     @Test
     public void runSuccessTestTest() {
         final var testMethod = new TestMethod(successMethod, testClass);
-        final var runner = new Runner(testIstance, testMethod);
+        final var runner = new Runner(testIstance, testMethod, report);
         assertDoesNotThrow(() -> {
             runner.runTest();
         });
@@ -43,7 +45,7 @@ public class RunnerTest {
     @Test
     public void runFailTestTest() {
         final var testMethod = new TestMethod(failMethod, testClass);
-        final var runner = new Runner(testIstance, testMethod);
+        final var runner = new Runner(testIstance, testMethod, report);
         assertDoesNotThrow(() -> {
             runner.runTest();
         });
@@ -52,7 +54,7 @@ public class RunnerTest {
     @Test
     public void runBeforeTest() {
         final var testMethod = new TestMethod(failMethod, testClass);
-        final var runner = new Runner(testIstance, testMethod);
+        final var runner = new Runner(testIstance, testMethod, report);
         assertDoesNotThrow(() -> {
             runner.runBefore();
         });
@@ -61,7 +63,7 @@ public class RunnerTest {
     @Test
     public void runAfterTest() {
         final var testMethod = new TestMethod(failMethod, testClass);
-        final var runner = new Runner(testIstance, testMethod);
+        final var runner = new Runner(testIstance, testMethod, report);
         assertDoesNotThrow(() -> {
             runner.runAfter();
         });
@@ -70,7 +72,7 @@ public class RunnerTest {
     @Test
     public void runTest() {
         final var testMethod = new TestMethod(failMethod, testClass);
-        final var runner = new Runner(testIstance, testMethod);
+        final var runner = new Runner(testIstance, testMethod, report);
         assertDoesNotThrow(() -> {
             runner.run();
         });

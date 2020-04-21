@@ -27,22 +27,27 @@ public class TestHelper {
         }
     }
 
+    @Test
     public TestClass getTestClass() {
         return testClass;
     }
 
+    @Test
     public Object getIstance() {
         return istance;
     }
 
+    @Test
     public Method getSuccessMethod() {
         return successMethod;
     }
 
+    @Test
     public Method getFailMethod() {
         return failMethod;
     }
 
+    @Test
     public Class<SomeClassTest> getClazz() {
         return clazz;
     }

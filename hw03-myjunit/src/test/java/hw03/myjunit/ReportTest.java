@@ -3,6 +3,7 @@
  */
 package hw03.myjunit;
 
+import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class ReportTest {
@@ -17,7 +18,7 @@ public class ReportTest {
     @Test
     public void headerTest() {
         var report = new Report();
-        assertEquals("Testing Result", report.header());
+        assertEquals("TESTING RESULT", report.header());
     }
 
     @Test
@@ -44,6 +45,6 @@ public class ReportTest {
     public void makeTest() {
         var report = new Report();
         report.addLine("Some test result");
-        assertEquals("Testing Result\nSome test result\nTotal:0 Success:0 Fail:0", report.make());
+        assertEquals("\nTESTING RESULT\nSome test result\nTotal:0 Success:0 Fail:0", report.make());
     }
 }

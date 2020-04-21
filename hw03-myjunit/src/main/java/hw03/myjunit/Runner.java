@@ -1,12 +1,14 @@
 package hw03.myjunit;
 
 public class Runner {
-    private final Object test;
+    private final Object testIstance;
     private TestMethod testMethod;
+    private Report report;
 
-    public Runner(Object testIstance, TestMethod method) {
-        this.test = testIstance;
+    public Runner(Object testIstance, TestMethod method, Report report) {
+        this.testIstance = testIstance;
         testMethod = method;
+        this.report = report;
     }
 
     public void run() {
@@ -23,17 +25,22 @@ public class Runner {
     }
 
     public void runTest() {
+        report.addLine( "[ RUN  ] " + testMethod.getName());
         try {
-            testMethod.invoke(test);
+            testMethod.invoke(testIstance);
+            report.testSuccessfull();
+            report.addLine( "[ OK   ] " + testMethod.getName());
         } catch (Throwable e) {
-            //TODO add result handler
+            report.testFailed();
+            report.addLine(  e.getCause().toString() );
+            report.addLine( "[ FAIL ] " + testMethod.getName());
         }
     }
 
     public void runBefore() throws FailedBefore {
         try {
             try {
-                testMethod.getBefore().invoke(test);
+                testMethod.getBefore().invoke(testIstance);
             } catch (NullPointerException e) {
             }
         } catch (Throwable e) {
@@ -44,7 +51,7 @@ public class Runner {
     public void runAfter() {
         try {
             try {
-                testMethod.getAfter().invoke(test);
+                testMethod.getAfter().invoke(testIstance);
             } catch (NullPointerException e) {
             }
         } catch (Throwable e) {

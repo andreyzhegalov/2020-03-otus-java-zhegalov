@@ -4,14 +4,16 @@ import java.lang.reflect.Method;
 
 public class MyJunit {
     private TestClass testClass;
+    private Report report;
 
     public MyJunit(Class<?> klass) {
         testClass = new TestClass(klass);
+        report = new Report();
     }
 
     public void run() {
         for (final var test : testClass.getTestMethods()) {
-            new Runner(testIstance(), testMethod(test)).run();
+            new Runner(testIstance(), testMethod(test), report).run();
         }
     }
 
