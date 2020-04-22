@@ -31,3 +31,11 @@ hs_err_pid*
 .settings
 
 **.classpath
+
+.idea
+
+gradle/*
+
+gradlew
+
+gradlew.bat
