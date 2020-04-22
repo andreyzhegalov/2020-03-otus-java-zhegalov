@@ -1,6 +1,3 @@
-/*
- *
- */
 package hw03.myjunit;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;

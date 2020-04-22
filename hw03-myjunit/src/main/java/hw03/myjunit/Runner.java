@@ -2,12 +2,12 @@ package hw03.myjunit;
 
 public class Runner {
     private final Object testIstance;
-    private TestMethod testMethod;
+    private final TestMethod testMethod;
     private Report report;
 
     public Runner(final Object testIstance, final TestMethod method, final Report report) {
         this.testIstance = testIstance;
-        testMethod = method;
+        this.testMethod = method;
         this.report = report;
     }
 
