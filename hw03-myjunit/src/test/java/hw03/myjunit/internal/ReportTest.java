@@ -44,6 +44,9 @@ public class ReportTest {
     public void makeTest() {
         final var report = new Report();
         report.addLine("Some test result");
-        assertEquals("\nTESTING RESULT\nSome test result\nTotal:0 Success:0 Fail:0", report.make());
+        assertEquals(
+                System.getProperty("line.separator") + "TESTING RESULT" + System.getProperty("line.separator")
+                        + "Some test result" + System.getProperty("line.separator") + "Total:0 Success:0 Fail:0",
+                report.make());
     }
 }
