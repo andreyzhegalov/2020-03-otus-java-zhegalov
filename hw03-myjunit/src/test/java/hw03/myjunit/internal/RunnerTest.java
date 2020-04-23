@@ -1,4 +1,4 @@
-package hw03.myjunit;
+package hw03.myjunit.internal;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 

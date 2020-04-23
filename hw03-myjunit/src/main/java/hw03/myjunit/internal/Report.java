@@ -1,4 +1,4 @@
-package hw03.myjunit;
+package hw03.myjunit.internal;
 
 import java.util.ArrayList;
 import java.util.List;

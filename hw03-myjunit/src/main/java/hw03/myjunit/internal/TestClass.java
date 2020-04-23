@@ -1,4 +1,4 @@
-package hw03.myjunit;
+package hw03.myjunit.internal;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;

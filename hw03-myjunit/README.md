@@ -23,6 +23,6 @@
 Выполнить ```gradle build```
 
 **Использование**
-Пример работы для тестового класса из проекта ( ./hw03-myjunit/src/test/java/hw03/myjunit/SomeClassTest.java )
-```java -classpath ./hw03-myjunit/build/libs/hw03-myjunit.jar:./hw03-myjunit/build/classes/java/test/  hw03.myjunit.Starter hw03.myjunit.SomeClassTest```
+Пример работы для тестового класса из проекта ( ./hw03-myjunit/src/test/java/hw03/myjunit/internal/SomeClassTest.java )
+```java -classpath ./hw03-myjunit/build/libs/hw03-myjunit.jar:./hw03-myjunit/build/classes/java/test/  hw03.myjunit.Starter hw03.myjunit.internal.SomeClassTest```
 

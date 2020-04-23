@@ -1,4 +1,4 @@
-package hw03.myjunit;
+package hw03.myjunit.internal;
 
 class SomeClassTest {
     public SomeClassTest() {
