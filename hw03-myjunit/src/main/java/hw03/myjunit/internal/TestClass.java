@@ -22,12 +22,12 @@ class TestClass {
     }
 
     public Method getBefore() {
-        final var methodsList = getAnnotatedMethods(Before.class);
+        final var methodsList = getAnnotatedMethods(BeforeEach.class);
         return methodsList.isEmpty() ? null : methodsList.get(0);
     }
 
     public Method getAfter() {
-        final var methodsList = getAnnotatedMethods(After.class);
+        final var methodsList = getAnnotatedMethods(AfterEach.class);
         return methodsList.isEmpty() ? null : methodsList.get(0);
     }
 

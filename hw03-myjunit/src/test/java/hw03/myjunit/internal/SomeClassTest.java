@@ -4,12 +4,12 @@ class SomeClassTest {
     public SomeClassTest() {
     }
 
-    @Before
+    @BeforeEach
     public void beforeTest() {
         System.out.println("Some before actions");
     }
 
-    @After
+    @AfterEach
     public void afterTest() {
         System.out.println("Some after actions");
     }
