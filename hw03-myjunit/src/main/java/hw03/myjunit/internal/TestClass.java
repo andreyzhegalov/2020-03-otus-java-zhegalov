@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 class TestClass {
-    private Class<?> klass;
+    private final Class<?> klass;
 
     TestClass(final Class<?> klass) {
         this.klass = klass;

@@ -3,11 +3,11 @@ package hw03.myjunit.internal;
 import java.lang.reflect.Method;
 
 public class TestHelper {
-    private TestClass testClass;
+    private final TestClass testClass;
     private Method successMethod;
     private Method failMethod;
     private Object istance;
-    private Class<SomeClassTest> clazz;
+    private final Class<SomeClassTest> clazz;
 
     TestHelper() {
         clazz = SomeClassTest.class;

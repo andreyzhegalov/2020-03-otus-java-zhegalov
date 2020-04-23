@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Report {
-    private List<String> report;
+    private final List<String> report;
     private int okTest;
     private int failTest;
 

@@ -3,7 +3,7 @@ package hw03.myjunit.internal;
 public class Runner {
     private final Object testIstance;
     private final TestMethod testMethod;
-    private Report report;
+    private final Report report;
 
     public Runner(final Object testIstance, final TestMethod method, final Report report) {
         this.testIstance = testIstance;

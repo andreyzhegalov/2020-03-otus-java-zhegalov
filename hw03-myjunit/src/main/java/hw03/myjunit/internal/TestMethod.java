@@ -5,7 +5,7 @@ import java.lang.reflect.Method;
 
 public class TestMethod {
     private final Method method;
-    private TestClass testClass;
+    private final TestClass testClass;
 
     public TestMethod(final Method method, final TestClass testClass) {
         this.method = method;

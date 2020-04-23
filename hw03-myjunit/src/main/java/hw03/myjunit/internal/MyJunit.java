@@ -3,8 +3,8 @@ package hw03.myjunit.internal;
 import java.lang.reflect.Method;
 
 public class MyJunit {
-    private TestClass testClass;
-    private Report report;
+    private final TestClass testClass;
+    private final Report report;
 
     public MyJunit(final Class<?> klass) {
         testClass = new TestClass(klass);
