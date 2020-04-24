@@ -15,7 +15,7 @@ public class Runner {
         try {
             runBefore();
             runTest();
-        } catch (FailedBefore e) {
+        } catch (BeforeEachTestFailedException e) {
             throw new RuntimeException("Failed before");
         } catch (Exception e) {
             throw new RuntimeException("test should never throw an exception to this level");
@@ -37,14 +37,14 @@ public class Runner {
         }
     }
 
-    public void runBefore() throws FailedBefore {
+    public void runBefore() throws BeforeEachTestFailedException {
         try {
             try {
                 testMethod.getBefore().invoke(testIstance);
             } catch (NullPointerException e) {
             }
         } catch (Throwable e) {
-            throw new FailedBefore();
+            throw new BeforeEachTestFailedException();
         }
     }
 
