@@ -62,7 +62,7 @@ java  -XX:+UseParallelGC -Xms256M -Xmx256M  -Xlog:gc=info:file=./logs/name.log:t
 
 ### Интегральная оценка затрат производительности на  GC
 *(логарифмический масштаб)
-![](https://github.com/andreyzhegalov/2020-03-otus-java-zhegalov/blob/feature/hw04-testing-gc/hw04-testing-gc/pic/latency.png?raw=true)
+![](https://github.com/andreyzhegalov/2020-03-otus-java-zhegalov/blob/feature/hw04-testing-gc/hw04-testing-gc/pic/throughput.png?raw=true)
 
 **Выводы**
 1. При малых нагрузках (ratio = 0.6) Parallel GC меньше всего использовал ресурса JVM. 
