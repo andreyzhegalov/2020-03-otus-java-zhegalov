@@ -45,7 +45,7 @@ import java.util.ArrayDeque;
 */
 
 class UnitOfWork {
-    final private byte payload[];
+    private final byte payload[];
     private long cnt;
 
     public UnitOfWork(int loadSize) {
@@ -59,10 +59,10 @@ class UnitOfWork {
 }
 
 public class AppModel {
-    private int taskPrice = 1_000; // стоимость одной задачи [байт]
-    private int taskCnt = 1_000; // количество новых задач
-    private double ratio; // 1 - все пришло и ушло. > 1 - приходит больше, <1 - уходит больше
-    private ArrayDeque<UnitOfWork> queue = new ArrayDeque<>();
+    private final int taskPrice = 1_000; // one task cost [byte]
+    private final int taskCnt = 1_000; // new task count
+    private final double ratio; // 1 - incoming tasks count equal ready task count, > 1 - incomming task count more, < 1 - ready task count more
+    private final ArrayDeque<UnitOfWork> queue = new ArrayDeque<>();
 
     AppModel(double ratio) {
         this.ratio = ratio;
@@ -74,13 +74,13 @@ public class AppModel {
 
         System.out.println("Starting pid: " + ManagementFactory.getRuntimeMXBean().getName());
 
-        var model = new AppModel(Double.valueOf(args[0]));
+        final var model = new AppModel(Double.valueOf(args[0]));
 
         System.out.println("Ratio = " + model.getRatio());
         System.out.println("Incoming task " + model.newTaskCnt());
         System.out.println("Outcomming task " + model.readyTaskCnt());
 
-        int initTaskCnt = 10_000; // Начальное состояние очереди
+        final int initTaskCnt = 10_000; // init queue size
         model.setInitSize(initTaskCnt);
         model.run();
     }
@@ -90,7 +90,7 @@ public class AppModel {
     }
 
     int readyTaskCnt() {
-        double inverseRatio = 2 - ratio;
+        final double inverseRatio = 2 - ratio;
         return (int) (inverseRatio * taskCnt);
     }
 
