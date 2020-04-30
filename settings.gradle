@@ -1,4 +1,5 @@
 rootProject.name = 'otusHomeWork'
 include 'hw01-gradle'
 include 'hw02-myarraylist'
+include 'hw03-myjunit'
 include 'hw04-testing-gc'
