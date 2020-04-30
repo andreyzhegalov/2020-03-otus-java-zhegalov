@@ -8,21 +8,23 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class TestMethodTest {
 
-    private final TestClass testClass;
-    private final Method failMethod;
-    private final Method successMethod;
-    private final Object istance;
+    private TestClass testClass;
+    private Method failMethod;
+    private Method successMethod;
+    private Object istance;
 
-    TestMethodTest() {
-        final var helper = new TestHelper();
-        testClass = helper.getTestClass();
-        failMethod = helper.getFailMethod();
-        successMethod = helper.getSuccessMethod();
-        istance = helper.getIstance();
+    @BeforeEach
+    public void init(){
+        final var testHelper = new TestHelper();
+        testClass = testHelper.getTestClass();
+        failMethod = testHelper.getFailMethod();
+        successMethod = testHelper.getSuccessMethod();
+        istance = testHelper.getIstance();
     }
 
     @Test

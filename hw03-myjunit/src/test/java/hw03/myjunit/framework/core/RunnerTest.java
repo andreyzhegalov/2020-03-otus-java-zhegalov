@@ -4,16 +4,18 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 import java.lang.reflect.Method;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class RunnerTest {
-    private final Object testIstance;
-    private final TestClass testClass;
-    private final Method successMethod;
-    private final Method failMethod;
-    private final Report report;
+    private Object testIstance;
+    private TestClass testClass;
+    private Method successMethod;
+    private Method failMethod;
+    private Report report;
 
-    public RunnerTest() {
+    @BeforeEach
+    public void init() {
         final var testHelper = new TestHelper();
         testIstance = testHelper.getIstance();
         testClass = testHelper.getTestClass();
@@ -32,6 +34,7 @@ public class RunnerTest {
 
     @Test
     public void runSuccessTestTest() {
+        System.out.println(successMethod);
         final var testMethod = new TestMethod(successMethod, testClass);
         final var runner = new Runner(testIstance, testMethod, report);
         assertDoesNotThrow(() -> {
