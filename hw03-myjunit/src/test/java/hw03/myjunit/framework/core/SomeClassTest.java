@@ -1,4 +1,9 @@
-package hw03.myjunit.internal;
+package hw03.myjunit.framework.core;
+
+import hw03.myjunit.framework.Assert;
+import hw03.myjunit.framework.annotations.AfterEach;
+import hw03.myjunit.framework.annotations.BeforeEach;
+import hw03.myjunit.framework.annotations.Test;
 
 class SomeClassTest {
     public SomeClassTest() {

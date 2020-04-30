@@ -1,4 +1,4 @@
-package hw03.myjunit.internal;
+package hw03.myjunit.framework;
 
 public class Assert {
 

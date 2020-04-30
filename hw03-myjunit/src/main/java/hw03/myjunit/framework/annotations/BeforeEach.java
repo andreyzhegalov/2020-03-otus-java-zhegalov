@@ -1,4 +1,4 @@
-package hw03.myjunit.internal;
+package hw03.myjunit.framework.annotations;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

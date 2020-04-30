@@ -1,4 +1,6 @@
-package hw03.myjunit.internal;
+package hw03.myjunit.framework.core;
+
+import hw03.myjunit.framework.exceptions.BeforeEachTestFailedException;
 
 public class Runner {
     private final Object testIstance;

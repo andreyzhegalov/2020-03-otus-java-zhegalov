@@ -1,6 +1,8 @@
-package hw03.myjunit.internal;
+package hw03.myjunit.framework.core;
 
 import java.lang.reflect.Method;
+
+import hw03.myjunit.framework.annotations.Test;
 
 public class TestHelper {
     private final TestClass testClass;

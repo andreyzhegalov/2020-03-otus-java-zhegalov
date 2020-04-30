@@ -1,10 +1,14 @@
-package hw03.myjunit.internal;
+package hw03.myjunit.framework.core;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
+
+import hw03.myjunit.framework.annotations.AfterEach;
+import hw03.myjunit.framework.annotations.BeforeEach;
+import hw03.myjunit.framework.annotations.Test;
 
 class TestClass {
     private final Class<?> klass;

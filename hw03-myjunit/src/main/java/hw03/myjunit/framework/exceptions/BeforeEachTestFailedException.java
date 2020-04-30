@@ -1,7 +1,7 @@
-package hw03.myjunit.internal;
+package hw03.myjunit.framework.exceptions;
 
 public class BeforeEachTestFailedException extends Exception {
-    BeforeEachTestFailedException(){
+    public BeforeEachTestFailedException(){
         super();
     }
 }
