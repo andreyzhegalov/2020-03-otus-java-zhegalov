@@ -1,5 +1,6 @@
 plugins {
     id 'java'
+    id 'jacoco'
 }
 
 sourceCompatibility = JavaVersion.VERSION_13
@@ -8,7 +9,20 @@ targetCompatibility = JavaVersion.VERSION_13
 dependencies {
     implementation 'org.ow2.asm:asm-commons'
     implementation 'org.ow2.asm:asm-util'
+
+    testImplementation 'org.junit.jupiter:junit-jupiter-api'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
 }
 
 test {
+    useJUnitPlatform()
 }
+
+jacocoTestReport {
+    reports {
+        xml.enabled true
+        html.enabled true
+    }
+}
+
+check.dependsOn jacocoTestReport
