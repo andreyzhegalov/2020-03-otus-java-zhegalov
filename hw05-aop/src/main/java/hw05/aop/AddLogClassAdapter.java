@@ -13,12 +13,14 @@ public class AddLogClassAdapter extends ClassVisitor {
 
     @Override
     public MethodVisitor visitMethod(int access, String name, String desc, String signature, String[] exceptions) {
+        System.out.println(desc);
         MethodVisitor mv;
         mv = cv.visitMethod(access, name, desc, signature, exceptions);
         //TODO added annotation handler
-        if(mv !=null && !name.equals("<init>")){
+        if( name.equals("testMethod")){
             var customMethodAdapter = new AddLogMethodAdapter(mv);
             customMethodAdapter.setName(name);
+            //customMethodAdapter.setParametrs();
             mv = customMethodAdapter;
         }
         return mv;

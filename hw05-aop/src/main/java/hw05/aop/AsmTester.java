@@ -39,7 +39,7 @@ public class AsmTester {
 
         verifyAndPrint(finalClass);
 
-        writeToFile(finalClass, "Changed.class");
+        writeToFile(finalClass, "/home/and/works/otus/base_java/2020-03-otus-java-zhegalov/hw05-aop/bin/main/hw05/aop/TestClass.class");
 
     }
 
