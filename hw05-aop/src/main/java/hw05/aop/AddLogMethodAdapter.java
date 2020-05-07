@@ -75,12 +75,16 @@ public class AddLogMethodAdapter extends MethodVisitor {
                         String.class, MethodType.class, String.class, Object[].class).toMethodDescriptorString(),
                 false);
 
+        String test = "methodName";
+        mv.visitLdcInsn(test);
+        mv.visitVarInsn(Opcodes.ASTORE, 7);
+
         mv.visitFieldInsn(Opcodes.GETSTATIC, "java/lang/System", "out", "Ljava/io/PrintStream;");
+        mv.visitVarInsn(Opcodes.ALOAD, 7);
         mv.visitVarInsn(Opcodes.ILOAD, 1);
         mv.visitVarInsn(Opcodes.ALOAD, 3);
-        mv.visitInvokeDynamicInsn("makeConcatWithConstants", "(ILjava/lang/String;)Ljava/lang/String;", handle,
-                "logged param:\u0001 \u0001");
-
+        mv.visitInvokeDynamicInsn("makeConcatWithConstants", "(Ljava/lang/String;ILjava/lang/String;)Ljava/lang/String;", handle,
+                "Method name \u0001 logged param:\u0001 \u0001");
         mv.visitMethodInsn(Opcodes.INVOKEVIRTUAL, "java/io/PrintStream", "println", "(Ljava/lang/String;)V", false);
     }
 
