@@ -1,7 +1,9 @@
 package hw05.aop;
 
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.util.Vector;
 
 import org.junit.jupiter.api.Test;
 import org.objectweb.asm.Opcodes;
@@ -9,62 +11,125 @@ import org.objectweb.asm.Opcodes;
 public class ParameterToInstConverterTest {
 
     @Test
+    public void testWrongMethodSignatureNoOpeningBracket() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            new ParameterToInstConverter("V)V").getArgs();
+        });
+    }
+
+    @Test
+    public void testWrongMethodSignatureNoClosingBracket() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            new ParameterToInstConverter("(VV").getArgs();
+        });
+    }
+
+    @Test
     public void testBooleanParam() {
-        assertArrayEquals(new int[] { Opcodes.ILOAD }, new ParameterToInstConverter("(Z)V").getInsts());
+        var result = new Vector<ArgType>();
+        result.add(new ArgType(Opcodes.ILOAD, 1, "Z"));
+
+        final var parseResult = new ParameterToInstConverter("(Z)V").getArgs();
+        assertTrue(result.equals(parseResult));
     }
 
     @Test
     public void testByteParam() {
-        assertArrayEquals(new int[] { Opcodes.ILOAD }, new ParameterToInstConverter("(B)V").getInsts());
+        var result = new Vector<ArgType>();
+        result.add(new ArgType(Opcodes.ILOAD, 1, "B"));
+
+        final var parseResult = new ParameterToInstConverter("(B)V").getArgs();
+        assertTrue(result.equals(parseResult));
     }
 
     @Test
     public void testCharParam() {
-        assertArrayEquals(new int[] { Opcodes.ILOAD }, new ParameterToInstConverter("(C)V").getInsts());
+        var result = new Vector<ArgType>();
+        result.add(new ArgType(Opcodes.ILOAD, 1, "C"));
+
+        final var parseResult = new ParameterToInstConverter("(C)V").getArgs();
+        assertTrue(result.equals(parseResult));
     }
 
     @Test
     public void testShortParam() {
-        assertArrayEquals(new int[] { Opcodes.ILOAD }, new ParameterToInstConverter("(S)V").getInsts());
+        var result = new Vector<ArgType>();
+        result.add(new ArgType(Opcodes.ILOAD, 1, "S"));
+
+        final var parseResult = new ParameterToInstConverter("(S)V").getArgs();
+        assertTrue(result.equals(parseResult));
     }
 
     @Test
     public void testIntegerParam() {
-        assertArrayEquals(new int[] { Opcodes.ILOAD }, new ParameterToInstConverter("(I)V").getInsts());
+        var result = new Vector<ArgType>();
+        result.add(new ArgType(Opcodes.ILOAD, 1, "I"));
+
+        final var parseResult = new ParameterToInstConverter("(I)V").getArgs();
+        assertTrue(result.equals(parseResult));
     }
 
     @Test
     public void testLongParam() {
-        assertArrayEquals(new int[] { Opcodes.LLOAD }, new ParameterToInstConverter("(J)V").getInsts());
+        var result = new Vector<ArgType>();
+        result.add(new ArgType(Opcodes.LLOAD, 2, "J"));
+
+        final var parseResult = new ParameterToInstConverter("(J)V").getArgs();
+        assertTrue(result.equals(parseResult));
     }
 
     @Test
     public void testFloatParam() {
-        assertArrayEquals(new int[] { Opcodes.FLOAD }, new ParameterToInstConverter("(F)V").getInsts());
+        var result = new Vector<ArgType>();
+        result.add(new ArgType(Opcodes.FLOAD, 1, "F"));
+
+        final var parseResult = new ParameterToInstConverter("(F)V").getArgs();
+        assertTrue(result.equals(parseResult));
     }
 
     @Test
     public void testDoubleParam() {
-        assertArrayEquals(new int[] { Opcodes.DLOAD }, new ParameterToInstConverter("(D)V").getInsts());
+        var result = new Vector<ArgType>();
+        result.add(new ArgType(Opcodes.DLOAD, 2, "D"));
+
+        final var parseResult = new ParameterToInstConverter("(D)V").getArgs();
+        assertTrue(result.equals(parseResult));
     }
 
     @Test
-    public void testObjectParam() {
-        assertArrayEquals(new int[] { Opcodes.ALOAD },
-                new ParameterToInstConverter("(Ljava/lang/Object;)V").getInsts());
+    public void testStringParam() {
+        var result = new Vector<ArgType>();
+        result.add(new ArgType(Opcodes.ALOAD, 1, "Ljava/lang/String;"));
+
+        final var parseResult = new ParameterToInstConverter("(Ljava/lang/String;)V").getArgs();
+        assertTrue(result.equals(parseResult));
+    }
+
+    @Test
+    public void testStringParamNoClosingSemicolon() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            new ParameterToInstConverter("(Ljava/lang/String)V").getArgs();
+        });
     }
 
     @Test
     public void testArrayParam() {
         assertThrows(IllegalArgumentException.class, () -> {
-            new ParameterToInstConverter("([I])V").getInsts();
+            new ParameterToInstConverter("([I)V").getArgs();
         });
     }
 
     @Test
     public void testCombinationParam() {
-        assertArrayEquals(new int[] { Opcodes.ILOAD, Opcodes.ALOAD, Opcodes.FLOAD },
-                new ParameterToInstConverter("(ILjava/lang/Object;F)V").getInsts());
+        var result = new Vector<ArgType>();
+        result.add(new ArgType(Opcodes.ILOAD, 1, "S"));
+        result.add(new ArgType(Opcodes.ALOAD, 1, "Ljava/lang/String;"));
+        result.add(new ArgType(Opcodes.FLOAD, 1, "F"));
+        result.add(new ArgType(Opcodes.ALOAD, 1, "Ljava/lang/String;"));
+        result.add(new ArgType(Opcodes.ILOAD, 1, "I"));
+
+        final var parseResult = new ParameterToInstConverter("(SLjava/lang/String;FLjava/lang/String;I)V").getArgs();
+        assertTrue(result.equals(parseResult));
     }
 
 }

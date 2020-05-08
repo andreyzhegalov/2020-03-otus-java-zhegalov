@@ -2,113 +2,131 @@ package hw05.aop;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
+import java.util.Vector;
 
 import org.objectweb.asm.Opcodes;
 
 public class ParameterToInstConverter {
-    private final List<Integer> insts;
-    private boolean inBody;
-    private boolean inObjDesc;
+    private final Vector<ArgType> args;
     private final String description;
+
+    private class ArgSet {
+        private final Map<String, ArgType> argVariants;
+
+        public ArgSet() {
+            argVariants = new TreeMap<>();
+            argVariants.put("Z", new ArgType(Opcodes.ILOAD, 1, "Z"));
+            argVariants.put("B", new ArgType(Opcodes.ILOAD, 1, "B"));
+            argVariants.put("C", new ArgType(Opcodes.ILOAD, 1, "C"));
+            argVariants.put("S", new ArgType(Opcodes.ILOAD, 1, "S"));
+            argVariants.put("I", new ArgType(Opcodes.ILOAD, 1, "I"));
+            argVariants.put("J", new ArgType(Opcodes.LLOAD, 2, "J"));
+            argVariants.put("F", new ArgType(Opcodes.FLOAD, 1, "F"));
+            argVariants.put("D", new ArgType(Opcodes.DLOAD, 2, "D"));
+            argVariants.put("Ljava/lang/String;", new ArgType(Opcodes.ALOAD, 1, "Ljava/lang/String;"));
+        }
+
+        public ArgType get(String typeDesc) {
+            return argVariants.get(typeDesc);
+        }
+    }
 
     public ParameterToInstConverter(String description) {
         this.description = description;
-        insts = new ArrayList<>();
-        inBody = false;
-
+        args = new Vector<>();
         parse();
     }
 
     private void parse() {
-        insts.clear();
+        var body = getBoby(description);
 
-        for (int i = 0; i < description.length(); i++) {
-            final char curSymbol = description.charAt(i);
-
-            if (isBodyEnd(curSymbol)) {
-                return;
+        for (int i = 0; i < body.length(); i++) {
+            final char curSymbol = body.charAt(i);
+            String typeDesc = String.valueOf(curSymbol);
+            if (isStartObjectDesc(curSymbol)) {
+                var semicolonInd = getEndIndexOfObjectDesc(i, body);
+                typeDesc = body.substring(i, semicolonInd + 1); // include ;
+                i = semicolonInd;
             }
-
-            if (!isBody(curSymbol)) {
-                continue;
+            var argType = new ArgSet().get(typeDesc);
+            if(null == argType){
+                throw new IllegalArgumentException("Unsuported arg type");
             }
-
-            if (isObjectDescription(curSymbol)) {
-                continue;
-            }
-
-            final var inst = typeConverter(curSymbol);
-            insts.add(inst);
+            args.add(argType);
         }
     }
 
-    public int[] getInsts() {
-        var result = new int[insts.size()];
-        for (int i = 0; i < result.length; i++) {
-            result[i] = insts.get(i);
+    static private int getEndIndexOfObjectDesc(int startInd, String body) {
+        var semicolonInd = body.indexOf(';', startInd);
+        if (-1 == semicolonInd) {
+            throw new IllegalArgumentException("Wrong Object type description");
         }
-        return result;
+        return semicolonInd;
     }
 
-    private boolean isBody(char symbol) {
-        if (isBodyStart(symbol)) {
-            inBody = true;
-            return false;
-        }
-        if (isBodyEnd(symbol)) {
-            inBody = false;
-        }
-        return inBody;
-    }
-
-    private static boolean isBodyStart(char symbol) {
-        return '(' == symbol;
-    }
-
-    private static boolean isBodyEnd(char symbol) {
-        return ')' == symbol;
-    }
-
-    private boolean isObjectDescription(char symbol) {
-        if (isObjectType(symbol)) {
-            inObjDesc = true;
-            return false;
-        }
-        if (isObjectDescEnd(symbol)) {
-            inObjDesc = false;
-            return true;
-        }
-
-        return inObjDesc;
-    }
-
-    private static boolean isObjectType(char symbol) {
+    static private boolean isStartObjectDesc(char symbol) {
         return 'L' == symbol;
     }
 
-    private static boolean isObjectDescEnd(char symbol) {
-        return ';' == symbol;
+    Vector<ArgType> getArgs() {
+        return args;
     }
 
-    private static int typeConverter(char symbol) {
-        switch (symbol) {
-            case 'Z':
-            case 'B':
-            case 'C':
-            case 'S':
-            case 'I':
-                return Opcodes.ILOAD;
-            case 'J':
-                return Opcodes.LLOAD;
-            case 'F':
-                return Opcodes.FLOAD;
-            case 'D':
-                return Opcodes.DLOAD;
-            case 'L':
-                return Opcodes.ALOAD;
-            default:
-                throw new IllegalArgumentException("Wrong argument type in the description");
+    static private String getBoby(String description) {
+        var startPos = description.indexOf('(');
+        var endPos = description.indexOf(')');
+        if ((-1 == startPos) || (-1 == endPos)) {
+            throw new IllegalArgumentException("wrong method signature");
         }
+        return description.substring(startPos + 1, endPos);
+    }
+}
+
+class ArgType {
+    private final int loadOpcode;
+    private final short slotSize;
+    private final String typeDesc;
+
+    public ArgType(int loadOpcode, int slotSize, String typeDesc) {
+        this.loadOpcode = loadOpcode;
+        this.slotSize = (short) slotSize;
+        this.typeDesc = typeDesc;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = 17;
+        result = 31 * result + (int) loadOpcode;
+        result = 31 * result + (int) slotSize;
+        result = 31 * result + (typeDesc != null ? typeDesc.hashCode() : 0);
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
+
+        ArgType object = (ArgType) o;
+
+        if (loadOpcode != object.loadOpcode)
+            return false;
+        if (slotSize != object.slotSize)
+            return false;
+        return !(typeDesc != null ? !typeDesc.equals(object.typeDesc) : object.typeDesc != null);
+    }
+
+    @Override
+    public String toString() {
+        return "ArgType{" +
+            "loadOpcode = " + loadOpcode +
+            ", slotSize = " + slotSize +
+            ", typeDesc = " + typeDesc +
+            "}";
     }
 
 }
