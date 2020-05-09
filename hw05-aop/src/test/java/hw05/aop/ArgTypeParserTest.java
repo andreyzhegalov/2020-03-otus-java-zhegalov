@@ -1,6 +1,5 @@
-package hw05.aop.argparser;
+package hw05.aop;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -17,7 +16,6 @@ public class ArgTypeParserTest {
             new ArgTypeParser("V)V").getArgs();
         });
     }
-
     @Test
     public void testWrongMethodSignatureNoClosingBracket() {
         assertThrows(IllegalArgumentException.class, () -> {
@@ -131,30 +129,6 @@ public class ArgTypeParserTest {
 
         final var parseResult = new ArgTypeParser("(SLjava/lang/String;FLjava/lang/String;I)V").getArgs();
         assertTrue(result.equals(parseResult));
-    }
-
-    @Test
-    public void testGetFullDescription() {
-        final var argParser = new ArgTypeParser("(SLjava/lang/String;FLjava/lang/String;I)V");
-        assertEquals("SLjava/lang/String;FLjava/lang/String;I", argParser.getFullDescription());
-    }
-
-    @Test
-    public void testGetFullDescriptionVar2() {
-        final var argParser = new ArgTypeParser("(Ljava/lang/String;F)V");
-        assertEquals("Ljava/lang/String;F", argParser.getFullDescription());
-    }
-
-    @Test
-    public void testGetFullSlotSize() {
-        final var argParser = new ArgTypeParser("(SLjava/lang/String;FLjava/lang/String;I)V");
-        assertEquals(5, argParser.getFullSlotSize());
-    }
-
-    @Test
-    public void testGetFullSlotSizeVer2() {
-        final var argParser = new ArgTypeParser("(Ljava/lang/String;D)V");
-        assertEquals(3, argParser.getFullSlotSize());
     }
 
 }

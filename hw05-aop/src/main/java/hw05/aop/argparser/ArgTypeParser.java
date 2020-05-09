@@ -4,18 +4,34 @@ import java.util.Vector;
 
 public class ArgTypeParser {
     private final Vector<ArgType> args;
-    private final String description;
-
 
     public ArgTypeParser(String description) {
-        this.description = description;
-        args = new Vector<>();
-        parse();
+        args = parse(description);
     }
 
-    private void parse() {
-        var body = getBoby(description);
+    public Vector<ArgType> getArgs() {
+        return args;
+    }
 
+    public String getFullDescription() {
+        StringBuilder result = new StringBuilder();
+        for (final var arg : args) {
+            result.append(arg.getTypeDesc());
+        }
+        return result.toString();
+    }
+
+    public int getFullSlotSize() {
+        int result = 0;
+        for (final var arg : args) {
+            result += arg.getSlotSize();
+        }
+        return result;
+    }
+
+    static private Vector<ArgType> parse(String description) {
+        var body = getBoby(description);
+        var args = new Vector<ArgType>();
         var argSet = new SupportedArgTypes();
         for (int i = 0; i < body.length(); i++) {
             final char curSymbol = body.charAt(i);
@@ -31,6 +47,7 @@ public class ArgTypeParser {
             }
             args.add(argType);
         }
+        return args;
     }
 
     static private int getEndIndexOfObjectDesc(int startInd, String body) {
@@ -45,10 +62,6 @@ public class ArgTypeParser {
         return 'L' == symbol;
     }
 
-    Vector<ArgType> getArgs() {
-        return args;
-    }
-
     static private String getBoby(String description) {
         var startPos = description.indexOf('(');
         var endPos = description.indexOf(')');
@@ -58,4 +71,3 @@ public class ArgTypeParser {
         return description.substring(startPos + 1, endPos);
     }
 }
-

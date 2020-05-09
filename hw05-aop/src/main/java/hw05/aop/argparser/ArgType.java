@@ -11,6 +11,18 @@ class ArgType {
         this.typeDesc = typeDesc;
     }
 
+    public int getLoadOpcode() {
+        return loadOpcode;
+    }
+
+    public String getTypeDesc() {
+        return typeDesc;
+    }
+
+    public short getSlotSize() {
+        return slotSize;
+    }
+
     @Override
     public int hashCode() {
         int result = 17;
