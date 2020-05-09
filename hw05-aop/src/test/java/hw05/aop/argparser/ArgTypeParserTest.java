@@ -1,4 +1,4 @@
-package hw05.aop;
+package hw05.aop.argparser;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -8,19 +8,19 @@ import java.util.Vector;
 import org.junit.jupiter.api.Test;
 import org.objectweb.asm.Opcodes;
 
-public class ParameterToInstConverterTest {
+public class ArgTypeParserTest {
 
     @Test
     public void testWrongMethodSignatureNoOpeningBracket() {
         assertThrows(IllegalArgumentException.class, () -> {
-            new ParameterToInstConverter("V)V").getArgs();
+            new ArgTypeParser("V)V").getArgs();
         });
     }
 
     @Test
     public void testWrongMethodSignatureNoClosingBracket() {
         assertThrows(IllegalArgumentException.class, () -> {
-            new ParameterToInstConverter("(VV").getArgs();
+            new ArgTypeParser("(VV").getArgs();
         });
     }
 
@@ -29,7 +29,7 @@ public class ParameterToInstConverterTest {
         var result = new Vector<ArgType>();
         result.add(new ArgType(Opcodes.ILOAD, 1, "Z"));
 
-        final var parseResult = new ParameterToInstConverter("(Z)V").getArgs();
+        final var parseResult = new ArgTypeParser("(Z)V").getArgs();
         assertTrue(result.equals(parseResult));
     }
 
@@ -38,7 +38,7 @@ public class ParameterToInstConverterTest {
         var result = new Vector<ArgType>();
         result.add(new ArgType(Opcodes.ILOAD, 1, "B"));
 
-        final var parseResult = new ParameterToInstConverter("(B)V").getArgs();
+        final var parseResult = new ArgTypeParser("(B)V").getArgs();
         assertTrue(result.equals(parseResult));
     }
 
@@ -47,7 +47,7 @@ public class ParameterToInstConverterTest {
         var result = new Vector<ArgType>();
         result.add(new ArgType(Opcodes.ILOAD, 1, "C"));
 
-        final var parseResult = new ParameterToInstConverter("(C)V").getArgs();
+        final var parseResult = new ArgTypeParser("(C)V").getArgs();
         assertTrue(result.equals(parseResult));
     }
 
@@ -56,7 +56,7 @@ public class ParameterToInstConverterTest {
         var result = new Vector<ArgType>();
         result.add(new ArgType(Opcodes.ILOAD, 1, "S"));
 
-        final var parseResult = new ParameterToInstConverter("(S)V").getArgs();
+        final var parseResult = new ArgTypeParser("(S)V").getArgs();
         assertTrue(result.equals(parseResult));
     }
 
@@ -65,7 +65,7 @@ public class ParameterToInstConverterTest {
         var result = new Vector<ArgType>();
         result.add(new ArgType(Opcodes.ILOAD, 1, "I"));
 
-        final var parseResult = new ParameterToInstConverter("(I)V").getArgs();
+        final var parseResult = new ArgTypeParser("(I)V").getArgs();
         assertTrue(result.equals(parseResult));
     }
 
@@ -74,7 +74,7 @@ public class ParameterToInstConverterTest {
         var result = new Vector<ArgType>();
         result.add(new ArgType(Opcodes.LLOAD, 2, "J"));
 
-        final var parseResult = new ParameterToInstConverter("(J)V").getArgs();
+        final var parseResult = new ArgTypeParser("(J)V").getArgs();
         assertTrue(result.equals(parseResult));
     }
 
@@ -83,7 +83,7 @@ public class ParameterToInstConverterTest {
         var result = new Vector<ArgType>();
         result.add(new ArgType(Opcodes.FLOAD, 1, "F"));
 
-        final var parseResult = new ParameterToInstConverter("(F)V").getArgs();
+        final var parseResult = new ArgTypeParser("(F)V").getArgs();
         assertTrue(result.equals(parseResult));
     }
 
@@ -92,7 +92,7 @@ public class ParameterToInstConverterTest {
         var result = new Vector<ArgType>();
         result.add(new ArgType(Opcodes.DLOAD, 2, "D"));
 
-        final var parseResult = new ParameterToInstConverter("(D)V").getArgs();
+        final var parseResult = new ArgTypeParser("(D)V").getArgs();
         assertTrue(result.equals(parseResult));
     }
 
@@ -101,21 +101,21 @@ public class ParameterToInstConverterTest {
         var result = new Vector<ArgType>();
         result.add(new ArgType(Opcodes.ALOAD, 1, "Ljava/lang/String;"));
 
-        final var parseResult = new ParameterToInstConverter("(Ljava/lang/String;)V").getArgs();
+        final var parseResult = new ArgTypeParser("(Ljava/lang/String;)V").getArgs();
         assertTrue(result.equals(parseResult));
     }
 
     @Test
     public void testStringParamNoClosingSemicolon() {
         assertThrows(IllegalArgumentException.class, () -> {
-            new ParameterToInstConverter("(Ljava/lang/String)V").getArgs();
+            new ArgTypeParser("(Ljava/lang/String)V").getArgs();
         });
     }
 
     @Test
     public void testArrayParam() {
         assertThrows(IllegalArgumentException.class, () -> {
-            new ParameterToInstConverter("([I)V").getArgs();
+            new ArgTypeParser("([I)V").getArgs();
         });
     }
 
@@ -128,7 +128,7 @@ public class ParameterToInstConverterTest {
         result.add(new ArgType(Opcodes.ALOAD, 1, "Ljava/lang/String;"));
         result.add(new ArgType(Opcodes.ILOAD, 1, "I"));
 
-        final var parseResult = new ParameterToInstConverter("(SLjava/lang/String;FLjava/lang/String;I)V").getArgs();
+        final var parseResult = new ArgTypeParser("(SLjava/lang/String;FLjava/lang/String;I)V").getArgs();
         assertTrue(result.equals(parseResult));
     }
 
