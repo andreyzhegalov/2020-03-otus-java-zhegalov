@@ -1,6 +1,6 @@
 package hw05.aop.argparser;
 
-class ArgType {
+public class ArgType {
     private final int loadOpcode;
     private final short slotSize;
     private final String typeDesc;

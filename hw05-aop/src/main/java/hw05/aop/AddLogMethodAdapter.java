@@ -10,20 +10,16 @@ import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.Type;
 
+import hw05.aop.argparser.ArgTypeParser;
+
 public class AddLogMethodAdapter extends MethodVisitor {
-    private String name;
-    private int[] paramInst;
+    private final String name;
+    private final ArgTypeParser argTypeParser;
 
-    public AddLogMethodAdapter(MethodVisitor mv) {
+    public AddLogMethodAdapter(String name, String description, MethodVisitor mv) {
         super(Opcodes.ASM7, mv);
-    }
-
-    public void setName(String name) {
         this.name = name;
-    }
-
-    public void setParamInst(int[] paramInst) {
-        this.paramInst = paramInst;
+        argTypeParser = new ArgTypeParser(description);
     }
 
     @Override
@@ -70,21 +66,44 @@ public class AddLogMethodAdapter extends MethodVisitor {
         System.out.println("calling visitCode");
         Handle handle = new Handle(
                 Opcodes.H_INVOKESTATIC, Type.getInternalName(java.lang.invoke.StringConcatFactory.class),
-                "makeConcatWithConstants",
-                MethodType.methodType(CallSite.class, MethodHandles.Lookup.class,
+                "makeConcatWithConstants", MethodType.methodType(CallSite.class, MethodHandles.Lookup.class,
                         String.class, MethodType.class, String.class, Object[].class).toMethodDescriptorString(),
                 false);
 
-        String test = "methodName";
-        mv.visitLdcInsn(test);
-        mv.visitVarInsn(Opcodes.ASTORE, 7);
+        // Save class name
+        mv.visitLdcInsn(this.name);
+        mv.visitVarInsn(Opcodes.ASTORE, argTypeParser.getFullSlotSize() + 1);
 
         mv.visitFieldInsn(Opcodes.GETSTATIC, "java/lang/System", "out", "Ljava/io/PrintStream;");
-        mv.visitVarInsn(Opcodes.ALOAD, 7);
-        mv.visitVarInsn(Opcodes.ILOAD, 1);
-        mv.visitVarInsn(Opcodes.ALOAD, 3);
-        mv.visitInvokeDynamicInsn("makeConcatWithConstants", "(Ljava/lang/String;ILjava/lang/String;)Ljava/lang/String;", handle,
-                "Method name \u0001 logged param:\u0001 \u0001");
+
+        // Load param to stack
+        mv.visitVarInsn(Opcodes.ALOAD, argTypeParser.getFullSlotSize() + 1);
+        int curSlot = 1; // 0 for this
+        for (final var arg : argTypeParser.getArgs()) {
+            mv.visitVarInsn(arg.getLoadOpcode(), curSlot);
+            curSlot += arg.getSlotSize();
+        }
+
+        // Make concat method signature
+        String stringTypeDesc = "Ljava/lang/String;";
+        String concatMethodSignature = String.format("(%s)Ljava/lang/String;",
+                (stringTypeDesc + argTypeParser.getFullDescription()));
+        System.out.println(concatMethodSignature);
+
+        // Make log message
+        StringBuilder logMesssageBuilder = new StringBuilder();
+        logMesssageBuilder.append("Method name ");
+        logMesssageBuilder.append("\u0001 ");
+        for (int i = 0; i < argTypeParser.getArgs().size(); i++) {
+            logMesssageBuilder.append(" param \u0001");
+        }
+        String logMessage = logMesssageBuilder.toString();
+        System.out.println(logMessage);
+
+        // invoke concat method
+        mv.visitInvokeDynamicInsn("makeConcatWithConstants", concatMethodSignature, handle, logMessage);
+
+        // invoke println whith result concat method
         mv.visitMethodInsn(Opcodes.INVOKEVIRTUAL, "java/io/PrintStream", "println", "(Ljava/lang/String;)V", false);
     }
 

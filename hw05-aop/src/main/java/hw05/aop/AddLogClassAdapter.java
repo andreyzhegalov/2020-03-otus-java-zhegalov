@@ -18,9 +18,7 @@ public class AddLogClassAdapter extends ClassVisitor {
         mv = cv.visitMethod(access, name, desc, signature, exceptions);
         //TODO added annotation handler
         if( name.equals("testMethod")){
-            var customMethodAdapter = new AddLogMethodAdapter(mv);
-            customMethodAdapter.setName(name);
-            //customMethodAdapter.setParametrs();
+            var customMethodAdapter = new AddLogMethodAdapter(name, desc, mv);
             mv = customMethodAdapter;
         }
         return mv;
