@@ -15,11 +15,11 @@ import org.objectweb.asm.util.TraceClassVisitor;
 
 public class AsmTester {
     public static void main(String[] args) throws IOException {
-        String currentDirectory = System.getProperty("user.dir");
-        var ba = loadClass(
-                currentDirectory + "/hw05-aop/bin/main/hw05/aop/TestClass.class");
-        asmModifications(ba);
-        System.out.println("END");
+        if(args.length < 1){
+            throw new RuntimeException("Set path to .class file");
+        }
+        var ba = loadClass( args[0] );
+        asmModifications(ba, args[0]);
     }
 
     static byte[] loadClass(String className) throws IOException {
@@ -28,22 +28,18 @@ public class AsmTester {
         return bytecode;
     }
 
-    static void asmModifications(byte[] classArray) {
+    static void asmModifications(byte[] classArray, String outFile) {
         ClassReader cr = new ClassReader(classArray);
         ClassWriter cw = new ClassWriter(cr, ClassWriter.COMPUTE_MAXS);
         ClassVisitor cv = new AddLogClassAdapter(cw);
         cr.accept(cv, 0);
 
         byte[] finalClass = cw.toByteArray();
-
         verifyAndPrint(finalClass);
-
-        String currentDirectory = System.getProperty("user.dir");
-        writeToFile(finalClass, currentDirectory + "/hw05-aop/bin/main/hw05/aop/TestClass.class");
+        writeToFile(finalClass, outFile);
     }
 
     static void writeToFile(byte[] data, String fileName) {
-
         try (OutputStream fos = new FileOutputStream(fileName)) {
             fos.write(data);
         } catch (Exception e) {

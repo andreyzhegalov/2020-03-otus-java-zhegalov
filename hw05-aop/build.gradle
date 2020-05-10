@@ -1,6 +1,7 @@
 plugins {
     id 'java'
     id 'jacoco'
+    id 'com.github.johnrengelman.shadow'
 }
 
 sourceCompatibility = JavaVersion.VERSION_13
@@ -12,6 +13,23 @@ dependencies {
 
     testImplementation 'org.junit.jupiter:junit-jupiter-api'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
+}
+
+task shadowTestLogAnnotation(type: Jar, dependsOn: shadowJar) {
+    archiveBaseName.set('testLogAnnotation')
+    manifest {
+        attributes 'Main-Class': 'hw05.aop.ClassForTestingLog'
+        attributes 'Premain-Class': 'hw05.aop.Agent'
+    }
+    from zipTree(shadowJar.archiveFile)
+}
+
+task shadowAsmTester(type: Jar, dependsOn: shadowJar) {
+    archiveBaseName.set('asmTester')
+    manifest {
+        attributes 'Main-Class': 'hw05.aop.AsmTester'
+    }
+    from zipTree(shadowJar.archiveFile)
 }
 
 test {
@@ -26,3 +44,5 @@ jacocoTestReport {
 }
 
 check.dependsOn jacocoTestReport
+tasks.build.dependsOn tasks.shadowTestLogAnnotation
+tasks.build.dependsOn tasks.shadowAsmTester

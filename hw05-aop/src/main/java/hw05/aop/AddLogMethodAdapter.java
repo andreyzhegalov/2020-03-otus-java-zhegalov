@@ -5,7 +5,6 @@ import java.lang.invoke.MethodHandles;
 import java.lang.invoke.MethodType;
 
 import org.objectweb.asm.AnnotationVisitor;
-import org.objectweb.asm.Attribute;
 import org.objectweb.asm.Handle;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
@@ -26,15 +25,10 @@ public class AddLogMethodAdapter extends MethodVisitor {
 
     @Override
     public void visitCode() {
-        System.out.println("visitCode " + name);
-
-        if (!hasLogAnnotation)
-        {
+        if (!hasLogAnnotation) {
             mv.visitCode();
             return;
         }
-
-        System.out.println("Added log string");
         var argTypeParser = new ArgTypeParser(description);
 
         final Handle handle = new Handle(
@@ -45,16 +39,15 @@ public class AddLogMethodAdapter extends MethodVisitor {
         saveClassNameToFrameLocals(argTypeParser);
         mv.visitFieldInsn(Opcodes.GETSTATIC, "java/lang/System", "out", "Ljava/io/PrintStream;");
         loadParamToStack(argTypeParser);
-        mv.visitInvokeDynamicInsn("makeConcatWithConstants", getConcatMethodSignature(argTypeParser), handle, getOutLogMessage(argTypeParser));
+        mv.visitInvokeDynamicInsn("makeConcatWithConstants", getConcatMethodSignature(argTypeParser), handle,
+                getOutLogMessage(argTypeParser));
         mv.visitMethodInsn(Opcodes.INVOKEVIRTUAL, "java/io/PrintStream", "println", "(Ljava/lang/String;)V", false);
     }
 
     @Override
     public AnnotationVisitor visitAnnotation(String descriptor, boolean visible) {
-        System.out.println("visitAnnotation" + descriptor);
-
         hasLogAnnotation = false;
-        if (descriptor.contains("Log")){
+        if (descriptor.contains("Log")) {
             hasLogAnnotation = true;
             return null; // remove log annotation
         }
