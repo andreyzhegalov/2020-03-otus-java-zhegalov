@@ -15,8 +15,9 @@ import org.objectweb.asm.util.TraceClassVisitor;
 
 public class AsmTester {
     public static void main(String[] args) throws IOException {
+        String currentDirectory = System.getProperty("user.dir");
         var ba = loadClass(
-                "/home/and/works/otus/base_java/2020-03-otus-java-zhegalov/hw05-aop/bin/main/hw05/aop/TestClass.class");
+                currentDirectory + "/hw05-aop/bin/main/hw05/aop/TestClass.class");
         asmModifications(ba);
         System.out.println("END");
     }
@@ -37,8 +38,8 @@ public class AsmTester {
 
         verifyAndPrint(finalClass);
 
-        writeToFile(finalClass, "/home/and/works/otus/base_java/2020-03-otus-java-zhegalov/hw05-aop/bin/main/hw05/aop/TestClass.class");
-
+        String currentDirectory = System.getProperty("user.dir");
+        writeToFile(finalClass, currentDirectory + "/hw05-aop/bin/main/hw05/aop/TestClass.class");
     }
 
     static void writeToFile(byte[] data, String fileName) {
