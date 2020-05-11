@@ -36,11 +36,11 @@ public class AddLogMethodAdapter extends MethodVisitor {
                 "makeConcatWithConstants", MethodType.methodType(CallSite.class, MethodHandles.Lookup.class,
                         String.class, MethodType.class, String.class, Object[].class).toMethodDescriptorString(),
                 false);
-        saveClassNameToFrameLocals(argTypeParser);
+        saveClassNameToFrameLocals(argTypeParser.getFullSlotSize() + 1);
         mv.visitFieldInsn(Opcodes.GETSTATIC, "java/lang/System", "out", "Ljava/io/PrintStream;");
         loadParamToStack(argTypeParser);
-        mv.visitInvokeDynamicInsn("makeConcatWithConstants", getConcatMethodSignature(argTypeParser), handle,
-                getOutLogMessage(argTypeParser));
+        mv.visitInvokeDynamicInsn("makeConcatWithConstants",
+                getConcatMethodSignature(argTypeParser.getFullDescription()), handle, getOutLogMessage(argTypeParser));
         mv.visitMethodInsn(Opcodes.INVOKEVIRTUAL, "java/io/PrintStream", "println", "(Ljava/lang/String;)V", false);
     }
 
@@ -55,15 +55,15 @@ public class AddLogMethodAdapter extends MethodVisitor {
         return mv.visitAnnotation(descriptor, visible);
     }
 
-    private void saveClassNameToFrameLocals(ArgTypeParser argTypeParser) {
+    private void saveClassNameToFrameLocals(int slotNumber) {
         mv.visitLdcInsn(this.name);
-        mv.visitVarInsn(Opcodes.ASTORE, argTypeParser.getFullSlotSize() + 1);
+        mv.visitVarInsn(Opcodes.ASTORE, slotNumber);
     }
 
-    private String getConcatMethodSignature(ArgTypeParser argTypeParser) {
+    private String getConcatMethodSignature(String fullArgDesription) {
         final String stringTypeDesc = "Ljava/lang/String;";
         final String concatMethodSignature = String.format("(%s)Ljava/lang/String;",
-                (stringTypeDesc + argTypeParser.getFullDescription()));
+                (stringTypeDesc + fullArgDesription));
         return concatMethodSignature;
     }
 
