@@ -34,6 +34,9 @@ task shadowAsmTester(type: Jar, dependsOn: shadowJar) {
 
 test {
     useJUnitPlatform()
+    testLogging {
+        events "passed", "skipped", "failed"
+    }
 }
 
 jacocoTestReport {
