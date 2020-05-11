@@ -4,10 +4,9 @@ import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 
-
 public class AddLogClassAdapter extends ClassVisitor {
 
-	public AddLogClassAdapter(ClassVisitor cv) {
+    public AddLogClassAdapter(ClassVisitor cv) {
         super(Opcodes.ASM7, cv);
     }
 

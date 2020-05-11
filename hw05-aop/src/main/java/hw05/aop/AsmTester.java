@@ -15,10 +15,10 @@ import org.objectweb.asm.util.TraceClassVisitor;
 
 public class AsmTester {
     public static void main(String[] args) throws IOException {
-        if(args.length < 1){
+        if (args.length < 1) {
             throw new RuntimeException("Set path to .class file");
         }
-        var ba = loadClass( args[0] );
+        var ba = loadClass(args[0]);
         asmModifications(ba, args[0]);
     }
 
