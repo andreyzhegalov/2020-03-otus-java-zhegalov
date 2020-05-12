@@ -42,5 +42,5 @@ java -javaagent:hw05-aop/build/libs/testLogAnnotation.jar -jar hw05-aop/build/li
 Для разработки, отладки использовалось вспомогательное приложение. Приложение позволяет валидировать вносимые изменения с помощью ASM утилиты [CheckClassAdapter](https://asm.ow2.io/javadoc/org/objectweb/asm/util/CheckClassAdapter.html), и выводить список JVM команд.
 Для запуска необходимо выполнить
 ```bash
-java -javaagent:hw05-aop/build/libs/testLogAnnotation.jar -jar hw05-aop/build/libs/testLogAnnotation.jar
+java -jar hw05-aop/build/libs/asmTester.jar hw05-aop/build/classes/java/main/hw05/aop/ClassForTestingLog.class
 ```

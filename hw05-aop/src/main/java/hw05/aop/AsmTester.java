@@ -18,23 +18,23 @@ public class AsmTester {
         if (args.length < 1) {
             throw new RuntimeException("Set path to .class file");
         }
-        var ba = loadClass(args[0]);
+        final var ba = loadClass(args[0]);
         asmModifications(ba, args[0]);
     }
 
     static byte[] loadClass(String className) throws IOException {
         File file = new File(className);
-        byte[] bytecode = Files.readAllBytes(file.toPath());
+        final byte[] bytecode = Files.readAllBytes(file.toPath());
         return bytecode;
     }
 
     static void asmModifications(byte[] classArray, String outFile) {
-        ClassReader cr = new ClassReader(classArray);
-        ClassWriter cw = new ClassWriter(cr, ClassWriter.COMPUTE_MAXS);
-        ClassVisitor cv = new AddLogClassAdapter(cw);
+        final ClassReader cr = new ClassReader(classArray);
+        final ClassWriter cw = new ClassWriter(cr, ClassWriter.COMPUTE_MAXS);
+        final ClassVisitor cv = new AddLogClassAdapter(cw);
         cr.accept(cv, 0);
 
-        byte[] finalClass = cw.toByteArray();
+        final byte[] finalClass = cw.toByteArray();
         verifyAndPrint(finalClass);
         writeToFile(finalClass, outFile);
     }
@@ -48,9 +48,9 @@ public class AsmTester {
     }
 
     static void verifyAndPrint(byte[] bytes) {
-        ClassReader reader = new ClassReader(bytes);
-        ClassVisitor tracer = new TraceClassVisitor(new PrintWriter(System.out));
-        ClassVisitor checker = new CheckClassAdapter(tracer, true);
+        final ClassReader reader = new ClassReader(bytes);
+        final ClassVisitor tracer = new TraceClassVisitor(new PrintWriter(System.out));
+        final ClassVisitor checker = new CheckClassAdapter(tracer, true);
         reader.accept(checker, 0);
     }
 }

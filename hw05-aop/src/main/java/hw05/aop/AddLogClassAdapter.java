@@ -12,11 +12,8 @@ public class AddLogClassAdapter extends ClassVisitor {
 
     @Override
     public MethodVisitor visitMethod(int access, String name, String desc, String signature, String[] exceptions) {
-        MethodVisitor mv;
-        mv = cv.visitMethod(access, name, desc, signature, exceptions);
-        var customMethodAdapter = new AddLogMethodAdapter(name, desc, mv);
-        mv = customMethodAdapter;
-        return mv;
+        final MethodVisitor mv = cv.visitMethod(access, name, desc, signature, exceptions);
+        return new AddLogMethodAdapter(name, desc, mv);
     }
 
 }

@@ -29,15 +29,17 @@ public class AddLogMethodAdapter extends MethodVisitor {
             mv.visitCode();
             return;
         }
-        var argTypeParser = new ArgTypeParser(description);
+        final var argTypeParser = new ArgTypeParser(description);
 
         final Handle handle = new Handle(
                 Opcodes.H_INVOKESTATIC, Type.getInternalName(java.lang.invoke.StringConcatFactory.class),
                 "makeConcatWithConstants", MethodType.methodType(CallSite.class, MethodHandles.Lookup.class,
                         String.class, MethodType.class, String.class, Object[].class).toMethodDescriptorString(),
                 false);
-        saveClassNameToFrameLocals(argTypeParser.getFullSlotSize() + 1);
+        int methodNameSlotNumber = argTypeParser.getFullSlotSize() + 1;
+        saveMethodNameToFrameLocals(methodNameSlotNumber);
         mv.visitFieldInsn(Opcodes.GETSTATIC, "java/lang/System", "out", "Ljava/io/PrintStream;");
+        loadMethonNameToStack(methodNameSlotNumber);
         loadParamToStack(argTypeParser);
         mv.visitInvokeDynamicInsn("makeConcatWithConstants",
                 getConcatMethodSignature(argTypeParser.getFullDescription()), handle, getOutLogMessage(argTypeParser));
@@ -51,17 +53,20 @@ public class AddLogMethodAdapter extends MethodVisitor {
             hasLogAnnotation = true;
             return null; // remove log annotation
         }
-
         return mv.visitAnnotation(descriptor, visible);
     }
 
-    private void saveClassNameToFrameLocals(int slotNumber) {
+    private void saveMethodNameToFrameLocals(int slotNumber) {
         mv.visitLdcInsn(this.name);
         mv.visitVarInsn(Opcodes.ASTORE, slotNumber);
     }
 
+    private void loadMethonNameToStack(int slotNumber) {
+        mv.visitVarInsn(Opcodes.ALOAD, slotNumber);
+    }
+
     private String getConcatMethodSignature(String fullArgDesription) {
-        final String stringTypeDesc = "Ljava/lang/String;";
+        final String stringTypeDesc = "Ljava/lang/String;"; // for method name
         final String concatMethodSignature = String.format("(%s)Ljava/lang/String;",
                 (stringTypeDesc + fullArgDesription));
         return concatMethodSignature;
@@ -77,7 +82,6 @@ public class AddLogMethodAdapter extends MethodVisitor {
     }
 
     private void loadParamToStack(ArgTypeParser argTypeParser) {
-        mv.visitVarInsn(Opcodes.ALOAD, argTypeParser.getFullSlotSize() + 1); // method name
         int curSlot = 1; // 0 for this
         for (final var arg : argTypeParser.getArgs()) {
             mv.visitVarInsn(arg.getLoadOpcode(), curSlot);
