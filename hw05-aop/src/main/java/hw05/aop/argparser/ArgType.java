@@ -5,7 +5,7 @@ public class ArgType {
     private final short slotSize;
     private final String typeDesc;
 
-    public ArgType(int loadOpcode, int slotSize, String typeDesc) {
+    public ArgType(final int loadOpcode, final int slotSize, final String typeDesc) {
         this.loadOpcode = loadOpcode;
         this.slotSize = (short) slotSize;
         this.typeDesc = typeDesc;
