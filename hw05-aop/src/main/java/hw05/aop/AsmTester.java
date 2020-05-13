@@ -18,28 +18,27 @@ public class AsmTester {
         if (args.length < 1) {
             throw new RuntimeException("Set path to .class file");
         }
-        final var ba = loadClass(args[0]);
-        asmModifications(ba, args[0]);
+        final var data = loadClass(args[0]);
+        asmModifications(data, args[0]);
     }
 
-    static byte[] loadClass(String className) throws IOException {
-        File file = new File(className);
-        final byte[] bytecode = Files.readAllBytes(file.toPath());
-        return bytecode;
+    private static byte[] loadClass(final String className) throws IOException {
+        final File file = new File(className);
+        return Files.readAllBytes(file.toPath());
     }
 
-    static void asmModifications(byte[] classArray, String outFile) {
-        final ClassReader cr = new ClassReader(classArray);
-        final ClassWriter cw = new ClassWriter(cr, ClassWriter.COMPUTE_MAXS);
-        final ClassVisitor cv = new AddLogClassAdapter(cw);
-        cr.accept(cv, 0);
+    private static void asmModifications(final byte[] classArray, final String outFile) {
+        final ClassReader classReader = new ClassReader(classArray);
+        final ClassWriter classWriter = new ClassWriter(classReader, ClassWriter.COMPUTE_MAXS);
+        final ClassVisitor classVisitor = new AddLogClassAdapter(classWriter);
+        classReader.accept(classVisitor, 0);
 
-        final byte[] finalClass = cw.toByteArray();
+        final byte[] finalClass = classWriter.toByteArray();
         verifyAndPrint(finalClass);
         writeToFile(finalClass, outFile);
     }
 
-    static void writeToFile(byte[] data, String fileName) {
+    private static void writeToFile(final byte[] data, final String fileName) {
         try (OutputStream fos = new FileOutputStream(fileName)) {
             fos.write(data);
         } catch (Exception e) {
@@ -47,7 +46,7 @@ public class AsmTester {
         }
     }
 
-    static void verifyAndPrint(byte[] bytes) {
+    private static void verifyAndPrint(final byte[] bytes) {
         final ClassReader reader = new ClassReader(bytes);
         final ClassVisitor tracer = new TraceClassVisitor(new PrintWriter(System.out));
         final ClassVisitor checker = new CheckClassAdapter(tracer, true);

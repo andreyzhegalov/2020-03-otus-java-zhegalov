@@ -21,7 +21,7 @@ class SupportedArgTypes {
         argVariants.put("Ljava/lang/String;", new ArgType(Opcodes.ALOAD, 1, "Ljava/lang/String;"));
     }
 
-    public ArgType get(String typeDesc) {
+    public ArgType get(final String typeDesc) {
         return argVariants.get(typeDesc);
     }
 }

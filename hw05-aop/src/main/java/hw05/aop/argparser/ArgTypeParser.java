@@ -1,20 +1,21 @@
 package hw05.aop.argparser;
 
+import java.util.List;
 import java.util.Vector;
 
 public class ArgTypeParser {
-    private final Vector<ArgType> args;
+    private final List<ArgType> args;
 
-    public ArgTypeParser(String description) {
+    public ArgTypeParser(final String description) {
         args = parse(description);
     }
 
-    public Vector<ArgType> getArgs() {
+    public List<ArgType> getArgs() {
         return args;
     }
 
     public String getFullDescription() {
-        StringBuilder result = new StringBuilder();
+        final StringBuilder result = new StringBuilder();
         for (final var arg : args) {
             result.append(arg.getTypeDesc());
         }
@@ -29,19 +30,19 @@ public class ArgTypeParser {
         return result;
     }
 
-    static private Vector<ArgType> parse(String description) {
-        var body = getBoby(description);
-        var args = new Vector<ArgType>();
-        var argSet = new SupportedArgTypes();
+    static private List<ArgType> parse(final String description) {
+        final var body = getBoby(description);
+        final var args = new Vector<ArgType>();
+        final var argSet = new SupportedArgTypes();
         for (int i = 0; i < body.length(); i++) {
             final char curSymbol = body.charAt(i);
             String typeDesc = String.valueOf(curSymbol);
             if (isStartObjectDesc(curSymbol)) {
-                var semicolonInd = getEndIndexOfObjectDesc(i, body);
+                final var semicolonInd = getEndIndexOfObjectDesc(i, body);
                 typeDesc = body.substring(i, semicolonInd + 1); // include ;
                 i = semicolonInd;
             }
-            var argType = argSet.get(typeDesc);
+            final var argType = argSet.get(typeDesc);
             if (null == argType) {
                 throw new IllegalArgumentException("Unsuported arg type");
             }
@@ -50,22 +51,22 @@ public class ArgTypeParser {
         return args;
     }
 
-    static private int getEndIndexOfObjectDesc(int startInd, String body) {
-        var semicolonInd = body.indexOf(';', startInd);
+    static private int getEndIndexOfObjectDesc(final int startInd, final String body) {
+        final var semicolonInd = body.indexOf(';', startInd);
         if (-1 == semicolonInd) {
             throw new IllegalArgumentException("Wrong Object type description");
         }
         return semicolonInd;
     }
 
-    static private boolean isStartObjectDesc(char symbol) {
+    static private boolean isStartObjectDesc(final char symbol) {
         return 'L' == symbol;
     }
 
-    static private String getBoby(String description) {
-        var startPos = description.indexOf('(');
-        var endPos = description.indexOf(')');
-        if ((-1 == startPos) || (-1 == endPos)) {
+    static private String getBoby(final String description) {
+        final var startPos = description.indexOf('(');
+        final var endPos = description.indexOf(')');
+        if (-1 == startPos || -1 == endPos) {
             throw new IllegalArgumentException("wrong method signature");
         }
         return description.substring(startPos + 1, endPos);

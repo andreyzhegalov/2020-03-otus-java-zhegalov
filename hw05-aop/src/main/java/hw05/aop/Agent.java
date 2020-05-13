@@ -14,11 +14,11 @@ public class Agent {
             @Override
             public byte[] transform(ClassLoader loader, String className, Class<?> classBeingRedefined,
                     ProtectionDomain protectionDomain, byte[] classfileBuffer) {
-                ClassReader cr = new ClassReader(classfileBuffer);
-                ClassWriter cw = new ClassWriter(cr, ClassWriter.COMPUTE_MAXS);
-                ClassVisitor cv = new AddLogClassAdapter(cw);
-                cr.accept(cv, 0);
-                return cw.toByteArray();
+                final ClassReader classReader = new ClassReader(classfileBuffer);
+                final ClassWriter classWriter = new ClassWriter(classReader, ClassWriter.COMPUTE_MAXS);
+                final ClassVisitor classVisitor = new AddLogClassAdapter(classWriter);
+                classReader.accept(classVisitor, 0);
+                return classWriter.toByteArray();
             }
         });
 
