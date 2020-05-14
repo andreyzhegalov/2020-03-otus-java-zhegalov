@@ -39,7 +39,7 @@ public class AddLogMethodAdapter extends MethodVisitor {
         final int methodNameSlot = argTypeParser.getFullSlotSize() + 1;
         saveMethodNameToFrameLocals(methodNameSlot);
         mv.visitFieldInsn(Opcodes.GETSTATIC, "java/lang/System", "out", "Ljava/io/PrintStream;");
-        loadMethonNameToStack(methodNameSlot);
+        loadMethodNameToStack(methodNameSlot);
         loadParamToStack(argTypeParser);
         mv.visitInvokeDynamicInsn("makeConcatWithConstants",
                 getConcatMethodSignature(argTypeParser.getFullDescription()), handle, getOutLogMessage(argTypeParser));
@@ -61,7 +61,7 @@ public class AddLogMethodAdapter extends MethodVisitor {
         mv.visitVarInsn(Opcodes.ASTORE, slotNumber);
     }
 
-    private void loadMethonNameToStack(final int slotNumber) {
+    private void loadMethodNameToStack(final int slotNumber) {
         mv.visitVarInsn(Opcodes.ALOAD, slotNumber);
     }
 

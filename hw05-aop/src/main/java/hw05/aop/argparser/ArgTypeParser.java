@@ -1,7 +1,7 @@
 package hw05.aop.argparser;
 
 import java.util.List;
-import java.util.Vector;
+import java.util.ArrayList;
 
 public class ArgTypeParser {
     private final List<ArgType> args;
@@ -32,8 +32,7 @@ public class ArgTypeParser {
 
     static private List<ArgType> parse(final String description) {
         final var body = getBoby(description);
-        final var args = new Vector<ArgType>();
-        final var argSet = new SupportedArgTypes();
+        final var args = new ArrayList<ArgType>();
         for (int i = 0; i < body.length(); i++) {
             final char curSymbol = body.charAt(i);
             String typeDesc = String.valueOf(curSymbol);
@@ -42,7 +41,7 @@ public class ArgTypeParser {
                 typeDesc = body.substring(i, semicolonInd + 1); // include ;
                 i = semicolonInd;
             }
-            final var argType = argSet.get(typeDesc);
+            final var argType = SupportedArgTypes.get(typeDesc);
             if (null == argType) {
                 throw new IllegalArgumentException("Unsuported arg type");
             }
