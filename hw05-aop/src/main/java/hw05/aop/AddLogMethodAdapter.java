@@ -72,12 +72,8 @@ public class AddLogMethodAdapter extends MethodVisitor {
     }
 
     private String getOutLogMessage(final ArgTypeParser argTypeParser) {
-        final StringBuilder logMesssageBuilder = new StringBuilder();
-        logMesssageBuilder.append("Method name \u0001 ");
-        for (int i = 0; i < argTypeParser.getArgs().size(); i++) {
-            logMesssageBuilder.append(" param \u0001");
-        }
-        return logMesssageBuilder.toString();
+        return "Method name \u0001 "+
+            " param \u0001".repeat(argTypeParser.getArgs().size()) ;
     }
 
     private void loadParamToStack(final ArgTypeParser argTypeParser) {
