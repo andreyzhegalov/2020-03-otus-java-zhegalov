@@ -1,7 +1,9 @@
 package hw06.atm;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
@@ -17,6 +19,22 @@ public class MoneyCellTest {
         assertEquals(0, cell.getTotalCnt());
         cell.put(2);
         assertEquals(2, cell.getTotalCnt());
+    }
+
+    @Test
+    public void testIsFull(){
+        final var cell = new MoneyCell(new Money(100), 1);
+        assertFalse( cell.isFull());
+        cell.put(1);
+        assertTrue(cell.isFull());
+    }
+
+    @Test
+    public void testFreeSpace(){
+        final var cell = new MoneyCell(new Money(100), 2);
+        assertEquals(2, cell.freeSpace());
+        cell.put(1);
+        assertEquals(1, cell.freeSpace());
     }
 
     @Test

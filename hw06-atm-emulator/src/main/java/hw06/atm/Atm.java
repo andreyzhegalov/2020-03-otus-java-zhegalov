@@ -1,6 +1,7 @@
 package hw06.atm;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class Atm implements MoneyAction, StaffAction {
@@ -28,6 +29,7 @@ public class Atm implements MoneyAction, StaffAction {
     @Override
     public void putCell(MoneyCell cell) {
         cells.add(cell);
+        cells.sort((var m1, var m2) -> (m1.getMoneyType().cost() - m2.getMoneyType().cost()));
     }
 
     @Override
