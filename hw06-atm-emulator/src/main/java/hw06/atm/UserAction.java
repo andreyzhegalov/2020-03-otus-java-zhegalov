@@ -1,6 +1,6 @@
 package hw06.atm;
 
-public interface MoneyAction {
+public interface UserAction {
     public void put(Object[] moneys);
 
     public Object[] get(int summ);

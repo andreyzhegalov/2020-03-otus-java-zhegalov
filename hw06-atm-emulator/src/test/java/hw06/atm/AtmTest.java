@@ -9,8 +9,10 @@ public class AtmTest {
 
     @Test
     public void testPutMoney() {
-        final Money[] moneys = { new Money(50), new Money(100) };
+        final Banknote[] moneys = { new Banknote(50), new Banknote(100) };
         final var atm = new Atm();
+        atm.putCell(new BanknoteCell(new Banknote(50), 10));
+        atm.putCell(new BanknoteCell( new Banknote(100), 10));
         atm.put(moneys);
     }
 
@@ -23,7 +25,7 @@ public class AtmTest {
     public void testPutCell() {
         final var atm = new Atm();
         assertEquals(0, atm.getCellCnt());
-        atm.putCell(new MoneyCell(new Money(100), 100));
+        atm.putCell(new BanknoteCell(new Banknote(100), 100));
         assertEquals(1, atm.getCellCnt());
     }
 

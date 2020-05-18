@@ -1,11 +1,11 @@
 package hw06.atm;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
-public class Atm implements MoneyAction, StaffAction {
-    private final List<MoneyCell> cells = new ArrayList<>();
+public class Atm implements UserAction, StaffAction {
+    private final List<BanknoteCell> cells = new ArrayList<>();
+    private final CellManager cellManger = new CellManager();
 
     public int getBalance() {
         return 0;
@@ -16,8 +16,9 @@ public class Atm implements MoneyAction, StaffAction {
     }
 
     @Override
-    public void put(Object[] moneys) {
-        // TODO Auto-generated method stub
+    public void put(Object[] banknotes) {
+        final var cntByCell = cellManger.tryPutToCells((Banknote[]) banknotes);
+        cellManger.putToCells(cntByCell);
     }
 
     @Override
@@ -27,9 +28,10 @@ public class Atm implements MoneyAction, StaffAction {
     }
 
     @Override
-    public void putCell(MoneyCell cell) {
+    public void putCell(BanknoteCell cell) {
         cells.add(cell);
-        cells.sort((var m1, var m2) -> (m1.getMoneyType().cost() - m2.getMoneyType().cost()));
+        cells.sort((var m1, var m2) -> (m1.getBanknoteType().getCost() - m2.getBanknoteType().getCost()));
+        cellManger.setCells(cells);
     }
 
     @Override
