@@ -51,7 +51,7 @@ public class BanknoteCell {
         if (cnt == 0) {
             return 0;
         }
-        return (getOccupiedSpace() >= cnt) ? cnt : getFreeSpace();
+        return (getOccupiedSpace() >= cnt) ? cnt : getOccupiedSpace();
     }
 
     public boolean tryPut(int cnt) {

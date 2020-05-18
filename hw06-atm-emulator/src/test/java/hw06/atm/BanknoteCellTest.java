@@ -81,16 +81,23 @@ public class BanknoteCellTest {
     }
 
     @Test
-    public void testGetSavedCntForLessCostMoney() {
+    public void testTryGetSumForLessCostMoney() {
         final var cell = new BanknoteCell(new Banknote(100), 10);
         assertEquals(0, cell.tryGetSum(50));
     }
 
     @Test
-    public void testGetSavedCntSuccess(){
+    public void testTryGetSumSuccess(){
         final var cell = new BanknoteCell(new Banknote(100), 10);
         cell.put(10);
         assertEquals(2, cell.tryGetSum(200));
+    }
+
+    @Test
+    public void testTryGetAboveSum(){
+        final var cell = new BanknoteCell(new Banknote(100), 10);
+        cell.put(10);
+        assertEquals(10, cell.tryGetSum(11*100));
     }
 
     @Test

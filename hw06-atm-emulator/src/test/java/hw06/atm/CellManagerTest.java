@@ -89,6 +89,14 @@ public class CellManagerTest {
     }
 
     @Test
+    public void testTryGetAllBanknote() {
+        final int[] initCntInCells = { 10, 10 };
+        cellManager.putToCells(initCntInCells);
+        final int[] expectedCnt = { 10, 10 };
+        assertArrayEquals(expectedCnt, cellManager.tryGetFromCells(100*10 + 50*10));
+    }
+
+    @Test
     public void testGetFromFirstCell() {
         final int[] initCntInCells = { 10, 10 };
         cellManager.putToCells(initCntInCells);

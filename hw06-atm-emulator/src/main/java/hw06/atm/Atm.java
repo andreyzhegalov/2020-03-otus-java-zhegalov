@@ -22,15 +22,15 @@ public class Atm implements UserAction, StaffAction {
     }
 
     @Override
-    public Object[] get(int summ) {
-        // TODO Auto-generated method stub
-        return null;
+    public Object[] get(int sum) {
+        final var cntByCell = cellManger.tryGetFromCells(sum);
+        return cellManger.getFromCells(cntByCell);
     }
 
     @Override
     public void putCell(BanknoteCell cell) {
         cells.add(cell);
-        cells.sort((var m1, var m2) -> (m1.getBanknoteType().getCost() - m2.getBanknoteType().getCost()));
+        cells.sort((var m1, var m2) -> (m2.getBanknoteType().getCost() - m1.getBanknoteType().getCost()));
         cellManger.setCells(cells);
     }
 
