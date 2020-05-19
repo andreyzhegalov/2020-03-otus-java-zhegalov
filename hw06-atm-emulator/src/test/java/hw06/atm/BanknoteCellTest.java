@@ -9,38 +9,53 @@ import org.junit.jupiter.api.Test;
 
 public class BanknoteCellTest {
     @Test
-    public void testGetTotal() {
+    public void testGetOccupiedSpaceInEmptyCell() {
         assertEquals(0, new BanknoteCell(new Banknote(100), 10).getOccupiedSpace());
     }
 
     @Test
-    public void testGetTotalCnt() {
+    public void testGetOccupiedSpace() {
         final var cell = new BanknoteCell(new Banknote(100), 200);
-        assertEquals(0, cell.getOccupiedSpace());
         cell.put(2);
         assertEquals(2, cell.getOccupiedSpace());
     }
 
     @Test
-    public void testIsFull() {
+    public void testIsFullForEmptyCell() {
         final var cell = new BanknoteCell(new Banknote(100), 1);
         assertFalse(cell.isFull());
+    }
+
+    @Test
+    public void testIsFull() {
+        final var cell = new BanknoteCell(new Banknote(100), 1);
         cell.put(1);
         assertTrue(cell.isFull());
     }
 
     @Test
-    public void testIsEmpty() {
+    public void testIsEmptyFroEmptyCell() {
         final var cell = new BanknoteCell(new Banknote(100), 1);
         assertTrue(cell.isEmpty());
+    }
+
+    @Test
+    public void testIsEmpty() {
+        final var cell = new BanknoteCell(new Banknote(100), 1);
         cell.put(1);
         assertFalse(cell.isEmpty());
     }
 
     @Test
+    public void testFreeSpaceForEmptyCell() {
+        final int cellCapacity = 2;
+        final var cell = new BanknoteCell(new Banknote(100), cellCapacity);
+        assertEquals(cellCapacity, cell.getFreeSpace());
+    }
+
+    @Test
     public void testFreeSpace() {
         final var cell = new BanknoteCell(new Banknote(100), 2);
-        assertEquals(2, cell.getFreeSpace());
         cell.put(1);
         assertEquals(1, cell.getFreeSpace());
     }
@@ -55,7 +70,7 @@ public class BanknoteCellTest {
     public void testGetBalance() {
         final var cell = new BanknoteCell(new Banknote(100), 10);
         cell.put(5);
-        assertEquals((10 - 5) * 100, cell.getBalance());
+        assertEquals(5 * 100, cell.getBalance());
     }
 
     @Test
@@ -80,12 +95,6 @@ public class BanknoteCellTest {
     }
 
     @Test
-    public void testGetFromEmptyCell() {
-        final var cell = new BanknoteCell(new Banknote(100), 10);
-        assertThrows(RuntimeException.class, () -> cell.get(1));
-    }
-
-    @Test
     public void testGet() {
         final var cell = new BanknoteCell(new Banknote(50), 100);
         cell.put(2);
@@ -103,14 +112,20 @@ public class BanknoteCellTest {
     public void testTryGetSumSuccess() {
         final var cell = new BanknoteCell(new Banknote(100), 10);
         cell.put(10);
-        assertEquals(2, cell.tryGetSum(200));
+        assertEquals(200, cell.tryGetSum(250));
     }
 
     @Test
     public void testTryGetSumAboveSum() {
         final var cell = new BanknoteCell(new Banknote(100), 10);
         cell.put(10);
-        assertEquals(10, cell.tryGetSum(11 * 100));
+        assertEquals(10*100, cell.tryGetSum(11 * 100));
+    }
+
+    @Test
+    public void testGetFromEmptyCell() {
+        final var cell = new BanknoteCell(new Banknote(100), 10);
+        assertThrows(RuntimeException.class, () -> cell.get(1));
     }
 
     @Test

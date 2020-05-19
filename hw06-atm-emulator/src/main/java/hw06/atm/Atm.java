@@ -8,7 +8,7 @@ public class Atm implements UserAction, StaffAction {
     private final CellManager cellManger = new CellManager();
 
     public int getBalance() {
-        int result=0;
+        int result = 0;
         for (BanknoteCell banknoteCell : cells) {
             result += banknoteCell.getBalance();
         }

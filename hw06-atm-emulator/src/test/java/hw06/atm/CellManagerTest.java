@@ -23,9 +23,8 @@ public class CellManagerTest {
     }
 
     @Test
-    public void testTryPutToCellWithoutCells() {
+    public void testTryPutWithoutCells() {
         final var cellManager = new CellManager();
-
         final Banknote[] banknote = { new Banknote(50) };
         assertThrows(RuntimeException.class, () -> cellManager.tryPutToCells(banknote));
     }
@@ -75,7 +74,7 @@ public class CellManagerTest {
     }
 
     @Test
-    public void testTryGetFromNotOneCell() {
+    public void testTryGetWithoutCells() {
         final var cellManager = new CellManager();
         assertThrows(RuntimeException.class, () -> cellManager.tryGetFromCells(100));
     }
@@ -93,14 +92,21 @@ public class CellManagerTest {
         final int[] initCntInCells = { 10, 10 };
         cellManager.putToCells(initCntInCells);
         final int[] expectedCnt = { 10, 10 };
-        assertArrayEquals(expectedCnt, cellManager.tryGetFromCells(100*10 + 50*10));
+        assertArrayEquals(expectedCnt, cellManager.tryGetFromCells(100 * 10 + 50 * 10));
+    }
+
+    @Test
+    public void testGetFromErrorCntCell() {
+        final int[] initCntInCells = { 10, 10 };
+        cellManager.putToCells(initCntInCells);
+        final int[] getCntFromCell = { 1, 0, 1 };
+        assertThrows(RuntimeException.class, ()-> cellManager.getFromCells(getCntFromCell));
     }
 
     @Test
     public void testGetFromFirstCell() {
         final int[] initCntInCells = { 10, 10 };
         cellManager.putToCells(initCntInCells);
-
         final int[] getCntFromCell = { 1, 0 };
         final var banknotes = cellManager.getFromCells(getCntFromCell);
         assertEquals(1, banknotes.length);

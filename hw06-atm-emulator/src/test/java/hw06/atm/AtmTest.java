@@ -1,6 +1,7 @@
 package hw06.atm;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -29,7 +30,7 @@ public class AtmTest {
         final var atm = new Atm();
         atm.putCell(new BanknoteCell(new Banknote(50), 10));
         atm.putCell(new BanknoteCell(new Banknote(100), 10));
-        atm.put(banknotes);
+        assertDoesNotThrow(()->atm.put(banknotes));
     }
 
     @Test

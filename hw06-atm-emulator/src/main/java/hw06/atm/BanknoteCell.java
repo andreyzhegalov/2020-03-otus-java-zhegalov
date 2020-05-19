@@ -31,34 +31,29 @@ public class BanknoteCell {
     }
 
     public int getBalance() {
-        return banknoteType.getCost() * getOccupiedSpace();
+        return banknoteType.getCost() * occupiedSpace;
+    }
+
+    public boolean tryPut(int cnt) {
+        return !isFull() && getFreeSpace() >= cnt;
     }
 
     public void put(int cnt) {
-        if (occupiedSpace + cnt > capacity) {
-            throw new RuntimeException("No free space");
-        }
         occupiedSpace += cnt;
-    }
-
-    public void get(int cnt) {
-        if (cnt > occupiedSpace)
-            throw new RuntimeException("Not enough in cell");
-        occupiedSpace -= cnt;
     }
 
     public int tryGetSum(int sum) {
         if (isEmpty()) {
             return 0;
         }
-        final int cnt = sum / getBanknoteType().getCost();
-        if (cnt == 0) {
-            return 0;
-        }
-        return (getOccupiedSpace() >= cnt) ? cnt : getOccupiedSpace();
+        final int neededSum = (getBalance() > sum) ? sum : getBalance();
+        final int banknoteCnt = neededSum / banknoteType.getCost();
+        return banknoteCnt * banknoteType.getCost();
     }
 
-    public boolean tryPut(int cnt) {
-        return !isFull() && getFreeSpace() >= cnt;
+    public void get(int cnt) {
+        if (cnt > occupiedSpace)
+            throw new RuntimeException("Not enough space in cell");
+        occupiedSpace -= cnt;
     }
 }

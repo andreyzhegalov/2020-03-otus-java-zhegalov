@@ -1,14 +1,18 @@
 [![codecov](https://codecov.io/gh/andreyzhegalov/2020-03-otus-java-zhegalov/branch/feature/hw06-atm-emulator/graph/badge.svg)](https://codecov.io/gh/andreyzhegalov/2020-03-otus-java-zhegalov)
 
 # Эмулятор банкомата
+
 **Цель**
 Применить на практике принципы SOLID.
 Написать эмулятор АТМ (банкомата).
 
 **Требования**
 Объект класса АТМ должен уметь:
+
 - принимать банкноты разных номиналов (на каждый номинал должна быть своя ячейка)
 - выдавать запрошенную сумму минимальным количеством банкнот или ошибку если сумму нельзя выдать
-- Оптимизировать выдачу не надо.
+- оптимизировать выдачу не надо.
 - выдавать сумму остатка денежных средств
 
+**Результат**
+Все пользовательские сценарии покрыты [тестами](https://github.com/andreyzhegalov/2020-03-otus-java-zhegalov/blob/feature/hw06-ATM-emulator/hw06-atm-emulator/src/test/java/hw06/atm/AtmTest.java).

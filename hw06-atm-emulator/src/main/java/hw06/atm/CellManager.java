@@ -14,7 +14,7 @@ public class CellManager {
         if (cells == null) {
             throw new RuntimeException("Can't put banknote");
         }
-        int[] result = new int[cells.size()];
+        final int[] result = new int[cells.size()];
         for (final var banknote : banknotes) {
             boolean isPut = false;
             for (int ind = 0; ind < cells.size(); ind++) {
@@ -22,7 +22,7 @@ public class CellManager {
                 if (!banknote.equals(cell.getBanknoteType())) {
                     continue;
                 }
-                int newCntInCell = result[ind] + 1;
+                final int newCntInCell = result[ind] + 1;
                 if (!cell.tryPut(newCntInCell)) {
                     continue;
                 }
@@ -42,21 +42,24 @@ public class CellManager {
             throw new RuntimeException("Can't put banknote. Error cells size");
         }
         for (int i = 0; i < cnt.length; i++) {
-            cells.get(i).put(cnt[i]);
+            final var curCell = cells.get(i);
+            final int ammountAdded = cnt[i];
+            curCell.put(ammountAdded);
         }
     }
 
     public int[] tryGetFromCells(int sum) {
-        if (cells.isEmpty()) {
+        if (cells == null || cells.isEmpty()) {
             throw new RuntimeException("Can't get banknote");
         }
         int curSum = sum;
-        int[] result = new int[cells.size()];
+        final int[] result = new int[cells.size()];
         for (int i = 0; i < cells.size(); i++) {
             final var curCell = cells.get(i);
-            final int canSavedCnt = curCell.tryGetSum(curSum);
-            result[i] = canSavedCnt;
-            curSum -= canSavedCnt * curCell.getBanknoteType().getCost();
+            final int canGetFromCellSum = curCell.tryGetSum(curSum);
+            final int canGetFromCellCnt = canGetFromCellSum / curCell.getBanknoteType().getCost();
+            result[i] = canGetFromCellCnt;
+            curSum -= canGetFromCellSum;
             if (curSum == 0) {
                 break;
             }
@@ -75,7 +78,8 @@ public class CellManager {
         for (int i = 0; i < cnt.length; i++) {
             final var curCell = cells.get(i);
             final int cntFromCell = cnt[i];
-            result.addAll(getFromCell(curCell, cntFromCell));
+            final var banknotesFromCell = getFromCell(curCell, cntFromCell);
+            result.addAll(banknotesFromCell);
         }
         final Banknote[] resArray = new Banknote[result.size()];
         return result.toArray(resArray);
