@@ -1,5 +1,3 @@
-[![codecov](https://codecov.io/gh/andreyzhegalov/2020-03-otus-java-zhegalov/branch/feature/hw06-atm-emulator/graph/badge.svg)](https://codecov.io/gh/andreyzhegalov/2020-03-otus-java-zhegalov)
-
 # Эмулятор банкомата
 
 **Цель**
