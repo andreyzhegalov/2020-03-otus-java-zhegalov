@@ -24,11 +24,6 @@ public class AtmTest {
     }
 
     @Test
-    public void testGetInitBalance() {
-        assertEquals(0, new Atm().getBalance());
-    }
-
-    @Test
     public void testPutBanknotesSuccess() {
         final Banknote[] banknotes = { new Banknote(50), new Banknote(100) };
         final var atm = new Atm();
@@ -106,5 +101,17 @@ public class AtmTest {
         final Banknote[] expected = { new Banknote(200), new Banknote(200), new Banknote(100), new Banknote(100),
                 new Banknote(50), new Banknote(50) };
         assertArrayEquals(expected, banknotes);
+    }
+
+    @Test
+    public void testGetInitBalance() {
+        assertEquals(0, new Atm().getBalance());
+    }
+
+    @Test
+    public void testGetBalance()
+    {
+        final var atm = prepareAtm();
+        assertEquals(200*2 + 100*2 + 50*2, atm.getBalance());
     }
 }

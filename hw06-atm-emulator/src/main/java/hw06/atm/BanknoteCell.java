@@ -30,6 +30,10 @@ public class BanknoteCell {
         return capacity - occupiedSpace;
     }
 
+    public int getBalance() {
+        return banknoteType.getCost() * getOccupiedSpace();
+    }
+
     public void put(int cnt) {
         if (occupiedSpace + cnt > capacity) {
             throw new RuntimeException("No free space");

@@ -46,6 +46,19 @@ public class BanknoteCellTest {
     }
 
     @Test
+    public void testGetBalanceOfEmptyCell() {
+        final var cell = new BanknoteCell(new Banknote(100), 10);
+        assertEquals(0, cell.getBalance());
+    }
+
+    @Test
+    public void testGetBalance() {
+        final var cell = new BanknoteCell(new Banknote(100), 10);
+        cell.put(5);
+        assertEquals((10 - 5) * 100, cell.getBalance());
+    }
+
+    @Test
     public void testGetMoneyType() {
         final var cell = new BanknoteCell(new Banknote(100), 200);
         assertEquals(new Banknote(100), cell.getBanknoteType());
@@ -87,27 +100,27 @@ public class BanknoteCellTest {
     }
 
     @Test
-    public void testTryGetSumSuccess(){
+    public void testTryGetSumSuccess() {
         final var cell = new BanknoteCell(new Banknote(100), 10);
         cell.put(10);
         assertEquals(2, cell.tryGetSum(200));
     }
 
     @Test
-    public void testTryGetAboveSum(){
+    public void testTryGetSumAboveSum() {
         final var cell = new BanknoteCell(new Banknote(100), 10);
         cell.put(10);
-        assertEquals(10, cell.tryGetSum(11*100));
+        assertEquals(10, cell.tryGetSum(11 * 100));
     }
 
     @Test
-    public void testTryPut(){
+    public void testTryPut() {
         final var cell = new BanknoteCell(new Banknote(100), 10);
         assertTrue(cell.tryPut(1));
     }
 
     @Test
-    public void testTryPutInFullCell(){
+    public void testTryPutInFullCell() {
         final int cellCapacity = 10;
         final var cell = new BanknoteCell(new Banknote(100), cellCapacity);
         cell.put(cellCapacity);
