@@ -3,12 +3,16 @@ package hw07.model.atm;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Atm implements UserAction, StaffAction {
+import hw07.model.department.DepartmentAction;
+
+
+public class Atm implements UserAction, StaffAction, DepartmentAction {
     private final List<BanknoteCell> cells = new ArrayList<>();
     private final CellManager cellManger = new CellManager();
 
-    public int getBalance() {
-        int result = 0;
+    @Override
+    public long getBalance() {
+        long result = 0;
         for (BanknoteCell banknoteCell : cells) {
             result += banknoteCell.getBalance();
         }
