@@ -10,16 +10,16 @@ public class CellManager {
         this.cells = cells;
     }
 
-    public int[] tryPutToCells(Banknote[] banknotes) {
+    public int[] tryPutToCells(BanknoteNominal[] banknotes) {
         if (cells == null) {
-            throw new RuntimeException("Can't put banknote");
+            throw new AtmException("Can't put banknote");
         }
         final int[] result = new int[cells.size()];
         for (final var banknote : banknotes) {
             boolean isPut = false;
             for (int ind = 0; ind < cells.size(); ind++) {
                 final var cell = cells.get(ind);
-                if (!banknote.equals(cell.getBanknoteType())) {
+                if (!banknote.equals(cell.getBanknoteNominal())) {
                     continue;
                 }
                 final int newCntInCell = result[ind] + 1;
@@ -31,7 +31,7 @@ public class CellManager {
                 break;
             }
             if (!isPut) {
-                throw new RuntimeException("Can't put banknote");
+                throw new AtmException("Can't put banknote");
             }
         }
         return result;
@@ -39,7 +39,7 @@ public class CellManager {
 
     public void putToCells(int[] cnt) {
         if (cnt.length != cells.size()) {
-            throw new RuntimeException("Can't put banknote. Error cells size");
+            throw new AtmException("Can't put banknote. Error cells size");
         }
         for (int i = 0; i < cnt.length; i++) {
             final var curCell = cells.get(i);
@@ -50,14 +50,14 @@ public class CellManager {
 
     public int[] tryGetFromCells(int sum) {
         if (cells == null || cells.isEmpty()) {
-            throw new RuntimeException("Can't get banknote");
+            throw new AtmException("Can't get banknote");
         }
         int curSum = sum;
         final int[] result = new int[cells.size()];
         for (int i = 0; i < cells.size(); i++) {
             final var curCell = cells.get(i);
             final int canGetFromCellSum = curCell.tryGetSum(curSum);
-            final int canGetFromCellCnt = canGetFromCellSum / curCell.getBanknoteType().getCost();
+            final int canGetFromCellCnt = canGetFromCellSum / curCell.getBanknoteNominal().getCost();
             result[i] = canGetFromCellCnt;
             curSum -= canGetFromCellSum;
             if (curSum == 0) {
@@ -65,32 +65,36 @@ public class CellManager {
             }
         }
         if (curSum > 0) {
-            throw new RuntimeException("Can't get current sum");
+            throw new AtmException("Can't get current sum");
         }
         return result;
     }
 
-    public Banknote[] getFromCells(int[] cnt) {
+    public BanknoteNominal[] getFromCells(int[] cnt) {
         if (cnt.length != cells.size()) {
-            throw new RuntimeException("Can't get banknote. Error cells size");
+            throw new AtmException("Can't get banknote. Error cells size");
         }
-        final List<Banknote> result = new ArrayList<>();
+        final List<BanknoteNominal> result = new ArrayList<>();
         for (int i = 0; i < cnt.length; i++) {
             final var curCell = cells.get(i);
             final int cntFromCell = cnt[i];
             final var banknotesFromCell = getFromCell(curCell, cntFromCell);
             result.addAll(banknotesFromCell);
         }
-        final Banknote[] resArray = new Banknote[result.size()];
+        final BanknoteNominal[] resArray = new BanknoteNominal[result.size()];
         return result.toArray(resArray);
     }
 
-    private List<Banknote> getFromCell(BanknoteCell cell, int cnt) {
-        final List<Banknote> result = new ArrayList<>();
-        final int banknoteCost = cell.getBanknoteType().getCost();
+    private List<BanknoteNominal> getFromCell(BanknoteCell cell, int cnt) {
+        final List<BanknoteNominal> result = new ArrayList<>();
+        final int banknoteCost = cell.getBanknoteNominal().getCost();
         cell.get(cnt);
         for (int i = 0; i < cnt; i++) {
-            result.add(new Banknote(banknoteCost));
+            try {
+                result.add(new BanknoteNominal(banknoteCost));
+            } catch (Exception e) {
+                throw new AtmException("Internal error. Create banknote with nominal:" +  banknoteCost );
+            }
         }
         return result;
     }

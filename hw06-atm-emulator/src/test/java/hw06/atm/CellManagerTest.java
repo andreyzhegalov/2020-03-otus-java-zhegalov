@@ -18,20 +18,20 @@ public class CellManagerTest {
     void init() {
         cellManager = new CellManager();
 
-        cells = Arrays.asList(new BanknoteCell(new Banknote(100), 10), new BanknoteCell(new Banknote(50), 10));
+        cells = Arrays.asList(new BanknoteCell(new BanknoteNominal(100), 10), new BanknoteCell(new BanknoteNominal(50), 10));
         cellManager.setCells(cells);
     }
 
     @Test
     public void testTryPutWithoutCells() {
         final var cellManager = new CellManager();
-        final Banknote[] banknote = { new Banknote(50) };
+        final BanknoteNominal[] banknote = { new BanknoteNominal(50) };
         assertThrows(RuntimeException.class, () -> cellManager.tryPutToCells(banknote));
     }
 
     @Test
     public void testTryPutInOneCell() {
-        final Banknote[] banlnotes = { new Banknote(50) };
+        final BanknoteNominal[] banlnotes = { new BanknoteNominal(50) };
         final var result = cellManager.tryPutToCells(banlnotes);
         final int[] expect = { 0, 1 };
         assertArrayEquals(expect, result);
@@ -39,7 +39,7 @@ public class CellManagerTest {
 
     @Test
     public void testTryPutInTwoCell() {
-        final Banknote[] banknotes = { new Banknote(100), new Banknote(50) };
+        final BanknoteNominal[] banknotes = { new BanknoteNominal(100), new BanknoteNominal(50) };
         final var result = cellManager.tryPutToCells(banknotes);
         final int[] expect = { 1, 1 };
         assertArrayEquals(expect, result);
@@ -47,7 +47,7 @@ public class CellManagerTest {
 
     @Test
     public void testTryPutToCellError() {
-        final Banknote[] banknotes = { new Banknote(200) };
+        final BanknoteNominal[] banknotes = { new BanknoteNominal(200) };
         assertThrows(RuntimeException.class, () -> cellManager.tryPutToCells(banknotes));
     }
 
@@ -110,7 +110,7 @@ public class CellManagerTest {
         final int[] getCntFromCell = { 1, 0 };
         final var banknotes = cellManager.getFromCells(getCntFromCell);
         assertEquals(1, banknotes.length);
-        assertEquals(new Banknote(100), banknotes[0]);
+        assertEquals(new BanknoteNominal(100), banknotes[0]);
         assertEquals(9, cells.get(0).getOccupiedSpace());
         assertEquals(10, cells.get(1).getOccupiedSpace());
     }
@@ -123,7 +123,7 @@ public class CellManagerTest {
         final int[] getCntFromCell = { 0, 1 };
         final var banknotes = cellManager.getFromCells(getCntFromCell);
         assertEquals(1, banknotes.length);
-        assertEquals(new Banknote(50), banknotes[0]);
+        assertEquals(new BanknoteNominal(50), banknotes[0]);
         assertEquals(10, cells.get(0).getOccupiedSpace());
         assertEquals(9, cells.get(1).getOccupiedSpace());
     }

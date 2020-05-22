@@ -14,46 +14,40 @@ public class AtmTest {
     public void testPutCell() {
         final var atm = new Atm();
         assertEquals(0, atm.getCellCnt());
-        atm.putCell(new BanknoteCell(new Banknote(100), 100));
+        atm.putCell(new BanknoteCell(new BanknoteNominal(100), 100));
         assertEquals(1, atm.getCellCnt());
     }
 
     @Test
-    public void testGetCell() {
-        final var atm = new Atm();
-        assertThrows(UnsupportedOperationException.class, () -> atm.getCell());
-    }
-
-    @Test
     public void testPutBanknotesSuccess() {
-        final Banknote[] banknotes = { new Banknote(50), new Banknote(100) };
+        final BanknoteNominal[] banknotes = { new BanknoteNominal(50), new BanknoteNominal(100) };
         final var atm = new Atm();
-        atm.putCell(new BanknoteCell(new Banknote(50), 10));
-        atm.putCell(new BanknoteCell(new Banknote(100), 10));
+        atm.putCell(new BanknoteCell(new BanknoteNominal(50), 10));
+        atm.putCell(new BanknoteCell(new BanknoteNominal(100), 10));
         assertDoesNotThrow(()->atm.put(banknotes));
     }
 
     @Test
     public void testPutBanknotesFailed() {
-        final Banknote[] banknotes = { new Banknote(50), new Banknote(100) };
+        final BanknoteNominal[] banknotes = { new BanknoteNominal(50), new BanknoteNominal(100) };
         final var atm = new Atm();
-        atm.putCell(new BanknoteCell(new Banknote(50), 10));
-        atm.putCell(new BanknoteCell(new Banknote(200), 10));
+        atm.putCell(new BanknoteCell(new BanknoteNominal(50), 10));
+        atm.putCell(new BanknoteCell(new BanknoteNominal(200), 10));
         assertThrows(RuntimeException.class, () -> atm.put(banknotes));
     }
 
     private Atm prepareAtm() {
         final int cellCapacity = 2;
-        final var cost50 = Stream.generate(() -> new Banknote(50)).limit(cellCapacity);
-        final var cost100 = Stream.generate(() -> new Banknote(100)).limit(cellCapacity);
-        final var cost200 = Stream.generate(() -> new Banknote(200)).limit(cellCapacity);
-        Stream<Banknote> allCost = Stream.concat(Stream.concat(cost50, cost100), cost200);
-        Banknote[] inAtm = allCost.toArray(Banknote[]::new);
+        final var cost50 = Stream.generate(() -> new BanknoteNominal(50)).limit(cellCapacity);
+        final var cost100 = Stream.generate(() -> new BanknoteNominal(100)).limit(cellCapacity);
+        final var cost200 = Stream.generate(() -> new BanknoteNominal(200)).limit(cellCapacity);
+        Stream<BanknoteNominal> allCost = Stream.concat(Stream.concat(cost50, cost100), cost200);
+        BanknoteNominal[] inAtm = allCost.toArray(BanknoteNominal[]::new);
 
         final var atm = new Atm();
-        atm.putCell(new BanknoteCell(new Banknote(50), cellCapacity));
-        atm.putCell(new BanknoteCell(new Banknote(100), cellCapacity));
-        atm.putCell(new BanknoteCell(new Banknote(200), cellCapacity));
+        atm.putCell(new BanknoteCell(new BanknoteNominal(50), cellCapacity));
+        atm.putCell(new BanknoteCell(new BanknoteNominal(100), cellCapacity));
+        atm.putCell(new BanknoteCell(new BanknoteNominal(200), cellCapacity));
         atm.put(inAtm);
         return atm;
     }
@@ -75,7 +69,7 @@ public class AtmTest {
     public void testGetMinimalCntBanknotesCase1() {
         final var atm = prepareAtm();
         final var banknotes = atm.get(100);
-        final Banknote[] expected = { new Banknote(100) };
+        final BanknoteNominal[] expected = { new BanknoteNominal(100) };
         assertArrayEquals(expected, banknotes);
     }
 
@@ -83,7 +77,7 @@ public class AtmTest {
     public void testGetMinimalCntBanknotesCase2() {
         final var atm = prepareAtm();
         final var banknotes = atm.get(150);
-        final Banknote[] expected = { new Banknote(100), new Banknote(50) };
+        final BanknoteNominal[] expected = { new BanknoteNominal(100), new BanknoteNominal(50) };
         assertArrayEquals(expected, banknotes);
     }
 
@@ -91,7 +85,7 @@ public class AtmTest {
     public void testGetMinimalCntBanknotesCase3() {
         final var atm = prepareAtm();
         final var banknotes = atm.get(550);
-        final Banknote[] expected = { new Banknote(200), new Banknote(200), new Banknote(100), new Banknote(50) };
+        final BanknoteNominal[] expected = { new BanknoteNominal(200), new BanknoteNominal(200), new BanknoteNominal(100), new BanknoteNominal(50) };
         assertArrayEquals(expected, banknotes);
     }
 
@@ -99,8 +93,8 @@ public class AtmTest {
     public void testGetAllBanknotes() {
         final var atm = prepareAtm();
         final var banknotes = atm.get(700);
-        final Banknote[] expected = { new Banknote(200), new Banknote(200), new Banknote(100), new Banknote(100),
-                new Banknote(50), new Banknote(50) };
+        final BanknoteNominal[] expected = { new BanknoteNominal(200), new BanknoteNominal(200), new BanknoteNominal(100), new BanknoteNominal(100),
+                new BanknoteNominal(50), new BanknoteNominal(50) };
         assertArrayEquals(expected, banknotes);
     }
 

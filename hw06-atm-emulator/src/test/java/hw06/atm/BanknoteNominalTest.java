@@ -7,34 +7,34 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
-public class BanknoteTest {
+public class BanknoteNominalTest {
     @Test
     public void testGetPossibleVals() {
-        assertEquals(6, Banknote.getPossibleVals().size());
+        assertEquals(6, BanknoteNominal.getPossibleVals().size());
     }
 
     @Test
     public void testCtrSuccess() {
-        assertDoesNotThrow(() -> new Banknote(50));
+        assertDoesNotThrow(() -> new BanknoteNominal(50));
     }
 
     @Test
     public void testCtrWithThrowException() {
-        assertThrows(RuntimeException.class, () -> new Banknote(60));
+        assertThrows(AtmException.class, () -> new BanknoteNominal(60));
     }
 
     @Test
     public void testCost() {
-        assertEquals(50, new Banknote(50).getCost());
+        assertEquals(50, new BanknoteNominal(50).getCost());
     }
 
     @Test
     public void testEq() {
-        assertEquals(new Banknote(50), new Banknote(50));
+        assertEquals(new BanknoteNominal(50), new BanknoteNominal(50));
     }
 
     @Test
     public void testNotEq() {
-        assertNotEquals(new Banknote(100), new Banknote(50));
+        assertNotEquals(new BanknoteNominal(100), new BanknoteNominal(50));
     }
 }

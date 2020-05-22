@@ -21,7 +21,7 @@ public class Atm implements UserAction, StaffAction {
 
     @Override
     public void put(Object[] banknotes) {
-        final var cntByCell = cellManger.tryPutToCells((Banknote[]) banknotes);
+        final var cntByCell = cellManger.tryPutToCells((BanknoteNominal[]) banknotes);
         cellManger.putToCells(cntByCell);
     }
 
@@ -34,13 +34,7 @@ public class Atm implements UserAction, StaffAction {
     @Override
     public void putCell(BanknoteCell cell) {
         cells.add(cell);
-        cells.sort((var m1, var m2) -> (m2.getBanknoteType().getCost() - m1.getBanknoteType().getCost()));
+        cells.sort((var m1, var m2) -> (m2.getBanknoteNominal().getCost() - m1.getBanknoteNominal().getCost()));
         cellManger.setCells(cells);
     }
-
-    @Override
-    public void getCell() {
-        throw new UnsupportedOperationException();
-    }
-
 }

@@ -1,17 +1,17 @@
 package hw06.atm;
 
 public class BanknoteCell {
-    private final Banknote banknoteType;
+    private final BanknoteNominal banknoteNominal;
     private final int capacity;
     private int occupiedSpace;
 
-    public BanknoteCell(Banknote storageBanknoteType, int capacity) {
-        this.banknoteType = storageBanknoteType;
+    public BanknoteCell(BanknoteNominal storageBanknoteType, int capacity) {
+        this.banknoteNominal = storageBanknoteType;
         this.capacity = capacity;
     }
 
-    public Banknote getBanknoteType() {
-        return banknoteType;
+    public BanknoteNominal getBanknoteNominal() {
+        return banknoteNominal;
     }
 
     public int getOccupiedSpace() {
@@ -31,7 +31,7 @@ public class BanknoteCell {
     }
 
     public int getBalance() {
-        return banknoteType.getCost() * occupiedSpace;
+        return banknoteNominal.getCost() * occupiedSpace;
     }
 
     public boolean tryPut(int cnt) {
@@ -47,13 +47,15 @@ public class BanknoteCell {
             return 0;
         }
         final int neededSum = (getBalance() > sum) ? sum : getBalance();
-        final int banknoteCnt = neededSum / banknoteType.getCost();
-        return banknoteCnt * banknoteType.getCost();
+        final int banknoteCnt = neededSum / banknoteNominal.getCost();
+        return banknoteCnt * banknoteNominal.getCost();
     }
 
     public void get(int cnt) {
+        if (cnt < 0)
+            throw new IllegalArgumentException("Get banknote count must be positive. Now is " + cnt);
         if (cnt > occupiedSpace)
-            throw new RuntimeException("Not enough space in cell");
+            throw new AtmException("Not enough space in cell");
         occupiedSpace -= cnt;
     }
 }

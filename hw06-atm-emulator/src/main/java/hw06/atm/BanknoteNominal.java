@@ -4,13 +4,13 @@ import java.util.Set;
 
 import com.google.common.collect.ImmutableSet;
 
-public class Banknote {
+public class BanknoteNominal {
     private final static Set<Integer> POSIBLE_VALS = ImmutableSet.of(50, 100, 200, 500, 1000, 5000);
     private final int cost;
 
-    public Banknote(int value){
+    public BanknoteNominal(int value) {
         if( !POSIBLE_VALS.contains(value)){
-            throw new RuntimeException("Undefined banknote type");
+            throw new AtmException("Undefined banknote nominal" + value);
         }
         this.cost = value;
     }
@@ -28,7 +28,7 @@ public class Banknote {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        Banknote object = (Banknote) o;
+        BanknoteNominal object = (BanknoteNominal) o;
         return !(cost != object.cost);
     }
 }
