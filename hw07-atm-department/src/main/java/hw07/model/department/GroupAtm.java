@@ -2,10 +2,12 @@ package hw07.model.department;
 
 import java.util.List;
 
-public class GroupAtm implements DepartmentAction {
-    private final List<? extends DepartmentAction> atmPark;
+import hw07.model.protocol.BalanceCommand;
 
-    public GroupAtm(List<? extends DepartmentAction> atmPark) {
+public class GroupAtm implements BalanceCommand {
+    private final List<? extends BalanceCommand> atmPark;
+
+    public GroupAtm(List<? extends BalanceCommand> atmPark) {
         this.atmPark = atmPark;
     }
 

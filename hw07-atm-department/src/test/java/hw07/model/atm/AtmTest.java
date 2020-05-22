@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.stream.Stream;
 
@@ -24,7 +25,7 @@ public class AtmTest {
         final var atm = new Atm();
         atm.putCell(new BanknoteCell(new BanknoteNominal(50), 10));
         atm.putCell(new BanknoteCell(new BanknoteNominal(100), 10));
-        assertDoesNotThrow(()->atm.put(banknotes));
+        assertDoesNotThrow(() -> atm.put(banknotes));
     }
 
     @Test
@@ -85,7 +86,8 @@ public class AtmTest {
     public void testGetMinimalCntBanknotesCase3() {
         final var atm = prepareAtm();
         final var banknotes = atm.get(550);
-        final BanknoteNominal[] expected = { new BanknoteNominal(200), new BanknoteNominal(200), new BanknoteNominal(100), new BanknoteNominal(50) };
+        final BanknoteNominal[] expected = { new BanknoteNominal(200), new BanknoteNominal(200),
+                new BanknoteNominal(100), new BanknoteNominal(50) };
         assertArrayEquals(expected, banknotes);
     }
 
@@ -93,8 +95,8 @@ public class AtmTest {
     public void testGetAllBanknotes() {
         final var atm = prepareAtm();
         final var banknotes = atm.get(700);
-        final BanknoteNominal[] expected = { new BanknoteNominal(200), new BanknoteNominal(200), new BanknoteNominal(100), new BanknoteNominal(100),
-                new BanknoteNominal(50), new BanknoteNominal(50) };
+        final BanknoteNominal[] expected = { new BanknoteNominal(200), new BanknoteNominal(200),
+                new BanknoteNominal(100), new BanknoteNominal(100), new BanknoteNominal(50), new BanknoteNominal(50) };
         assertArrayEquals(expected, banknotes);
     }
 
@@ -104,9 +106,24 @@ public class AtmTest {
     }
 
     @Test
-    public void testGetBalance()
-    {
+    public void testGetBalance() {
         final var atm = prepareAtm();
-        assertEquals(200*2 + 100*2 + 50*2, atm.getBalance());
+        assertEquals(200 * 2 + 100 * 2 + 50 * 2, atm.getBalance());
     }
+
+    @Test
+    public void testSaveCurrentState() {
+        assertTrue(new Atm().saveCurrentState());
+    }
+
+    // @Test
+    // public void testRestoresLastState(){
+    //     final var atm = prepareAtm();
+    //     final var initBalance = atm.getBalance();
+    //     atm.saveCurrentState();
+    //     atm.get(200);
+    //     assertTrue(atm.restoreLastState());
+    //     assertEquals(initBalance, atm.getBalance());
+    // }
+
 }

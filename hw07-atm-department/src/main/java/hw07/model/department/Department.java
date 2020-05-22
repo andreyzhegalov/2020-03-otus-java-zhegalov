@@ -5,10 +5,9 @@ import java.util.List;
 
 import hw07.model.atm.Atm;
 
-public class Department implements DepartmentAction, AtmHandler {
+public class Department implements AtmHandler {
     private final List<Atm> atmPark = new ArrayList<>();
 
-    @Override
     public long getBalance() {
         return new GroupAtm(atmPark).getBalance();
     }

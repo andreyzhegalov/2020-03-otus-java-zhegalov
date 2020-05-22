@@ -3,10 +3,10 @@ package hw07.model.atm;
 import java.util.ArrayList;
 import java.util.List;
 
-import hw07.model.department.DepartmentAction;
+import hw07.model.protocol.BalanceCommand;
+import hw07.model.protocol.StateCommand;
 
-
-public class Atm implements UserAction, StaffAction, DepartmentAction {
+public class Atm implements UserAction, StaffAction, BalanceCommand, StateCommand {
     private final List<BanknoteCell> cells = new ArrayList<>();
     private final CellManager cellManger = new CellManager();
 
@@ -41,4 +41,14 @@ public class Atm implements UserAction, StaffAction, DepartmentAction {
         cells.sort((var m1, var m2) -> (m2.getBanknoteNominal().getCost() - m1.getBanknoteNominal().getCost()));
         cellManger.setCells(cells);
     }
+
+    @Override
+    public boolean saveCurrentState() {
+        return true;
+    }
+
+	@Override
+	public boolean restoreLastState() {
+		return true;
+	}
 }
