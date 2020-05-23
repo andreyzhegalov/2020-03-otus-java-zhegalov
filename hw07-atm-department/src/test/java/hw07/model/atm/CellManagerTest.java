@@ -1,25 +1,41 @@
 package hw07.model.atm;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-
-import java.util.Arrays;
-import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class CellManagerTest {
     private CellManager cellManager;
-    private List<BanknoteCell> cells;
 
     @BeforeEach
     void init() {
         cellManager = new CellManager();
+        cellManager.addCell(new BanknoteCell(new BanknoteNominal(100), 10));
+        cellManager.addCell(new BanknoteCell(new BanknoteNominal(50), 10));
+    }
 
-        cells = Arrays.asList(new BanknoteCell(new BanknoteNominal(100), 10), new BanknoteCell(new BanknoteNominal(50), 10));
-        cellManager.setCells(cells);
+    @Test
+    public void testGetCnt(){
+        assertEquals(2, cellManager.getCellCnt());
+    }
+
+    @Test
+    public void getCellSuccesful(){
+        assertDoesNotThrow(()->cellManager.getCell(1));
+    }
+
+    @Test
+    public void getCellFail(){
+        assertThrows( AtmException.class, ()->cellManager.getCell(2));
+    }
+
+    @Test
+    public void getCellWhithNegativeIndex(){
+        assertThrows(AtmException.class, ()->cellManager.getCell(-1));
     }
 
     @Test
@@ -61,16 +77,16 @@ public class CellManagerTest {
     public void testPutToNotOneCell() {
         final int[] cntByCell = { 0, 0 };
         cellManager.putToCells(cntByCell);
-        assertEquals(10, cells.get(0).getFreeSpace());
-        assertEquals(10, cells.get(1).getFreeSpace());
+        assertEquals(10, cellManager.getCell(0).getFreeSpace());
+        assertEquals(10, cellManager.getCell(1).getFreeSpace());
     }
 
     @Test
     public void testPutInOneCell() {
         final int[] cntByCell = { 0, 1 };
         cellManager.putToCells(cntByCell);
-        assertEquals(10, cells.get(0).getFreeSpace());
-        assertEquals(9, cells.get(1).getFreeSpace());
+        assertEquals(10, cellManager.getCell(0).getFreeSpace());
+        assertEquals(9, cellManager.getCell(1).getFreeSpace());
     }
 
     @Test
@@ -100,7 +116,7 @@ public class CellManagerTest {
         final int[] initCntInCells = { 10, 10 };
         cellManager.putToCells(initCntInCells);
         final int[] getCntFromCell = { 1, 0, 1 };
-        assertThrows(RuntimeException.class, ()-> cellManager.getFromCells(getCntFromCell));
+        assertThrows(RuntimeException.class, () -> cellManager.getFromCells(getCntFromCell));
     }
 
     @Test
@@ -111,8 +127,8 @@ public class CellManagerTest {
         final var banknotes = cellManager.getFromCells(getCntFromCell);
         assertEquals(1, banknotes.length);
         assertEquals(new BanknoteNominal(100), banknotes[0]);
-        assertEquals(9, cells.get(0).getOccupiedSpace());
-        assertEquals(10, cells.get(1).getOccupiedSpace());
+        assertEquals(9, cellManager.getCell(0).getOccupiedSpace());
+        assertEquals(10, cellManager.getCell(1).getOccupiedSpace());
     }
 
     @Test
@@ -124,7 +140,7 @@ public class CellManagerTest {
         final var banknotes = cellManager.getFromCells(getCntFromCell);
         assertEquals(1, banknotes.length);
         assertEquals(new BanknoteNominal(50), banknotes[0]);
-        assertEquals(10, cells.get(0).getOccupiedSpace());
-        assertEquals(9, cells.get(1).getOccupiedSpace());
+        assertEquals(10, cellManager.getCell(0).getOccupiedSpace());
+        assertEquals(9, cellManager.getCell(1).getOccupiedSpace());
     }
 }

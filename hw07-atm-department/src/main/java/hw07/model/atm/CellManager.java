@@ -4,11 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CellManager {
-    private List<BanknoteCell> cells = null;
-
-    void setCells(List<BanknoteCell> cells) {
-        this.cells = cells;
-    }
+    private List<BanknoteCell> cells = new ArrayList<>();
 
     public int[] tryPutToCells(BanknoteNominal[] banknotes) {
         if (cells == null) {
@@ -35,6 +31,34 @@ public class CellManager {
             }
         }
         return result;
+    }
+
+    public boolean addCell(BanknoteCell newCell) {
+        final boolean result = cells.add(newCell);
+        cells.sort((var m1, var m2) -> (m2.getBanknoteNominal().getCost() - m1.getBanknoteNominal().getCost()));
+        return result;
+    }
+
+    public long getBallance() {
+        long result = 0;
+        for (BanknoteCell banknoteCell : cells) {
+            result += banknoteCell.getBalance();
+        }
+        return result;
+    }
+
+    public BanknoteCell getCell(int index) {
+        if (index < 0) {
+            throw new AtmException("No cell with negative index ");
+        }
+        if (index >= cells.size())  {
+            throw new AtmException("No cell with index " + index );
+        }
+        return cells.get(index);
+    }
+
+    public int getCellCnt() {
+        return cells.size();
     }
 
     public void putToCells(int[] cnt) {
@@ -93,7 +117,7 @@ public class CellManager {
             try {
                 result.add(new BanknoteNominal(banknoteCost));
             } catch (Exception e) {
-                throw new AtmException("Internal error. Create banknote with nominal:" +  banknoteCost );
+                throw new AtmException("Internal error. Create banknote with nominal:" + banknoteCost);
             }
         }
         return result;
