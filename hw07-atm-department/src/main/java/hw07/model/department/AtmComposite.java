@@ -17,27 +17,27 @@ public class AtmComposite implements BalanceOperation, StateOperation {
     public long getBalance() {
         long result = 0;
         for (final var target : targets) {
-            final var preparedTarget = (BalanceOperation)target;
+            final var preparedTarget = (BalanceOperation) target;
             result += preparedTarget.getBalance();
         }
         return result;
     }
 
-	@Override
-	public boolean saveCurrentState() {
+    @Override
+    public boolean saveCurrentState() {
         for (final var target : targets) {
-            final var preparedTarget = (StateOperation)target;
+            final var preparedTarget = (StateOperation) target;
             preparedTarget.saveCurrentState();
         }
-		return false;
-	}
+        return false;
+    }
 
-	@Override
-	public boolean restoreLastState() {
+    @Override
+    public boolean restoreLastState() {
         for (final var target : targets) {
-            final var preparedTarget = (StateOperation)target;
+            final var preparedTarget = (StateOperation) target;
             preparedTarget.restoreLastState();
         }
-		return false;
-	}
+        return false;
+    }
 }
