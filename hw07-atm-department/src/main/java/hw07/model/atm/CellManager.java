@@ -109,6 +109,10 @@ public class CellManager {
         return result.toArray(resArray);
     }
 
+    public void reset(){
+        cells.clear();
+    }
+
     private List<BanknoteNominal> getFromCell(BanknoteCell cell, int cnt) {
         final List<BanknoteNominal> result = new ArrayList<>();
         final int banknoteCost = cell.getBanknoteNominal().getCost();
@@ -122,4 +126,9 @@ public class CellManager {
         }
         return result;
     }
+
+    public CellManagerMomento createSnapshot(){
+        return new CellManagerMomento(this, cells);
+    }
+
 }

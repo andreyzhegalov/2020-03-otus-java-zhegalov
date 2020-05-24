@@ -5,6 +5,7 @@ import hw07.model.protocol.StateCommand;
 
 public class Atm implements UserAction, StaffAction, BalanceCommand, StateCommand {
     private final CellManager cellManger = new CellManager();
+    private CellManagerMomento cellManagerState = null;
 
     @Override
     public long getBalance() {
@@ -34,11 +35,16 @@ public class Atm implements UserAction, StaffAction, BalanceCommand, StateComman
 
     @Override
     public boolean saveCurrentState() {
+        cellManagerState = cellManger.createSnapshot();
         return true;
     }
 
     @Override
     public boolean restoreLastState() {
+        if(cellManagerState == null){
+            throw new AtmException("No saved state");
+        }
+        cellManagerState.restore();
         return true;
     }
 }

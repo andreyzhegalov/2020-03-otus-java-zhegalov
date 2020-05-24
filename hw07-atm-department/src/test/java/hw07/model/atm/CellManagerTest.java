@@ -143,4 +143,17 @@ public class CellManagerTest {
         assertEquals(10, cellManager.getCell(0).getOccupiedSpace());
         assertEquals(9, cellManager.getCell(1).getOccupiedSpace());
     }
+
+    @Test
+    public void testReset(){
+        final int[] cntByCell = { 1, 0 };
+        cellManager.putToCells(cntByCell);
+        cellManager.reset();
+        assertEquals(0, cellManager.getBallance());
+    }
+
+    @Test
+    public void testCreateSnapshort(){
+        assertDoesNotThrow(()->cellManager.createSnapshot());
+    }
 }

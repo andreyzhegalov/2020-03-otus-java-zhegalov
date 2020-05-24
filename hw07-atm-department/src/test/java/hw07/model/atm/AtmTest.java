@@ -116,14 +116,20 @@ public class AtmTest {
         assertTrue(new Atm().saveCurrentState());
     }
 
-    // @Test
-    // public void testRestoresLastState(){
-    //     final var atm = prepareAtm();
-    //     final var initBalance = atm.getBalance();
-    //     atm.saveCurrentState();
-    //     atm.get(200);
-    //     assertTrue(atm.restoreLastState());
-    //     assertEquals(initBalance, atm.getBalance());
-    // }
+    @Test
+    public void testRestoreWithoutSavedState(){
+        final var atm = prepareAtm();
+        assertThrows(AtmException.class, ()->atm.restoreLastState());
+    }
+
+    @Test
+    public void testRestoresLastState(){
+        final var atm = prepareAtm();
+        final var initBalance = atm.getBalance();
+        atm.saveCurrentState();
+        atm.get(200);
+        assertTrue(atm.restoreLastState());
+        assertEquals(initBalance, atm.getBalance());
+    }
 
 }
