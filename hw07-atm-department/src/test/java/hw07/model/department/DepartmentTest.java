@@ -33,7 +33,7 @@ public class DepartmentTest {
     }
 
     @Test
-    public void testSaveAtmState(){
+    public void testSaveAtmState() {
         Atm mockedAtm1 = Mockito.mock(Atm.class);
         Mockito.when(mockedAtm1.getBalance()).thenReturn(100L);
         Atm mockedAtm2 = Mockito.mock(Atm.class);
@@ -45,12 +45,12 @@ public class DepartmentTest {
 
         department.saveAtmState();
 
-        Mockito.verify(mockedAtm1, Mockito.times(1)).saveState();
-        Mockito.verify(mockedAtm2, Mockito.times(1)).saveState();
+        Mockito.verify(mockedAtm1, Mockito.times(1)).saveCurrentState();
+        Mockito.verify(mockedAtm2, Mockito.times(1)).saveCurrentState();
     }
 
     @Test
-    public void testRestoreState(){
+    public void testRestoreState() {
         Atm mockedAtm1 = Mockito.mock(Atm.class);
         Mockito.when(mockedAtm1.getBalance()).thenReturn(100L);
         Atm mockedAtm2 = Mockito.mock(Atm.class);
@@ -63,7 +63,7 @@ public class DepartmentTest {
         department.saveAtmState();
         department.restoreAtmState();
 
-        Mockito.verify(mockedAtm1, Mockito.times(1)).restoreState();
-        Mockito.verify(mockedAtm2, Mockito.times(1)).restoreState();
+        Mockito.verify(mockedAtm1, Mockito.times(1)).restoreLastState();
+        Mockito.verify(mockedAtm2, Mockito.times(1)).restoreLastState();
     }
 }

@@ -1,6 +1,6 @@
 package hw07.model.protocol;
 
-public interface StateCommand {
+public interface StateOperation extends Operation{
     public boolean saveCurrentState();
 
     public boolean restoreLastState();

@@ -1,10 +1,9 @@
 package hw07.model.atm;
 
-import hw07.model.department.Subscriber;
-import hw07.model.protocol.BalanceCommand;
-import hw07.model.protocol.StateCommand;
+import hw07.model.protocol.BalanceOperation;
+import hw07.model.protocol.StateOperation;
 
-public class Atm implements UserAction, StaffAction, BalanceCommand, StateCommand, Subscriber {
+public class Atm implements UserAction, StaffAction, BalanceOperation, StateOperation {
     private final CellManager cellManger = new CellManager();
     private CellManagerMomento cellManagerState = null;
 
@@ -36,31 +35,16 @@ public class Atm implements UserAction, StaffAction, BalanceCommand, StateComman
 
     @Override
     public boolean saveCurrentState() {
-        // TODO is this needed?
         cellManagerState = cellManger.createSnapshot();
         return true;
     }
 
     @Override
     public boolean restoreLastState() {
-        // TODO is this needed?
         if(cellManagerState == null){
             throw new AtmException("No saved state");
         }
         cellManagerState.restore();
         return true;
     }
-
-	@Override
-	public void saveState() {
-        cellManagerState = cellManger.createSnapshot();
-	}
-
-	@Override
-	public void restoreState() {
-        if(cellManagerState == null){
-            throw new AtmException("No saved state");
-        }
-        cellManagerState.restore();
-	}
 }
