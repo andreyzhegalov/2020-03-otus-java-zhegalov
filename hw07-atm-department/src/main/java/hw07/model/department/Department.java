@@ -9,7 +9,7 @@ public class Department implements AtmHandler {
     private final List<Atm> atmPark = new ArrayList<>();
 
     public long getBalance() {
-        return new GroupAtm(atmPark).getBalance();
+        return new AtmComposite(atmPark).getBalance();
     }
 
     @Override

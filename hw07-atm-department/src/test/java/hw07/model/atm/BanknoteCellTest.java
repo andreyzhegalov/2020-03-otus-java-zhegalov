@@ -156,4 +156,11 @@ public class BanknoteCellTest {
         assertTrue(cell.tryPut(1));
         assertFalse(cell.tryPut(2));
     }
+
+    @Test
+    public void testClone(){
+        final var initCell = new BanknoteCell(new BanknoteNominal(100), 10);
+        final var clonnedCell = initCell.clone();
+        assertEquals(initCell, clonnedCell);
+    }
 }

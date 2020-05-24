@@ -4,10 +4,10 @@ import java.util.List;
 
 import hw07.model.protocol.BalanceCommand;
 
-public class GroupAtm implements BalanceCommand {
+public class AtmComposite implements BalanceCommand {
     private final List<? extends BalanceCommand> atmPark;
 
-    public GroupAtm(List<? extends BalanceCommand> atmPark) {
+    public AtmComposite(List<? extends BalanceCommand> atmPark) {
         this.atmPark = atmPark;
     }
 

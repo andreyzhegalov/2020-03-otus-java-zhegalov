@@ -51,8 +51,8 @@ public class CellManager {
         if (index < 0) {
             throw new AtmException("No cell with negative index ");
         }
-        if (index >= cells.size())  {
-            throw new AtmException("No cell with index " + index );
+        if (index >= cells.size()) {
+            throw new AtmException("No cell with index " + index);
         }
         return cells.get(index);
     }
@@ -109,7 +109,7 @@ public class CellManager {
         return result.toArray(resArray);
     }
 
-    public void reset(){
+    public void reset() {
         cells.clear();
     }
 
@@ -127,7 +127,7 @@ public class CellManager {
         return result;
     }
 
-    public CellManagerMomento createSnapshot(){
+    public CellManagerMomento createSnapshot() {
         return new CellManagerMomento(this, cells);
     }
 

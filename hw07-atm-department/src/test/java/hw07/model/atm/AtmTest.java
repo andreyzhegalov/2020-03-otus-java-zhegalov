@@ -117,13 +117,13 @@ public class AtmTest {
     }
 
     @Test
-    public void testRestoreWithoutSavedState(){
+    public void testRestoreWithoutSavedState() {
         final var atm = prepareAtm();
-        assertThrows(AtmException.class, ()->atm.restoreLastState());
+        assertThrows(AtmException.class, () -> atm.restoreLastState());
     }
 
     @Test
-    public void testRestoresLastState(){
+    public void testRestoresLastState() {
         final var atm = prepareAtm();
         final var initBalance = atm.getBalance();
         atm.saveCurrentState();

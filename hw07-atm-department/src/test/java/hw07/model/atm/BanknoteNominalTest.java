@@ -37,4 +37,5 @@ public class BanknoteNominalTest {
     public void testNotEq() {
         assertNotEquals(new BanknoteNominal(100), new BanknoteNominal(50));
     }
+
 }
