@@ -72,7 +72,7 @@ public class CellManager implements UserAction {
         for (int i = 0; i < cnt.length; i++) {
             final var curCell = cells.get(i);
             final int cntFromCell = cnt[i];
-            final var banknotesFromCell = getFromCell(curCell, cntFromCell);
+            final var banknotesFromCell = curCell.get(cntFromCell);
             result.addAll(banknotesFromCell);
         }
         final BanknoteNominal[] resArray = new BanknoteNominal[result.size()];
@@ -81,21 +81,6 @@ public class CellManager implements UserAction {
 
     public void reset() {
         cells.clear();
-    }
-
-    // TODO replace to Cell
-    private List<BanknoteNominal> getFromCell(BanknoteCell cell, int cnt) {
-        final List<BanknoteNominal> result = new ArrayList<>();
-        final int banknoteCost = cell.getBanknoteNominal().getCost();
-        cell.get(cnt);
-        for (int i = 0; i < cnt; i++) {
-            try {
-                result.add(new BanknoteNominal(banknoteCost));
-            } catch (Exception e) {
-                throw new AtmException("Internal error. Create banknote with nominal:" + banknoteCost);
-            }
-        }
-        return result;
     }
 
     public CellManagerMomento createSnapshot() {

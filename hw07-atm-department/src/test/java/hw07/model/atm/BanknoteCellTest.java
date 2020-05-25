@@ -95,6 +95,12 @@ public class BanknoteCellTest {
     }
 
     @Test
+    public void testPutAboveFreeSpace() {
+        final var cell = new BanknoteCell(new BanknoteNominal(100), 10);
+        assertThrows( AtmException.class, ()->cell.put(11));
+    }
+
+    @Test
     public void testGetNegativeCnt(){
         final var cell = new BanknoteCell(new BanknoteNominal(50), 100);
         assertThrows( IllegalArgumentException.class, ()->cell.get(-1));
@@ -104,8 +110,8 @@ public class BanknoteCellTest {
     public void testGet() {
         final var cell = new BanknoteCell(new BanknoteNominal(50), 100);
         cell.put(2);
-        cell.get(1);
-        assertEquals(1, cell.getOccupiedSpace());
+        final var banknotes = cell.get(1);
+        assertEquals(1, banknotes.size());
     }
 
     @Test
@@ -133,6 +139,7 @@ public class BanknoteCellTest {
         final var cell = new BanknoteCell(new BanknoteNominal(100), 10);
         assertThrows(RuntimeException.class, () -> cell.get(1));
     }
+
 
     @Test
     public void testTryPut() {

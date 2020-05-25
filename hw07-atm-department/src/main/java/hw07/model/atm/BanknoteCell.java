@@ -1,5 +1,8 @@
 package hw07.model.atm;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class BanknoteCell implements CellPrototype {
     private final BanknoteNominal banknoteNominal;
     private final int capacity;
@@ -50,6 +53,9 @@ public class BanknoteCell implements CellPrototype {
     }
 
     public void put(int cnt) {
+        if( getFreeSpace() < cnt){
+            throw new AtmException("Not enough space in cell");
+        }
         occupiedSpace += cnt;
     }
 
@@ -62,12 +68,22 @@ public class BanknoteCell implements CellPrototype {
         return banknoteCnt * banknoteNominal.getCost();
     }
 
-    public void get(int cnt) {
+    public List<BanknoteNominal> get( int cnt) {
         if (cnt < 0)
             throw new IllegalArgumentException("Get banknote count must be positive. Now is " + cnt);
         if (cnt > occupiedSpace)
             throw new AtmException("Not enough space in cell");
+        final List<BanknoteNominal> result = new ArrayList<>();
+        final int banknoteCost = getBanknoteNominal().getCost();
         occupiedSpace -= cnt;
+        for (int i = 0; i < cnt; i++) {
+            try {
+                result.add(new BanknoteNominal(banknoteCost));
+            } catch (Exception e) {
+                throw new AtmException("Internal error. Create banknote with nominal:" + banknoteCost);
+            }
+        }
+        return result;
     }
 
     @Override
