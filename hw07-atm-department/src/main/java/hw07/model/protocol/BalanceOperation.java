@@ -1,6 +1,6 @@
 package hw07.model.protocol;
 
-public interface BalanceOperation extends Operation{
+public interface BalanceOperation{
     public long getBalance();
 }
 

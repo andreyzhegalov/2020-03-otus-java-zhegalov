@@ -1,17 +1,11 @@
 package hw07.model.atm;
 
 import hw07.model.atm.cellstrategy.CellStrategy1;
-import hw07.model.protocol.BalanceOperation;
-import hw07.model.protocol.StateOperation;
+import hw07.model.protocol.Protocol;
 
-public class Atm implements UserAction, StaffAction, BalanceOperation, StateOperation {
+public class Atm implements UserAction, StaffAction, Protocol {
     private final CellManager cellManger = new CellManager(new CellStrategy1());
     private CellManagerMomento cellManagerState = null;
-
-    @Override
-    public long getBalance() {
-        return cellManger.getBallance();
-    }
 
     public int getCellCnt() {
         return cellManger.getCellCnt();
@@ -33,6 +27,11 @@ public class Atm implements UserAction, StaffAction, BalanceOperation, StateOper
     }
 
     @Override
+    public long getBalance() {
+        return cellManger.getBallance();
+    }
+
+    @Override
     public boolean saveCurrentState() {
         cellManagerState = cellManger.createSnapshot();
         return true;
@@ -40,7 +39,7 @@ public class Atm implements UserAction, StaffAction, BalanceOperation, StateOper
 
     @Override
     public boolean restoreLastState() {
-        if(cellManagerState == null){
+        if (cellManagerState == null) {
             throw new AtmException("No saved state");
         }
         cellManagerState.restore();

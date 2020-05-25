@@ -1,19 +1,16 @@
 package hw07.model.department.command;
 
-import java.util.List;
-
-import hw07.model.atm.Atm;
-import hw07.model.department.AtmComposite;
+import hw07.model.department.AtmManager;
 
 public class RestoreLastStateCommand extends Command {
 
-    public RestoreLastStateCommand(List<Atm> atmPark) {
-        super(atmPark);
+    public RestoreLastStateCommand(AtmManager atmManager) {
+        super(atmManager);
     }
 
     @Override
     public boolean execute() {
-        new AtmComposite(atmPark).restoreLastState();
+        atmManager.sendRestoreLastState();
         return true;
     }
 

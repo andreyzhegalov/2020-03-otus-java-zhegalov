@@ -1,19 +1,16 @@
 package hw07.model.department.command;
 
-import java.util.List;
-
-import hw07.model.atm.Atm;
-import hw07.model.department.AtmComposite;
+import hw07.model.department.AtmManager;
 
 public class SaveCurrentStateCommand extends Command {
 
-    public SaveCurrentStateCommand(List<Atm> atmPark) {
-        super(atmPark);
+    public SaveCurrentStateCommand(AtmManager atmManager) {
+        super(atmManager);
     }
 
     @Override
     public boolean execute() {
-        new AtmComposite(atmPark).saveCurrentState();
+        atmManager.sendSaveCurrentState();
         return true;
     }
 

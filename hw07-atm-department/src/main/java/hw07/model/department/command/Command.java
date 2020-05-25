@@ -1,17 +1,13 @@
 package hw07.model.department.command;
 
-import java.util.List;
-
-import hw07.model.atm.Atm;
+import hw07.model.department.AtmManager;
 
 public abstract class Command {
-    protected final List<Atm> atmPark;
+    protected final AtmManager atmManager;
 
-    public Command(List<Atm> atmPark) {
-        this.atmPark = atmPark;
+    public Command(AtmManager atmManager) {
+        this.atmManager = atmManager;
     }
 
     public abstract boolean execute();
 }
-
-
