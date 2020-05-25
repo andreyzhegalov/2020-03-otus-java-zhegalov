@@ -1,10 +1,11 @@
 package hw07.model.atm;
 
+import hw07.model.atm.cellstrategy.CellStrategy1;
 import hw07.model.protocol.BalanceOperation;
 import hw07.model.protocol.StateOperation;
 
 public class Atm implements UserAction, StaffAction, BalanceOperation, StateOperation {
-    private final CellManager cellManger = new CellManager();
+    private final CellManager cellManger = new CellManager(new CellStrategy1());
     private CellManagerMomento cellManagerState = null;
 
     @Override
@@ -18,14 +19,12 @@ public class Atm implements UserAction, StaffAction, BalanceOperation, StateOper
 
     @Override
     public void put(Object[] banknotes) {
-        final var cntByCell = cellManger.tryPutToCells((BanknoteNominal[]) banknotes);
-        cellManger.putToCells(cntByCell);
+        cellManger.put(banknotes);
     }
 
     @Override
-    public Object[] get(int sum) {
-        final var cntByCell = cellManger.tryGetFromCells(sum);
-        return cellManger.getFromCells(cntByCell);
+    public Object[] get(long sum) {
+        return cellManger.get(sum);
     }
 
     @Override

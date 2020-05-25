@@ -53,12 +53,12 @@ public class BanknoteCell implements CellPrototype {
         occupiedSpace += cnt;
     }
 
-    public int tryGetSum(int sum) {
+    public long tryGetSum(long sum) {
         if (isEmpty()) {
             return 0;
         }
-        final int neededSum = (getBalance() > sum) ? sum : getBalance();
-        final int banknoteCnt = neededSum / banknoteNominal.getCost();
+        final long neededSum = (getBalance() > sum) ? sum : getBalance();
+        final long banknoteCnt = neededSum / banknoteNominal.getCost();
         return banknoteCnt * banknoteNominal.getCost();
     }
 
