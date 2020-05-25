@@ -87,15 +87,6 @@ public class BanknoteCell implements CellPrototype {
     }
 
     @Override
-    public int hashCode() {
-        int result = 17;
-        result = 31 * result + (banknoteNominal != null ? banknoteNominal.hashCode() : 0);
-        result = 31 * result + (int) capacity;
-        result = 31 * result + (int) occupiedSpace;
-        return result;
-    }
-
-    @Override
     public boolean equals(Object o) {
         if (this == o)
             return true;

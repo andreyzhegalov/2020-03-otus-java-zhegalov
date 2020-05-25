@@ -6,24 +6,24 @@ import hw07.model.department.command.RestoreLastStateCommand;
 import hw07.model.department.command.SaveCurrentStateCommand;
 
 public class Department implements AtmHandler {
-    private final AtmManager atmManager = new AtmManager();
+    private final AtmObserver atmObserver = new AtmObserver();
 
     @Override
     public boolean addAtm(Atm newAtm) {
-        return atmManager.subscribe(newAtm);
+        return atmObserver.subscribe(newAtm);
     }
 
     public long getBalance() {
-        final var getBalanceCommand = new GetBalanceCommand(atmManager);
+        final var getBalanceCommand = new GetBalanceCommand(atmObserver);
         getBalanceCommand.execute();
         return getBalanceCommand.getBalance();
     }
 
     public void saveAtmState() {
-        new SaveCurrentStateCommand(atmManager).execute();
+        new SaveCurrentStateCommand(atmObserver).execute();
     }
 
     public void restoreAtmState() {
-        new RestoreLastStateCommand(atmManager).execute();
+        new RestoreLastStateCommand(atmObserver).execute();
     }
 }

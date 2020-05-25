@@ -1,11 +1,11 @@
 package hw07.model.department.command;
 
-import hw07.model.department.AtmManager;
+import hw07.model.department.AtmObserver;
 
 public abstract class Command {
-    protected final AtmManager atmManager;
+    protected final AtmObserver atmManager;
 
-    public Command(AtmManager atmManager) {
+    public Command(AtmObserver atmManager) {
         this.atmManager = atmManager;
     }
 

@@ -1,10 +1,10 @@
 package hw07.model.department.command;
 
-import hw07.model.department.AtmManager;
+import hw07.model.department.AtmObserver;
 
 public class SaveCurrentStateCommand extends Command {
 
-    public SaveCurrentStateCommand(AtmManager atmManager) {
+    public SaveCurrentStateCommand(AtmObserver atmManager) {
         super(atmManager);
     }
 
