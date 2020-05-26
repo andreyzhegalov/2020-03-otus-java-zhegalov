@@ -2,7 +2,7 @@ package hw07.model.atm.cellstrategy;
 
 import java.util.List;
 
-import hw07.model.atm.BanknoteCell;
+import hw07.model.atm.cell.BanknoteCell;
 import hw07.model.atm.BanknoteNominal;
 
 public interface CellStategy {

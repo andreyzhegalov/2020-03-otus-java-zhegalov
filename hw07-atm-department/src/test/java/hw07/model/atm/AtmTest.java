@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import hw07.model.atm.cell.BanknoteCell;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;

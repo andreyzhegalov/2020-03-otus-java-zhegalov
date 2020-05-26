@@ -1,5 +1,6 @@
-package hw07.model.atm;
+package hw07.model.atm.cellmanager;
 
+import hw07.model.atm.cell.BanknoteCell;
 import java.util.ArrayList;
 import java.util.List;
 

@@ -1,5 +1,8 @@
 package hw07.model.atm;
 
+import hw07.model.atm.cell.BanknoteCell;
+import hw07.model.atm.cellmanager.CellManager;
+import hw07.model.atm.cellmanager.CellManagerMomento;
 import hw07.model.atm.cellstrategy.CellStrategy1;
 import hw07.model.protocol.Protocol;
 

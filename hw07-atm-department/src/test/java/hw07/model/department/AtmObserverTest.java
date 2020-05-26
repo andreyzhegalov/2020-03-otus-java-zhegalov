@@ -2,6 +2,7 @@ package hw07.model.department;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import hw07.model.department.internal.AtmObserver;
 import org.junit.jupiter.api.Test;
 
 public class AtmObserverTest {

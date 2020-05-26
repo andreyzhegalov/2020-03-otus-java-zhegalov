@@ -1,6 +1,6 @@
 package hw07.model.department.command;
 
-import hw07.model.department.AtmObserver;
+import hw07.model.department.internal.AtmObserver;
 
 public abstract class Command {
     protected final AtmObserver atmManager;

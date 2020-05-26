@@ -1,4 +1,4 @@
-package hw07.model.atm;
+package hw07.model.atm.cell;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -6,6 +6,9 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
+
+import hw07.model.atm.AtmException;
+import hw07.model.atm.BanknoteNominal;
 
 public class BanknoteCellTest {
     @Test
@@ -103,7 +106,7 @@ public class BanknoteCellTest {
     @Test
     public void testGetNegativeCnt(){
         final var cell = new BanknoteCell(new BanknoteNominal(50), 100);
-        assertThrows( IllegalArgumentException.class, ()->cell.get(-1));
+        assertThrows( AtmException.class, ()->cell.get(-1));
     }
 
     @Test

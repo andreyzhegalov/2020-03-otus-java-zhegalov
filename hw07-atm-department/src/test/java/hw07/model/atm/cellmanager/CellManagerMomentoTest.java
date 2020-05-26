@@ -1,10 +1,13 @@
-package hw07.model.atm;
+package hw07.model.atm.cellmanager;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+
+import hw07.model.atm.BanknoteNominal;
+import hw07.model.atm.cell.BanknoteCell;
 
 public class CellManagerMomentoTest {
     @Test

@@ -1,4 +1,4 @@
-package hw07.model.atm;
+package hw07.model.atm.cellmanager;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -7,6 +7,9 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import hw07.model.atm.AtmException;
+import hw07.model.atm.BanknoteNominal;
+import hw07.model.atm.cell.BanknoteCell;
 import hw07.model.atm.cellstrategy.CellStrategy1;
 
 public class CellManagerTest {

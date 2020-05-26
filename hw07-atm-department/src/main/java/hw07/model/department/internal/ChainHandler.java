@@ -1,4 +1,4 @@
-package hw07.model.department;
+package hw07.model.department.internal;
 
 public interface ChainHandler {
     public void setNext(ChainHandler nextHandler);

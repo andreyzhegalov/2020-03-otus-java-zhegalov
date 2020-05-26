@@ -1,12 +1,12 @@
 package hw07.model.department.command;
 
-import hw07.model.department.AtmObserver;
+import hw07.model.department.internal.AtmObserver;
 
 public class GetBalanceCommand extends Command {
     private long balance;
 
-    public GetBalanceCommand(AtmObserver atmManager) {
-        super(atmManager);
+    public GetBalanceCommand(AtmObserver atmObserver) {
+        super(atmObserver);
     }
 
     @Override

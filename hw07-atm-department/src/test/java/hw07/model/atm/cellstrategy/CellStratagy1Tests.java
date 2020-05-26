@@ -9,8 +9,8 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import hw07.model.atm.BanknoteCell;
 import hw07.model.atm.BanknoteNominal;
+import hw07.model.atm.cell.BanknoteCell;
 
 public class CellStratagy1Tests {
     private List<BanknoteCell> cells;

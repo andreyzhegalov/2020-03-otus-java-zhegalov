@@ -4,11 +4,11 @@ import hw07.model.atm.Atm;
 import hw07.model.department.command.GetBalanceCommand;
 import hw07.model.department.command.RestoreLastStateCommand;
 import hw07.model.department.command.SaveCurrentStateCommand;
+import hw07.model.department.internal.AtmObserver;
 
-public class Department implements AtmHandler {
+public class Department{
     private final AtmObserver atmObserver = new AtmObserver();
 
-    @Override
     public boolean addAtm(Atm newAtm) {
         return atmObserver.subscribe(newAtm);
     }

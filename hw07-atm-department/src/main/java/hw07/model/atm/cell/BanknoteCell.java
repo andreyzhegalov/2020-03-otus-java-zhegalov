@@ -1,5 +1,7 @@
-package hw07.model.atm;
+package hw07.model.atm.cell;
 
+import hw07.model.atm.AtmException;
+import hw07.model.atm.BanknoteNominal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -70,7 +72,7 @@ public class BanknoteCell implements CellPrototype {
 
     public List<BanknoteNominal> get( int cnt) {
         if (cnt < 0)
-            throw new IllegalArgumentException("Get banknote count must be positive. Now is " + cnt);
+            throw new AtmException("Get banknote count must be positive. Now is " + cnt);
         if (cnt > occupiedSpace)
             throw new AtmException("Not enough space in cell");
         final List<BanknoteNominal> result = new ArrayList<>();

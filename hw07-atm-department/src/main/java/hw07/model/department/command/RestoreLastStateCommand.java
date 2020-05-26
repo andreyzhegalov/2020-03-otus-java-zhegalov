@@ -1,11 +1,11 @@
 package hw07.model.department.command;
 
-import hw07.model.department.AtmObserver;
+import hw07.model.department.internal.AtmObserver;
 
 public class RestoreLastStateCommand extends Command {
 
-    public RestoreLastStateCommand(AtmObserver atmManager) {
-        super(atmManager);
+    public RestoreLastStateCommand(AtmObserver atmObserver) {
+        super(atmObserver);
     }
 
     @Override
