@@ -10,7 +10,7 @@ public class RestoreLastStateCommand extends Command {
 
     @Override
     public boolean execute() {
-        atmManager.sendRestoreLastState();
+        atmObserver.sendRestoreLastState();
         return true;
     }
 

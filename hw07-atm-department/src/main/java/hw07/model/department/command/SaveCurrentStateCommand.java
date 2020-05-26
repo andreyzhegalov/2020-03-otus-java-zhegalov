@@ -10,7 +10,7 @@ public class SaveCurrentStateCommand extends Command {
 
     @Override
     public boolean execute() {
-        atmManager.sendSaveCurrentState();
+        atmObserver.sendSaveCurrentState();
         return true;
     }
 

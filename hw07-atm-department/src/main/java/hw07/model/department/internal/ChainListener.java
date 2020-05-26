@@ -1,7 +1,7 @@
 package hw07.model.department.internal;
 
-public interface ChainHandler {
-    public void setNext(ChainHandler nextHandler);
+public interface ChainListener {
+    public void setNext(ChainListener nextListener);
 
     public long summarizeBallance(long initBalance);
 

@@ -90,5 +90,4 @@ public class CellManager implements UserAction {
     public CellManagerMomento createSnapshot() {
         return new CellManagerMomento(this, cells);
     }
-
 }

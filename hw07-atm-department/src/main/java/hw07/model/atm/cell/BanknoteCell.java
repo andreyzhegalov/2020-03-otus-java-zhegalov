@@ -65,8 +65,8 @@ public class BanknoteCell implements CellPrototype {
         if (isEmpty()) {
             return 0;
         }
-        final long neededSum = (getBalance() > sum) ? sum : getBalance();
-        final long banknoteCnt = neededSum / banknoteNominal.getCost();
+        final long aviableSum = (getBalance() > sum) ? sum : getBalance();
+        final long banknoteCnt = aviableSum / banknoteNominal.getCost();
         return banknoteCnt * banknoteNominal.getCost();
     }
 
@@ -74,7 +74,7 @@ public class BanknoteCell implements CellPrototype {
         if (cnt < 0)
             throw new AtmException("Get banknote count must be positive. Now is " + cnt);
         if (cnt > occupiedSpace)
-            throw new AtmException("Not enough space in cell");
+            throw new AtmException("Not enough banknotes in cell");
         final List<BanknoteNominal> result = new ArrayList<>();
         final int banknoteCost = getBanknoteNominal().getCost();
         occupiedSpace -= cnt;

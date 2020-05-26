@@ -4,40 +4,40 @@ import hw07.model.department.DepartmentException;
 import hw07.model.protocol.Protocol;
 
 public class AtmObserver {
-    private ChainHandler lastHandler = null;
-    private ChainHandler firstHandle = null;
+    private ChainListener lastListener = null;
+    private ChainListener firstListener = null;
 
-    public boolean subscribe(Protocol atm) {
-        if (lastHandler == null) {
-            lastHandler = new AtmChainHandler(atm);
-            firstHandle = lastHandler;
+    public boolean subscribe(Protocol listener) {
+        if (lastListener == null) {
+            lastListener = new AtmChainListener(listener);
+            firstListener = lastListener;
         } else {
-            final var nextHandler = new AtmChainHandler(atm);
-            lastHandler.setNext(nextHandler);
-            lastHandler = nextHandler;
+            final var nextHandler = new AtmChainListener(listener);
+            lastListener.setNext(nextHandler);
+            lastListener = nextHandler;
         }
         return true;
     }
 
     public long sendGetBalance() {
-        if (firstHandle == null) {
+        if (firstListener == null) {
             throw new DepartmentException("no listeners");
         }
-        return firstHandle.summarizeBallance(0);
+        return firstListener.summarizeBallance(0);
     }
 
     public boolean sendSaveCurrentState() {
-        if (firstHandle == null) {
+        if (firstListener == null) {
             throw new DepartmentException("no listeners");
         }
-        return firstHandle.sendSaveState();
+        return firstListener.sendSaveState();
     }
 
     public boolean sendRestoreLastState() {
-        if (firstHandle == null) {
+        if (firstListener == null) {
             throw new DepartmentException("no listeners");
         }
-        return firstHandle.sendRestoreState();
+        return firstListener.sendRestoreState();
     }
 
 }

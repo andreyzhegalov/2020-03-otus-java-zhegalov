@@ -8,7 +8,7 @@ public class CellManagerMomento {
     private List<BanknoteCell> cells = new ArrayList<>();
     private CellManager cellManager;
 
-    public CellManagerMomento(CellManager cellManager, List<? extends BanknoteCell> cells) {
+    public CellManagerMomento(CellManager cellManager, List<BanknoteCell> cells) {
         for (final var banknoteCell : cells) {
             this.cells.add((BanknoteCell) banknoteCell.clone());
         }

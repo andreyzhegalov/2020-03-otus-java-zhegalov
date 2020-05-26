@@ -11,7 +11,7 @@ public class GetBalanceCommand extends Command {
 
     @Override
     public boolean execute() {
-        balance = atmManager.sendGetBalance();
+        balance = atmObserver.sendGetBalance();
         return true;
     }
 

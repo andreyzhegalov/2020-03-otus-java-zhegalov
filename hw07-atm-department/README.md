@@ -15,9 +15,9 @@
 
 **Результат**
 В решении были применены следующие шаблоны:
-1. *Command* - для представления команд департамента (GetBalanceCommand, SaveCurrentStateCommand, RestoreLastStateCommand).
+1. *Command* - для представления действий департамента с ATM (GetBalanceCommand, SaveCurrentStateCommand, RestoreLastStateCommand).
 2. *Observer* - для централизованной передачи команд подписанным ATM (AtmObserver).
 3. *Chain of responsibility* - для обхода по подписчикам в observer (AtmChainHandler).
-4. *Momento* - для сохранения состояния менеджера ячеек в банкомате (CellManagerMomento).
+4. *Momento* - для сохранения состояния менеджера ячеек в ATM (CellManagerMomento).
 5. *Prototype* - для создания копии ячеек при создании снимка (CellPrototype).
-6. *Strategy* - для подключения алгоримта работы с ячейками в CellManager (CellStategy). Реализована только CellStrategy1 с логикой из предыдущего задания.
+6. *Strategy* - для выбора алгоримта работы с ячейками в CellManager (CellStategy). Реализована только CellStrategy1 с логикой из предыдущего задания.

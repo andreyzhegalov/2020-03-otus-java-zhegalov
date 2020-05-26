@@ -10,7 +10,7 @@ public class BanknoteNominal {
 
     public BanknoteNominal(int value) {
         if( !POSIBLE_VALS.contains(value)){
-            throw new AtmException("Undefined banknote nominal" + value);
+            throw new AtmException("Undefined banknote nominal " + value);
         }
         this.cost = value;
     }
