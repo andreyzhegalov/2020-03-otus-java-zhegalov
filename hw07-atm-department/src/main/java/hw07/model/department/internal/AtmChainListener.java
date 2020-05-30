@@ -4,10 +4,10 @@ import hw07.model.protocol.Protocol;
 
 public class AtmChainListener implements ChainListener {
     private ChainListener next = null;
-    private Protocol atm = null;
+    private Protocol atmProtocol = null;
 
     public AtmChainListener(Protocol atm) {
-        this.atm = atm;
+        this.atmProtocol = atm;
     }
 
     @Override
@@ -17,7 +17,7 @@ public class AtmChainListener implements ChainListener {
 
     @Override
     public long summarizeBallance(long initBalance) {
-        final var balance = initBalance + atm.getBalance();
+        final var balance = initBalance + atmProtocol.getBalance();
         if (next != null) {
             return next.summarizeBallance(balance);
         }
@@ -26,7 +26,7 @@ public class AtmChainListener implements ChainListener {
 
     @Override
     public boolean sendSaveState() {
-        atm.saveCurrentState();
+        atmProtocol.saveCurrentState();
         if (next != null) {
             next.sendSaveState();
         }
@@ -35,7 +35,7 @@ public class AtmChainListener implements ChainListener {
 
     @Override
     public boolean sendRestoreState() {
-        atm.restoreLastState();
+        atmProtocol.restoreLastState();
         if (next != null) {
             next.sendRestoreState();
         }

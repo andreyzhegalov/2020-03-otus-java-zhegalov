@@ -6,7 +6,7 @@ import hw07.model.atm.cellmanager.CellManagerMomento;
 import hw07.model.atm.cellstrategy.CellStrategy1;
 import hw07.model.protocol.Protocol;
 
-public class Atm implements UserAction, StaffAction, Protocol {
+public class Atm implements UserAction, CellAction, Protocol {
     private final CellManager cellManger = new CellManager(new CellStrategy1());
     private CellManagerMomento cellManagerState = null;
 
