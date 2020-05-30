@@ -1,6 +1,7 @@
 package hw07.model.department.internal;
 
 import hw07.model.department.DepartmentException;
+import hw07.model.department.command.Command;
 import hw07.model.protocol.Protocol;
 
 public class AtmObserver {
@@ -17,6 +18,13 @@ public class AtmObserver {
             lastListener = nextHandler;
         }
         return true;
+    }
+
+    public void sendCommand(Command command) {
+        if (firstListener == null) {
+            throw new DepartmentException("no listeners");
+        }
+        command.execute(firstListener);
     }
 
     public long sendGetBalance() {
