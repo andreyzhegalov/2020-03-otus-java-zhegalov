@@ -3,7 +3,6 @@ package hw08.mygson;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.google.gson.Gson;
-
 import org.junit.jupiter.api.Test;
 
 public class MyGsonTest {
@@ -24,7 +23,6 @@ public class MyGsonTest {
 
     class WithBoolean {
         private boolean b;
-
         public WithBoolean(boolean b) {
             this.b = b;
         }

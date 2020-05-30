@@ -14,12 +14,10 @@ public class MyGson {
         for (int i = 0; i < fields.length; i++) {
             final var field = fields[i];
             field.setAccessible(true);
-            System.out.println( field.getType().getTypeName());
+            System.out.println(field.getType().getTypeName());
             System.out.println(field.getName());
             System.out.println(field.getBoolean(obj));
         }
-
-        return "{}";
+        return new String();
     }
-
 }
