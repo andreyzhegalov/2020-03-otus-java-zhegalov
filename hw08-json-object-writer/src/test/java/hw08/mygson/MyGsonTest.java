@@ -61,4 +61,37 @@ public class MyGsonTest {
         assertEquals(expectedJson, new MyGson().toJson(objWithInt));
     }
 
+    class WithObjectArray {
+        private Object[] array;
+
+        WithObjectArray(Object[] array) {
+            this.array = array;
+        }
+    }
+
+    @Test
+    public void testToJsonFromObjectArray() {
+        final Integer[] array = { 1, 2, 3 };
+        final var objWithArray = new WithObjectArray(array);
+        final var expectedJson = new Gson().toJson(objWithArray);
+        System.out.println(expectedJson);
+        assertEquals(expectedJson, new MyGson().toJson(objWithArray));
+    }
+
+    class WithIntegerArray {
+        private int[] array;
+
+        WithIntegerArray(int[] array) {
+            this.array = array;
+        }
+    }
+
+    @Test
+    public void testToJsonFromPrimitiveArray() {
+        final int[] array = { 1, 2, 3 };
+        final var objWithArray = new WithIntegerArray(array);
+        final var expectedJson = new Gson().toJson(objWithArray);
+        System.out.println(expectedJson);
+        assertEquals(expectedJson, new MyGson().toJson(objWithArray));
+    }
 }

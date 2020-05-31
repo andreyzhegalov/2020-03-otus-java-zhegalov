@@ -1,5 +1,6 @@
 package hw08.mygson;
 
+import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 
 public class MyGson {
@@ -51,6 +52,42 @@ public class MyGson {
             }
         }
 
+        if (field.getType().isArray()) {
+            final Object[] array;
+            try {
+                if (field.get(obj) instanceof Object[]) {
+                    array = (Object[]) field.get(obj);
+                } else {
+                    array = fromPrimitiveArray(field.get(obj));
+                }
+            } catch (IllegalArgumentException e) {
+                throw new MyGsonException("Not array type");
+            } catch (IllegalAccessException e) {
+                throw new MyGsonException("Field not accesible");
+            }
+            value = arrayToString(array);
+        }
+
+        return value;
+    }
+
+    private Object[] fromPrimitiveArray(Object obj) {
+        final Object[] array = new Object[Array.getLength(obj)];
+        for (int index = 0; index < Array.getLength(obj); index++) {
+            array[index] = Array.get(obj, index); // automatic boxing
+        }
+        return array;
+    }
+
+    private String arrayToString(Object[] array) {
+        String value = "[";
+        for (int i = 0; i < array.length; i++) {
+            value += array[i].toString();
+            if (i < array.length - 1) {
+                value += ",";
+            }
+        }
+        value += "]";
         return value;
     }
 }
