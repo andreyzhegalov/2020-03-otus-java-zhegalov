@@ -2,6 +2,9 @@ package hw08.mygson;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.google.gson.Gson;
 import org.junit.jupiter.api.Test;
 
@@ -93,5 +96,24 @@ public class MyGsonTest {
         final var expectedJson = new Gson().toJson(objWithArray);
         System.out.println(expectedJson);
         assertEquals(expectedJson, new MyGson().toJson(objWithArray));
+    }
+
+    class WithCollectionList {
+        private ArrayList<?> list;
+        WithCollectionList( List<?> list){
+            this.list = (ArrayList<?>)list;
+        }
+    }
+
+    @Test
+    public void testToJsonFromCollectionList(){
+        final List<String> list = new ArrayList<>();
+        list.add("first");
+        list.add("second");
+        list.add("third");
+
+        final var objWithCollection = new WithCollectionList(list);
+        final var expectedJson = new Gson().toJson(objWithCollection);
+        System.out.println(expectedJson);
     }
 }
