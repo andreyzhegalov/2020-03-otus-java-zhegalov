@@ -31,6 +31,8 @@ public class MyGsonTest {
     @Test
     public void testToJsonForBoolean() throws IllegalArgumentException, IllegalAccessException {
         final var objWithTrue = new WithBoolean(true);
-        assertEquals(new Gson().toJson(objWithTrue), new MyGson().toJson(objWithTrue));
+        final var expectedJson = new Gson().toJson(objWithTrue);
+        System.out.println(expectedJson);
+        assertEquals(expectedJson, new MyGson().toJson(objWithTrue));
     }
 }

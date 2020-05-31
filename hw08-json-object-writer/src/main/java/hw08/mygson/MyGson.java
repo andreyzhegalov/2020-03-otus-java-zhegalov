@@ -11,13 +11,24 @@ public class MyGson {
 
         final var clazz = obj.getClass();
         final Field[] fields = clazz.getDeclaredFields();
+        String res = "{";
         for (int i = 0; i < fields.length; i++) {
             final var field = fields[i];
             field.setAccessible(true);
-            System.out.println(field.getType().getTypeName());
-            System.out.println(field.getName());
-            System.out.println(field.getBoolean(obj));
+
+            if (field.getName().contains("this$0")) {
+                continue;
+            }
+
+            if (field.getType().equals(boolean.class)) {
+                res += wrapValue(field.getName()) + ":" + field.getBoolean(obj);
+            }
+
         }
-        return new String();
+        return res + "}";
+    }
+
+    private String wrapValue(String value) {
+        return "\"" + value + "\"";
     }
 }
