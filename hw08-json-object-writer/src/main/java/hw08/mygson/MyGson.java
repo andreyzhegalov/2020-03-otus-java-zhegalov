@@ -19,25 +19,38 @@ public class MyGson {
             if (field.getName().contains("this$0")) {
                 continue;
             }
-
-            if (field.getType().equals(boolean.class)) {
-                String value;
-                try {
-                    value = String.valueOf(field.getBoolean(obj));
-                } catch (IllegalArgumentException e) {
-                    throw new MyGsonException("Not boolean type");
-                } catch (IllegalAccessException e) {
-                    throw new MyGsonException("Field not accesible");
-                }
-
-                res += wrapName(field.getName()) + ":" + value;
-            }
-
+            res += wrapName(field.getName()) + ":" + getValue(field, obj);
         }
         return res + "}";
     }
 
     private String wrapName(String value) {
         return "\"" + value + "\"";
+    }
+
+    private String getValue(Field field, Object obj) {
+        String value = new String();
+
+        if (field.getType().toString().equals("boolean")) {
+            try {
+                value = String.valueOf(field.getBoolean(obj));
+            } catch (IllegalArgumentException e) {
+                throw new MyGsonException("Not boolean type");
+            } catch (IllegalAccessException e) {
+                throw new MyGsonException("Field not accesible");
+            }
+        }
+
+        if (field.getType().toString().equals("int")) {
+            try {
+                value = String.valueOf(field.getInt(obj));
+            } catch (IllegalArgumentException e) {
+                throw new MyGsonException("Not integer type");
+            } catch (IllegalAccessException e) {
+                throw new MyGsonException("Field not accesible");
+            }
+        }
+
+        return value;
     }
 }

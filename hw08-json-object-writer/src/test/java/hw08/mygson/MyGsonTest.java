@@ -30,11 +30,19 @@ public class MyGsonTest {
     }
 
     @Test
-    public void testToJsonForBoolean() {
+    public void testToJsonForBooleanTrue() {
         final var objWithTrue = new WithBoolean(true);
         final var expectedJson = new Gson().toJson(objWithTrue);
         System.out.println(expectedJson);
         assertEquals(expectedJson, new MyGson().toJson(objWithTrue));
+    }
+
+    @Test
+    public void testToJsonForBooleanFalse() {
+        final var objWithFalse = new WithBoolean(false);
+        final var expectedJson = new Gson().toJson(objWithFalse);
+        System.out.println(expectedJson);
+        assertEquals(expectedJson, new MyGson().toJson(objWithFalse));
     }
 
     class WithInt {
