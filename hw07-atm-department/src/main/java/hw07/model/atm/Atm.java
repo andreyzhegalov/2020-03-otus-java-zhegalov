@@ -4,9 +4,8 @@ import hw07.model.atm.cell.BanknoteCell;
 import hw07.model.atm.cellmanager.CellManager;
 import hw07.model.atm.cellmanager.CellManagerMomento;
 import hw07.model.atm.cellstrategy.CellStrategy1;
-import hw07.model.protocol.Protocol;
 
-public class Atm implements UserAction, CellAction, Protocol {
+public class Atm implements UserAction, CellAction {
     private final CellManager cellManger = new CellManager(new CellStrategy1());
     private CellManagerMomento cellManagerState = null;
 
@@ -29,18 +28,15 @@ public class Atm implements UserAction, CellAction, Protocol {
         return cellManger.addCell(newCell);
     }
 
-    @Override
     public long getBalance() {
         return cellManger.getBallance();
     }
 
-    @Override
     public boolean saveCurrentState() {
         cellManagerState = cellManger.createSnapshot();
         return true;
     }
 
-    @Override
     public boolean restoreLastState() {
         if (cellManagerState == null) {
             throw new AtmException("No saved state");

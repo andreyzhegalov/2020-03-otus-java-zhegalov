@@ -1,14 +1,14 @@
 package hw07.model.department.internal;
 
+import hw07.model.atm.Atm;
 import hw07.model.department.DepartmentException;
 import hw07.model.department.command.Command;
-import hw07.model.protocol.Protocol;
 
 public class AtmObserver {
     private ChainListener lastListener = null;
     private ChainListener firstListener = null;
 
-    public boolean subscribe(Protocol listener) {
+    public boolean subscribe(Atm listener) {
         if (lastListener == null) {
             lastListener = new AtmChainListener(listener);
             firstListener = lastListener;
