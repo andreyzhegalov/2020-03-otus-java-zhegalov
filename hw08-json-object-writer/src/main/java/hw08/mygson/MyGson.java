@@ -2,6 +2,8 @@ package hw08.mygson;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MyGson {
 
@@ -31,8 +33,9 @@ public class MyGson {
 
     private String getValue(Field field, Object obj) {
         String value = new String();
+        final var fieldType = field.getType();
 
-        if (field.getType().toString().equals("boolean")) {
+        if (fieldType.toString().equals("boolean")) {
             try {
                 value = String.valueOf(field.getBoolean(obj));
             } catch (IllegalArgumentException e) {
@@ -42,7 +45,7 @@ public class MyGson {
             }
         }
 
-        if (field.getType().toString().equals("int")) {
+        if (fieldType.toString().equals("int")) {
             try {
                 value = String.valueOf(field.getInt(obj));
             } catch (IllegalArgumentException e) {
@@ -52,7 +55,7 @@ public class MyGson {
             }
         }
 
-        if (field.getType().isArray()) {
+        if (fieldType.isArray()) {
             final Object[] array;
             try {
                 if (field.get(obj) instanceof Object[]) {
@@ -66,6 +69,20 @@ public class MyGson {
                 throw new MyGsonException("Field not accesible");
             }
             value = arrayToString(array);
+        }
+
+        if (Iterable.class.isAssignableFrom(fieldType)) {
+            List<Object> list = new ArrayList<>();
+            if (List.class.isAssignableFrom(fieldType)) {
+                try {
+                    list = (List<Object>) field.get(obj);
+                } catch (IllegalArgumentException e) {
+                    throw new MyGsonException("Not array type");
+                } catch (IllegalAccessException e) {
+                    throw new MyGsonException("Field not accesible");
+                }
+            }
+            value = arrayToString(list.toArray());
         }
 
         return value;
@@ -82,7 +99,13 @@ public class MyGson {
     private String arrayToString(Object[] array) {
         String value = "[";
         for (int i = 0; i < array.length; i++) {
-            value += array[i].toString();
+            if(array[i].getClass().equals(String.class)){
+                value += wrapName( array[i].toString());
+            }
+            else{
+                value += array[i].toString();
+            }
+
             if (i < array.length - 1) {
                 value += ",";
             }

@@ -100,13 +100,14 @@ public class MyGsonTest {
 
     class WithCollectionList {
         private ArrayList<?> list;
-        WithCollectionList( List<?> list){
-            this.list = (ArrayList<?>)list;
+
+        WithCollectionList(List<?> list) {
+            this.list = (ArrayList<?>) list;
         }
     }
 
     @Test
-    public void testToJsonFromCollectionList(){
+    public void testToJsonFromCollectionList() {
         final List<String> list = new ArrayList<>();
         list.add("first");
         list.add("second");
@@ -115,5 +116,7 @@ public class MyGsonTest {
         final var objWithCollection = new WithCollectionList(list);
         final var expectedJson = new Gson().toJson(objWithCollection);
         System.out.println(expectedJson);
+
+        assertEquals(expectedJson, new MyGson().toJson(objWithCollection));
     }
 }
