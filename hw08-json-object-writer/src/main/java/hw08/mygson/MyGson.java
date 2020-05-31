@@ -4,7 +4,7 @@ import java.lang.reflect.Field;
 
 public class MyGson {
 
-    public String toJson(Object obj) throws IllegalArgumentException, IllegalAccessException {
+    public String toJson(Object obj) {
         if (obj == null) {
             return "null";
         }
@@ -21,14 +21,23 @@ public class MyGson {
             }
 
             if (field.getType().equals(boolean.class)) {
-                res += wrapValue(field.getName()) + ":" + field.getBoolean(obj);
+                String value;
+                try {
+                    value = String.valueOf(field.getBoolean(obj));
+                } catch (IllegalArgumentException e) {
+                    throw new MyGsonException("Not boolean type");
+                } catch (IllegalAccessException e) {
+                    throw new MyGsonException("Field not accesible");
+                }
+
+                res += wrapName(field.getName()) + ":" + value;
             }
 
         }
         return res + "}";
     }
 
-    private String wrapValue(String value) {
+    private String wrapName(String value) {
         return "\"" + value + "\"";
     }
 }
