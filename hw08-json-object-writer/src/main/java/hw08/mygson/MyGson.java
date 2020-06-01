@@ -9,10 +9,16 @@ public class MyGson {
         }
         final var clazz = obj.getClass();
         final Field[] fields = clazz.getDeclaredFields();
-        return fieldsToJson(fields, obj);
+        try {
+            return fieldsToJson(fields, obj);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return new String();
     }
 
-    private String fieldsToJson(Field[] fields, Object obj) {
+
+    private String fieldsToJson(Field[] fields, Object obj) throws IllegalArgumentException, IllegalAccessException {
         StringBuilder sb = new StringBuilder();
         sb.append("{");
         for (int i = 0; i < fields.length; i++) {
@@ -24,13 +30,11 @@ public class MyGson {
                 continue;
             }
 
-            sb.append(fieldToJson(field, obj));
+            final var fieldHandler = new ObjectField(field, obj);
+            final var jsonObject = new JsonObject(field.getName(), fieldHandler.toObject());
+
+            sb.append(jsonObject.toJson());
         }
         return sb.append("}").toString();
-    }
-
-    private String fieldToJson(Field field, Object obj) {
-        final var jsonObject = new JsonObject(field, obj);
-        return jsonObject.getKey() + ":" + jsonObject.getValue();
     }
 }
