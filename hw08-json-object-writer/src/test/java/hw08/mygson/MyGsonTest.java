@@ -2,12 +2,15 @@ package hw08.mygson;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Queue;
 import java.util.Set;
 
 import com.google.gson.Gson;
+
 import org.junit.jupiter.api.Test;
 
 public class MyGsonTest {
@@ -101,10 +104,10 @@ public class MyGsonTest {
     }
 
     class WithCollectionList {
-        private ArrayList<?> list;
+        private List<?> list;
 
         WithCollectionList(List<?> list) {
-            this.list = (ArrayList<?>) list;
+            this.list = list;
         }
     }
 
@@ -125,7 +128,7 @@ public class MyGsonTest {
     class WithSet {
         final Set<?> set;
         WithSet(Set<?> set){
-            this.set = (HashSet<?>)set;
+            this.set = set;
         }
     }
 
@@ -136,6 +139,25 @@ public class MyGsonTest {
         set.add(2);
         set.add(3);
         final var objWithCollection = new WithSet(set);
+        final var expectedJson = new Gson().toJson(objWithCollection);
+        System.out.println(expectedJson);
+        assertEquals(expectedJson, new MyGson().toJson(objWithCollection));
+    }
+
+    class WithQueue{
+        final Queue<?> queue;
+        WithQueue(Queue<?> queue){
+            this.queue = queue;
+        }
+    }
+
+    @Test
+    public void testToJsonFromQueue(){
+        final Queue<String> queue = new ArrayDeque<>();
+        queue.add("first");
+        queue.add("second");
+        queue.add("third");
+        final var objWithCollection = new WithQueue(queue);
         final var expectedJson = new Gson().toJson(objWithCollection);
         System.out.println(expectedJson);
         assertEquals(expectedJson, new MyGson().toJson(objWithCollection));

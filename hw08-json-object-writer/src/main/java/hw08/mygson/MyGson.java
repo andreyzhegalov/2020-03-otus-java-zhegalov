@@ -73,26 +73,14 @@ public class MyGson {
             value = arrayToString(array);
         }
 
-        if (Iterable.class.isAssignableFrom(fieldType)) {
+        if (Collection.class.isAssignableFrom(fieldType)) {
             Collection<Object> collection = new ArrayList<>();
-            if (List.class.isAssignableFrom(fieldType)) {
-                try {
-                    collection = (List<Object>) field.get(obj);
-                } catch (IllegalArgumentException e) {
-                    throw new MyGsonException("Not array type");
-                } catch (IllegalAccessException e) {
-                    throw new MyGsonException("Field not accesible");
-                }
-            }
-
-            if (Set.class.isAssignableFrom(fieldType)){
-                try {
-                    collection = (Set<Object>) field.get(obj);
-                } catch (IllegalArgumentException e) {
-                    throw new MyGsonException("Not array type");
-                } catch (IllegalAccessException e) {
-                    throw new MyGsonException("Field not accesible");
-                }
+            try {
+                collection = (Collection<Object>) field.get(obj);
+            } catch (IllegalArgumentException e) {
+                throw new MyGsonException("Not array type");
+            } catch (IllegalAccessException e) {
+                throw new MyGsonException("Field not accesible");
             }
             value = arrayToString(collection.toArray());
         }
@@ -111,10 +99,9 @@ public class MyGson {
     private String arrayToString(Object[] array) {
         String value = "[";
         for (int i = 0; i < array.length; i++) {
-            if(array[i].getClass().equals(String.class)){
-                value += wrap( array[i].toString());
-            }
-            else{
+            if (array[i].getClass().equals(String.class)) {
+                value += wrap(array[i].toString());
+            } else {
                 value += array[i].toString();
             }
 
