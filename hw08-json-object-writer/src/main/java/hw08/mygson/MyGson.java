@@ -14,17 +14,29 @@ public class MyGson {
 
         final var clazz = obj.getClass();
         final Field[] fields = clazz.getDeclaredFields();
-        String res = "{";
+        return fieldsToJson(fields, obj);
+    }
+
+    private String fieldsToJson(Field[] fields, Object obj){
+        StringBuilder sb = new StringBuilder();
+        sb.append("{");
         for (int i = 0; i < fields.length; i++) {
             final var field = fields[i];
             field.setAccessible(true);
 
+            // TODO may be exist better variant
             if (field.getName().contains("this$0")) {
                 continue;
             }
-            res += wrap(field.getName()) + ":" + getValue(field, obj);
+
+            sb.append(fieldToJson(field, obj));
         }
-        return res + "}";
+        return sb.append("}").toString();
+    }
+
+    private String fieldToJson(Field field, Object obj)
+    {
+            return wrap(field.getName()) + ":" + getValue(field, obj);
     }
 
     private String wrap(String value) {
@@ -35,23 +47,25 @@ public class MyGson {
         String value = new String();
         final var fieldType = field.getType();
 
-        if (fieldType.toString().equals("boolean")) {
-            try {
-                value = String.valueOf(field.getBoolean(obj));
-            } catch (IllegalArgumentException e) {
-                throw new MyGsonException("Not boolean type");
-            } catch (IllegalAccessException e) {
-                throw new MyGsonException("Field not accesible");
+        if (fieldType.isPrimitive()) {
+            if (fieldType.equals(boolean.class)) {
+                try {
+                    value = String.valueOf(field.getBoolean(obj));
+                } catch (IllegalArgumentException e) {
+                    throw new MyGsonException("Not boolean type");
+                } catch (IllegalAccessException e) {
+                    throw new MyGsonException("Field not accesible");
+                }
             }
-        }
 
-        if (fieldType.toString().equals("int")) {
-            try {
-                value = String.valueOf(field.getInt(obj));
-            } catch (IllegalArgumentException e) {
-                throw new MyGsonException("Not integer type");
-            } catch (IllegalAccessException e) {
-                throw new MyGsonException("Field not accesible");
+            if (fieldType.equals(int.class)) {
+                try {
+                    value = String.valueOf(field.getInt(obj));
+                } catch (IllegalArgumentException e) {
+                    throw new MyGsonException("Not integer type");
+                } catch (IllegalAccessException e) {
+                    throw new MyGsonException("Field not accesible");
+                }
             }
         }
 
@@ -89,7 +103,7 @@ public class MyGson {
     private Object[] fromPrimitiveArray(Object obj) {
         final Object[] array = new Object[Array.getLength(obj)];
         for (int index = 0; index < Array.getLength(obj); index++) {
-            array[index] = Array.get(obj, index); // automatic boxing
+            array[index] = Array.get(obj, index);
         }
         return array;
     }
