@@ -11,22 +11,13 @@ public class JsonArray {
         StringBuilder sb = new StringBuilder();
         sb.append("[");
         for (int i = 0; i < array.length; i++) {
-            if (array[i].getClass().equals(String.class)) {
-                sb.append(wrap(array[i].toString()));
-            } else {
-                sb.append(array[i].toString());
-            }
-
+            sb.append(JsonValue.toJson(array[i]));
             if (i < array.length - 1) {
                 sb.append(",");
             }
         }
         sb.append("]");
         return sb.toString();
-    }
-
-    private String wrap(String value) {
-        return "\"" + value + "\"";
     }
 }
 
