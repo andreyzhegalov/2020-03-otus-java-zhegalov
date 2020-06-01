@@ -3,7 +3,9 @@ package hw08.mygson;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.google.gson.Gson;
 import org.junit.jupiter.api.Test;
@@ -117,6 +119,25 @@ public class MyGsonTest {
         final var expectedJson = new Gson().toJson(objWithCollection);
         System.out.println(expectedJson);
 
+        assertEquals(expectedJson, new MyGson().toJson(objWithCollection));
+    }
+
+    class WithSet {
+        final Set<?> set;
+        WithSet(Set<?> set){
+            this.set = (HashSet<?>)set;
+        }
+    }
+
+    @Test
+    public void testToJsonFromSet(){
+        final Set<Integer> set = new HashSet<>();
+        set.add(1);
+        set.add(2);
+        set.add(3);
+        final var objWithCollection = new WithSet(set);
+        final var expectedJson = new Gson().toJson(objWithCollection);
+        System.out.println(expectedJson);
         assertEquals(expectedJson, new MyGson().toJson(objWithCollection));
     }
 }

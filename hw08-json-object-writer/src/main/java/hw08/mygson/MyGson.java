@@ -3,7 +3,9 @@ package hw08.mygson;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 public class MyGson {
 
@@ -22,12 +24,12 @@ public class MyGson {
             if (field.getName().contains("this$0")) {
                 continue;
             }
-            res += wrapName(field.getName()) + ":" + getValue(field, obj);
+            res += wrap(field.getName()) + ":" + getValue(field, obj);
         }
         return res + "}";
     }
 
-    private String wrapName(String value) {
+    private String wrap(String value) {
         return "\"" + value + "\"";
     }
 
@@ -72,17 +74,27 @@ public class MyGson {
         }
 
         if (Iterable.class.isAssignableFrom(fieldType)) {
-            List<Object> list = new ArrayList<>();
+            Collection<Object> collection = new ArrayList<>();
             if (List.class.isAssignableFrom(fieldType)) {
                 try {
-                    list = (List<Object>) field.get(obj);
+                    collection = (List<Object>) field.get(obj);
                 } catch (IllegalArgumentException e) {
                     throw new MyGsonException("Not array type");
                 } catch (IllegalAccessException e) {
                     throw new MyGsonException("Field not accesible");
                 }
             }
-            value = arrayToString(list.toArray());
+
+            if (Set.class.isAssignableFrom(fieldType)){
+                try {
+                    collection = (Set<Object>) field.get(obj);
+                } catch (IllegalArgumentException e) {
+                    throw new MyGsonException("Not array type");
+                } catch (IllegalAccessException e) {
+                    throw new MyGsonException("Field not accesible");
+                }
+            }
+            value = arrayToString(collection.toArray());
         }
 
         return value;
@@ -100,7 +112,7 @@ public class MyGson {
         String value = "[";
         for (int i = 0; i < array.length; i++) {
             if(array[i].getClass().equals(String.class)){
-                value += wrapName( array[i].toString());
+                value += wrap( array[i].toString());
             }
             else{
                 value += array[i].toString();
