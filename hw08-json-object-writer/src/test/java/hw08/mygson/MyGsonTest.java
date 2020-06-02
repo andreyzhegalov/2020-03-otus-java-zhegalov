@@ -64,6 +64,7 @@ public class MyGsonTest {
         assertEquals(getExpectedJson(obj), new MyGson().toJson(obj));
     }
 
+
     class WithObjectArray {
         private Object[] array;
         WithObjectArray(Object[] array) {
@@ -141,6 +142,46 @@ public class MyGsonTest {
         queue.add("second");
         queue.add("third");
         final var obj = new WithQueue(queue);
+        assertEquals(getExpectedJson(obj), new MyGson().toJson(obj));
+    }
+
+    class WithManyField{
+        final int i;
+        final boolean b;
+        public WithManyField(int i, boolean b) {
+            this.i = i;
+            this.b = b;
+        }
+    }
+
+    @Test
+    public void testToJsonManyPrimitiveField(){
+        final var obj = new WithManyField(1, true);
+        assertEquals(getExpectedJson(obj), new MyGson().toJson(obj));
+    }
+
+    class WithOtherClass {
+        final Object obj;
+
+        public WithOtherClass(Object obj) {
+            this.obj = obj;
+        }
+    }
+
+    @Test
+    public void testToJsonFromClassWithObject() {
+        final Object innerObject = new WithInt(1);
+        final var obj = new WithOtherClass(innerObject );
+        assertEquals(getExpectedJson(obj), new MyGson().toJson(obj));
+    }
+
+    @Test
+    public void testToJsonFromClassWithArrayOfObject() {
+        final WithInt[] array = new WithInt[2];
+        array[0] = new WithInt(0);
+        array[1] = new WithInt(1);
+
+        final var obj = new WithOtherClass( array );
         assertEquals(getExpectedJson(obj), new MyGson().toJson(obj));
     }
 

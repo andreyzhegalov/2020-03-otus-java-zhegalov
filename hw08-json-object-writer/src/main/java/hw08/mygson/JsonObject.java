@@ -11,22 +11,29 @@ public class JsonObject {
 
     public StringBuilder toJson(StringBuilder sb) throws IllegalArgumentException, IllegalAccessException {
         sb.append("{");
+
         final var clazz = this.obj.getClass();
         final Field[] fields = clazz.getDeclaredFields();
-        for (final Field field : fields) {
+        for (int i = 0; i < fields.length; i++) {
+            final var field  = fields[i];
             field.setAccessible(true);
+
+            final var fieldHandler = new ObjectField(field, obj);
 
             // TODO may be exist better variant
             if (field.getName().contains("this$0")) {
                 continue;
             }
 
-            final var fieldHandler = new ObjectField(field, obj);
             sb.append(wrap((fieldHandler.getName())));
             sb.append(":");
-            sb.append( JsonValue.toJson( fieldHandler.toObject()));
-        }
+            new JsonValue(fieldHandler.toObject()).toJson( sb );
 
+            if(i == fields.length - 2){
+                break;
+            }
+            sb.append(",");
+        }
         sb.append("}");
         return sb;
     }

@@ -32,7 +32,7 @@ public class ObjectField {
         else if (isArray()){
             return toArrayObject();
         }
-        throw new UnsupportedOperationException();
+        return field.get(this.obj);
     }
 
     private boolean isArray() {
