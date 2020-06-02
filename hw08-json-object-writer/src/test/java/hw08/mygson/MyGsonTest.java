@@ -14,6 +14,9 @@ import com.google.gson.Gson;
 import org.junit.jupiter.api.Test;
 
 public class MyGsonTest {
+    private String getExpectedJson(Object obj){
+        return new Gson().toJson(obj);
+    }
 
     @Test
     public void testToJsonNull() {
@@ -141,7 +144,4 @@ public class MyGsonTest {
         assertEquals(getExpectedJson(obj), new MyGson().toJson(obj));
     }
 
-    private String getExpectedJson(Object obj){
-        return new Gson().toJson(obj);
-    }
 }
