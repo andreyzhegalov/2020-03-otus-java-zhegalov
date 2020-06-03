@@ -14,7 +14,7 @@ import com.google.gson.Gson;
 import org.junit.jupiter.api.Test;
 
 public class MyGsonTest {
-    private String getExpectedJson(Object obj){
+    private String getExpectedJson(Object obj) {
         return new Gson().toJson(obj);
     }
 
@@ -34,6 +34,7 @@ public class MyGsonTest {
 
     class WithBoolean {
         private boolean b;
+
         public WithBoolean(boolean b) {
             this.b = b;
         }
@@ -53,6 +54,7 @@ public class MyGsonTest {
 
     class WithInt {
         private int i;
+
         public WithInt(int i) {
             this.i = i;
         }
@@ -64,9 +66,37 @@ public class MyGsonTest {
         assertEquals(getExpectedJson(obj), new MyGson().toJson(obj));
     }
 
+    class WithDouble {
+        final double d;
+
+        public WithDouble(double d) {
+            this.d = d;
+        }
+    }
+
+    @Test
+    public void testToJsonDouble() {
+        final var obj = new WithDouble(1.123);
+        assertEquals(getExpectedJson(obj), new MyGson().toJson(obj));
+    }
+
+    class WithString {
+        final String str;
+
+        WithString(String str) {
+            this.str = str;
+        }
+    }
+
+    @Test
+    public void testToJsonString() {
+        final var obj = new WithString("test");
+        assertEquals(getExpectedJson(obj), new MyGson().toJson(obj));
+    }
 
     class WithObjectArray {
         private Object[] array;
+
         WithObjectArray(Object[] array) {
             this.array = array;
         }
@@ -81,6 +111,7 @@ public class MyGsonTest {
 
     class WithIntegerArray {
         private int[] array;
+
         WithIntegerArray(int[] array) {
             this.array = array;
         }
@@ -95,6 +126,7 @@ public class MyGsonTest {
 
     class WithList {
         private List<?> list;
+
         WithList(List<?> list) {
             this.list = list;
         }
@@ -113,13 +145,14 @@ public class MyGsonTest {
 
     class WithSet {
         final Set<?> set;
-        WithSet(Set<?> set){
+
+        WithSet(Set<?> set) {
             this.set = set;
         }
     }
 
     @Test
-    public void testToJsonFromSet(){
+    public void testToJsonFromSet() {
         final Set<Integer> set = new HashSet<>();
         set.add(1);
         set.add(2);
@@ -128,15 +161,16 @@ public class MyGsonTest {
         assertEquals(getExpectedJson(obj), new MyGson().toJson(obj));
     }
 
-    class WithQueue{
+    class WithQueue {
         final Queue<?> queue;
-        WithQueue(Queue<?> queue){
+
+        WithQueue(Queue<?> queue) {
             this.queue = queue;
         }
     }
 
     @Test
-    public void testToJsonFromQueue(){
+    public void testToJsonFromQueue() {
         final Queue<String> queue = new ArrayDeque<>();
         queue.add("first");
         queue.add("second");
@@ -145,9 +179,10 @@ public class MyGsonTest {
         assertEquals(getExpectedJson(obj), new MyGson().toJson(obj));
     }
 
-    class WithManyField{
+    class WithManyField {
         final int i;
         final boolean b;
+
         public WithManyField(int i, boolean b) {
             this.i = i;
             this.b = b;
@@ -155,7 +190,7 @@ public class MyGsonTest {
     }
 
     @Test
-    public void testToJsonManyPrimitiveField(){
+    public void testToJsonManyPrimitiveField() {
         final var obj = new WithManyField(1, true);
         assertEquals(getExpectedJson(obj), new MyGson().toJson(obj));
     }
@@ -169,19 +204,29 @@ public class MyGsonTest {
     }
 
     @Test
-    public void testToJsonFromClassWithObject() {
+    public void testToJsonFromObjectWithObject() {
         final Object innerObject = new WithInt(1);
-        final var obj = new WithOtherClass(innerObject );
+        final var obj = new WithOtherClass(innerObject);
         assertEquals(getExpectedJson(obj), new MyGson().toJson(obj));
     }
 
     @Test
-    public void testToJsonFromClassWithArrayOfObject() {
+    public void testToJsonFromObjectWithArrayOfObject() {
         final WithInt[] array = new WithInt[2];
         array[0] = new WithInt(0);
         array[1] = new WithInt(1);
 
-        final var obj = new WithOtherClass( array );
+        final var obj = new WithOtherClass(array);
+        assertEquals(getExpectedJson(obj), new MyGson().toJson(obj));
+    }
+
+    @Test
+    public void testToJsonFromObjectWithNullValue() {
+        final WithInt[] array = new WithInt[2];
+        array[0] = new WithInt(0);
+        array[1] = null;
+
+        final var obj = new WithOtherClass(array);
         assertEquals(getExpectedJson(obj), new MyGson().toJson(obj));
     }
 

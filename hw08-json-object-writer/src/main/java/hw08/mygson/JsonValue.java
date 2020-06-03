@@ -7,27 +7,24 @@ public class JsonValue {
         this.value = value;
     }
 
-    public StringBuilder toJson(StringBuilder sb) throws IllegalArgumentException, IllegalAccessException{
-        if( value.getClass().isMemberClass()){
-            new JsonObject(value).toJson(sb);
+    public String toJson() {
+        final var sb = new StringBuilder();
+        if (value == null){
+            sb.append("null");
         }
-        else if( value.getClass().isArray()){
-            new JsonArray((Object[]) value).toJson(sb);
-        }
-        else if (value.getClass().equals(String.class)){
-            sb.append( wrap(value.toString()) );
-        }
-        else {
+        else if (value.getClass().isMemberClass()) {
+            sb.append(new JsonObject(value).toJson());
+        } else if (value.getClass().isArray()) {
+            sb.append(new JsonArray((Object[]) value).toJson());
+        } else if (value.getClass().equals(String.class)) {
+            sb.append(wrap(value.toString()));
+        } else {
             sb.append(value.toString());
         }
-        return sb;
+        return sb.toString();
     }
-
 
     private static String wrap(String value) {
         return "\"" + value + "\"";
     }
 }
-
-
-

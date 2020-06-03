@@ -7,15 +7,16 @@ public class JsonArray {
         this.array = array;
     }
 
-    public StringBuilder toJson(StringBuilder sb) throws IllegalArgumentException, IllegalAccessException {
+    public String toJson() {
+        final var sb = new StringBuilder();
         sb.append("[");
         for (int i = 0; i < array.length; i++) {
-            new JsonValue(array[i]).toJson(sb);
+            sb.append(new JsonValue(array[i]).toJson());
             if (i < array.length - 1) {
                 sb.append(",");
             }
         }
         sb.append("]");
-        return sb;
+        return sb.toString();
     }
 }

@@ -5,14 +5,12 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collection;
 
-public class ObjectField {
+public class FieldHandler {
     private Field field;
-    private Class<?> fieldType;
     private Object obj;
 
-    public ObjectField(Field field, Object obj) {
+    public FieldHandler(Field field, Object obj) {
         this.field = field;
-        this.fieldType = field.getType();
         this.obj = obj;
     }
 
@@ -20,41 +18,46 @@ public class ObjectField {
         return field.getName();
     }
 
-    public Object toObject() throws IllegalArgumentException, IllegalAccessException {
-        if (fieldType.isPrimitive()) {
-            if (fieldType.equals(boolean.class)) {
-                return field.getBoolean(obj);
+    public Object getObject() {
+        Object obj = null;
+        try {
+            if (isArray()) {
+                obj = toArrayObject();
+            } else {
+                obj = field.get(this.obj);
             }
-            if (fieldType.equals(int.class)) {
-                return field.getInt(obj);
-            }
+        } catch (IllegalArgumentException e) {
+            throw new MyGsonException("Error get value from field " + getName());
+        } catch (IllegalAccessException e) {
+            throw new MyGsonException("Error get value from field " + getName());
         }
-        else if (isArray()){
-            return toArrayObject();
-        }
-        return field.get(this.obj);
+        return obj;
+    }
+
+    public Class<?> getType() {
+        return field.getType();
     }
 
     private boolean isArray() {
-        final boolean isArray = fieldType.isArray();
-        final boolean isCollection = Collection.class.isAssignableFrom(fieldType);
+        final boolean isArray = getType().isArray();
+        final boolean isCollection = Collection.class.isAssignableFrom(getType());
         return isArray || isCollection;
     }
 
     private Object[] toArrayObject() throws IllegalArgumentException, IllegalAccessException {
         final Object[] array;
-        if (fieldType.isArray()) {
+        if (getType().isArray()) {
             if (field.get(obj) instanceof Object[]) {
                 array = (Object[]) field.get(obj);
             } else {
                 array = fromPrimitiveArray(field.get(obj));
             }
-        } else if (Collection.class.isAssignableFrom(fieldType)) {
+        } else if (Collection.class.isAssignableFrom(getType())) {
             Collection<Object> collection = new ArrayList<>();
             collection = (Collection<Object>) field.get(obj);
             array = collection.toArray();
         } else {
-            throw new UnsupportedOperationException();
+            throw new MyGsonException("Internal error");
         }
         return array;
     }
