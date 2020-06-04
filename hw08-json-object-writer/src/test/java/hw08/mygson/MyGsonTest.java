@@ -118,6 +118,20 @@ public class MyGsonTest {
     }
 
     @Test
+    public void testToJsonFromObjectArrayWithoutEement() {
+        final Integer[] array = { 1 };
+        final var obj = new WithObjectArray(array);
+        assertEquals(getExpectedJson(obj), new MyGson().toJson(obj));
+    }
+
+    @Test
+    public void testToJsonFromObjectArrayWithOneElement() {
+        final Integer[] array = { 1 };
+        final var obj = new WithObjectArray(array);
+        assertEquals(getExpectedJson(obj), new MyGson().toJson(obj));
+    }
+
+    @Test
     public void testToJsonFromObjectArray() {
         final Integer[] array = { 1, 2, 3 };
         final var obj = new WithObjectArray(array);
@@ -245,20 +259,20 @@ public class MyGsonTest {
         assertEquals(getExpectedJson(obj), new MyGson().toJson(obj));
     }
 
-    class WithMap{
-        private final Map<?,?> map;
+    class WithMap {
+        private final Map<?, ?> map;
 
-        public WithMap(Map<?,?> map) {
+        public WithMap(Map<?, ?> map) {
             this.map = map;
         }
     }
 
     @Test
-    public void testToJsonFromObjectWithMap(){
+    public void testToJsonFromObjectWithMap() {
         final Map<String, Integer> map = new HashMap<>();
         map.put("first", 1);
         map.put("second", 2);
         final var obj = new WithMap(map);
-        assertThrows(MyGsonException.class, ()->new MyGson().toJson(obj));
+        assertThrows(MyGsonException.class, () -> new MyGson().toJson(obj));
     }
 }

@@ -1,7 +1,5 @@
 package hw08.mygson;
 
-import java.lang.reflect.Field;
-
 public class JsonObject {
     private final Object obj;
 
@@ -12,25 +10,16 @@ public class JsonObject {
     public String toJson() {
         final var sb = new StringBuilder();
         sb.append("{");
-
-        final var clazz = this.obj.getClass();
-        final Field[] fields = clazz.getDeclaredFields();
-        for (int i = 0; i < fields.length; i++) {
-            final var field = fields[i];
-
-            final var fieldHandler = new FieldHandler(field, obj);
-            if(fieldHandler.isSynthetic()) {
-                continue;
-            }
-
-            sb.append(wrap((fieldHandler.getName())));
+        final var objectHandler = new ObjectHandler(this.obj);
+        final var fields = objectHandler.getFields();
+        for (int i = 0; i < fields.size(); i++) {
+            final var field = fields.get(i);
+            sb.append(wrap((field.getName())));
             sb.append(":");
-            sb.append(new JsonValue(fieldHandler.getObject()).toJson());
-
-            if (i == fields.length - 2) {
-                break;
+            sb.append(new JsonValue(field.getObject()).toJson());
+            if (i < fields.size() - 1) {
+                sb.append(",");
             }
-            sb.append(",");
         }
         sb.append("}");
         return sb.toString();
