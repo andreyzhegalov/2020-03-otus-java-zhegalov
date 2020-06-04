@@ -10,8 +10,19 @@ public class FieldHandler {
     private Object obj;
 
     public FieldHandler(Field field, Object obj) {
+        if (field == null) {
+            throw new MyGsonException("Field is null");
+        }
+        if (obj == null) {
+            throw new MyGsonException("Obj is null");
+        }
+        field.setAccessible(true);
         this.field = field;
         this.obj = obj;
+    }
+
+    public boolean isSynthetic() {
+        return field.isSynthetic();
     }
 
     public String getName() {
@@ -21,10 +32,17 @@ public class FieldHandler {
     public Object getObject() {
         Object obj = null;
         try {
-            if (isArray()) {
-                obj = toArrayObject();
-            } else {
+            final var typeOfInstance = field.get(this.obj).getClass();
+            if (getType().isPrimitive()) {
                 obj = field.get(this.obj);
+            } else if (getType().equals(String.class)) {
+                obj = field.get(this.obj);
+            } else if (isArray(typeOfInstance)) {
+                obj = toArrayObject(typeOfInstance);
+            } else if (typeOfInstance.isMemberClass()) {
+                obj = field.get(this.obj);
+            } else {
+                throw new MyGsonException("Unsupported field type");
             }
         } catch (IllegalArgumentException e) {
             throw new MyGsonException("Error get value from field " + getName());
@@ -38,21 +56,21 @@ public class FieldHandler {
         return field.getType();
     }
 
-    private boolean isArray() {
-        final boolean isArray = getType().isArray();
-        final boolean isCollection = Collection.class.isAssignableFrom(getType());
+    private boolean isArray(Class<?> type) {
+        final boolean isArray = type.isArray();
+        final boolean isCollection = Collection.class.isAssignableFrom(type);
         return isArray || isCollection;
     }
 
-    private Object[] toArrayObject() throws IllegalArgumentException, IllegalAccessException {
+    private Object[] toArrayObject(Class<?> type) throws IllegalArgumentException, IllegalAccessException {
         final Object[] array;
-        if (getType().isArray()) {
+        if (type.isArray()) {
             if (field.get(obj) instanceof Object[]) {
                 array = (Object[]) field.get(obj);
             } else {
                 array = fromPrimitiveArray(field.get(obj));
             }
-        } else if (Collection.class.isAssignableFrom(getType())) {
+        } else if (Collection.class.isAssignableFrom(type)) {
             Collection<Object> collection = new ArrayList<>();
             collection = (Collection<Object>) field.get(obj);
             array = collection.toArray();

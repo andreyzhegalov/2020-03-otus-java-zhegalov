@@ -17,12 +17,11 @@ public class JsonObject {
         final Field[] fields = clazz.getDeclaredFields();
         for (int i = 0; i < fields.length; i++) {
             final var field = fields[i];
-            field.setAccessible(true);
-            if (field.isSynthetic()) {
-                continue;
-            }
 
             final var fieldHandler = new FieldHandler(field, obj);
+            if(fieldHandler.isSynthetic()) {
+                continue;
+            }
 
             sb.append(wrap((fieldHandler.getName())));
             sb.append(":");

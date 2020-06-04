@@ -1,11 +1,14 @@
 package hw08.mygson;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
 
@@ -66,6 +69,12 @@ public class MyGsonTest {
         assertEquals(getExpectedJson(obj), new MyGson().toJson(obj));
     }
 
+    @Test
+    public void testToJsonForNegativeInt() {
+        final var obj = new WithInt(-4);
+        assertEquals(getExpectedJson(obj), new MyGson().toJson(obj));
+    }
+
     class WithDouble {
         final double d;
 
@@ -77,6 +86,12 @@ public class MyGsonTest {
     @Test
     public void testToJsonDouble() {
         final var obj = new WithDouble(1.123);
+        assertEquals(getExpectedJson(obj), new MyGson().toJson(obj));
+    }
+
+    @Test
+    public void testToJsonNegativeDouble() {
+        final var obj = new WithDouble(-1.123);
         assertEquals(getExpectedJson(obj), new MyGson().toJson(obj));
     }
 
@@ -230,4 +245,20 @@ public class MyGsonTest {
         assertEquals(getExpectedJson(obj), new MyGson().toJson(obj));
     }
 
+    class WithMap{
+        private final Map<?,?> map;
+
+        public WithMap(Map<?,?> map) {
+            this.map = map;
+        }
+    }
+
+    @Test
+    public void testToJsonFromObjectWithMap(){
+        final Map<String, Integer> map = new HashMap<>();
+        map.put("first", 1);
+        map.put("second", 2);
+        final var obj = new WithMap(map);
+        assertThrows(MyGsonException.class, ()->new MyGson().toJson(obj));
+    }
 }
