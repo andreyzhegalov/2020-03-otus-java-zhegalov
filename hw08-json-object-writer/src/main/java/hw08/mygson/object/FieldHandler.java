@@ -1,9 +1,11 @@
-package hw08.mygson;
+package hw08.mygson.object;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collection;
+
+import hw08.mygson.MyGsonException;
 
 public class FieldHandler {
     private Field field;

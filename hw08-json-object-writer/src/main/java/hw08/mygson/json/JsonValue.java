@@ -1,4 +1,4 @@
-package hw08.mygson;
+package hw08.mygson.json;
 
 public class JsonValue {
     private final Object value;

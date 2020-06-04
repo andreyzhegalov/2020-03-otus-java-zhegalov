@@ -1,4 +1,6 @@
-package hw08.mygson;
+package hw08.mygson.json;
+
+import hw08.mygson.object.ObjectHandler;
 
 public class JsonObject {
     private final Object obj;

@@ -1,4 +1,4 @@
-package hw08.mygson;
+package hw08.mygson.object;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;

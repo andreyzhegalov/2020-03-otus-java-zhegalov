@@ -1,4 +1,4 @@
-package hw08.mygson;
+package hw08.mygson.json;
 
 public class JsonArray {
     final Object[] array;
