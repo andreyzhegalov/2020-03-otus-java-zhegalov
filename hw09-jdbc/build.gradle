@@ -8,6 +8,7 @@ targetCompatibility = JavaVersion.VERSION_13
 
 dependencies {
     dependencies {
+        implementation 'com.google.guava:guava'
         implementation 'com.h2database:h2'
         implementation 'ch.qos.logback:logback-classic'
         testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-engine'
