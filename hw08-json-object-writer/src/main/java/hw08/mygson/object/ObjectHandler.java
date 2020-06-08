@@ -51,7 +51,7 @@ public class ObjectHandler {
             throw new MyGsonException("Unsupported field type");
         }
         if (isArray()) {
-            return toArrayObject(getType());
+            return toArrayOfObject();
         }
         return this.obj;
     }
@@ -66,29 +66,19 @@ public class ObjectHandler {
         return isArray || isCollection;
     }
 
-    private Object[] toArrayObject(Class<?> type) {
-        final Object[] array;
-        if (type.isArray()) {
-            if (this.obj instanceof Object[]) {
-                array = (Object[]) this.obj;
-            } else {
-                array = fromPrimitiveArray(this.obj);
+    private Object[] toArrayOfObject() {
+        if (getType().isArray()) {
+            final Object[] array = new Object[Array.getLength(obj)];
+            for (int index = 0; index < array.length; index++) {
+                array[index] = Array.get(obj, index);
             }
-        } else if (Collection.class.isAssignableFrom(type)) {
+            return array;
+        }
+        if (Collection.class.isAssignableFrom(getType())) {
             Collection<Object> collection = new ArrayList<>();
             collection = (Collection<Object>) this.obj;
-            array = collection.toArray();
-        } else {
-            throw new MyGsonException("Internal error");
+            return collection.toArray();
         }
-        return array;
-    }
-
-    private Object[] fromPrimitiveArray(Object obj) {
-        final Object[] array = new Object[Array.getLength(obj)];
-        for (int index = 0; index < Array.getLength(obj); index++) {
-            array[index] = Array.get(obj, index);
-        }
-        return array;
+        throw new MyGsonException("Internal error");
     }
 }

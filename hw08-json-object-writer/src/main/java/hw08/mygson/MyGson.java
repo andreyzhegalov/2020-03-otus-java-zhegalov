@@ -16,7 +16,8 @@ public class MyGson {
             return new JsonValue(obj).toJson();
         }
         if( objectHandler.isArray()){
-            return new JsonArray((Object[])objectHandler.getObject()).toJson();
+            final Object[] array = (Object[])objectHandler.getObject();
+            return new JsonArray(array).toJson();
         }
         return new JsonObject(obj).toJson();
     }
