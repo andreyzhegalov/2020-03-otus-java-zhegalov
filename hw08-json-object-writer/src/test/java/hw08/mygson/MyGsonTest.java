@@ -182,6 +182,12 @@ public class MyGsonTest {
         assertThrows(MyGsonException.class, () -> new MyGson().toJson(obj));
     }
 
+    @Test
+    public void testToJsonFromObjectWithConst(){
+        final var obj = new ClassWithStatic();
+        assertEquals(getExpectedJson(obj), new MyGson().toJson(obj));
+    }
+
     @ParameterizedTest
     @MethodSource("generateDataForJsonValueTest")
     void testObjectValueCases(Object o) {

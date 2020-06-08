@@ -1,5 +1,6 @@
 package hw08.mygson.object;
 
+import java.lang.reflect.Modifier;
 import java.lang.reflect.Field;
 
 import hw08.mygson.MyGsonException;
@@ -22,6 +23,10 @@ public class FieldHandler {
 
     public boolean isSynthetic() {
         return field.isSynthetic();
+    }
+
+    public boolean isStatic() {
+        return (field.getModifiers() & Modifier.STATIC) > 0;
     }
 
     public String getName() {

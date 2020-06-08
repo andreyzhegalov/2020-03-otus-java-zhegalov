@@ -36,6 +36,9 @@ public class ObjectHandler {
             if (filedHandler.isSynthetic()) {
                 continue;
             }
+            if (filedHandler.isStatic()) {
+                continue;
+            }
             res.add(filedHandler);
         }
         return res;
