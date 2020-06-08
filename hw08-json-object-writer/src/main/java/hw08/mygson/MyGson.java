@@ -1,6 +1,5 @@
 package hw08.mygson;
 
-
 import hw08.mygson.json.JsonValue;
 import hw08.mygson.json.JsonArray;
 import hw08.mygson.json.JsonObject;
@@ -12,11 +11,11 @@ public class MyGson {
             return "null";
         }
         final var objectHandler = new ObjectHandler(obj);
-        if(objectHandler.isPrimitiveWrapper() || objectHandler.isString()){
+        if (objectHandler.isPrimitiveWrapper() || objectHandler.isString()) {
             return new JsonValue(obj).toJson();
         }
-        if( objectHandler.isArray()){
-            final Object[] array = (Object[])objectHandler.getObject();
+        if (objectHandler.isArray()) {
+            final Object[] array = (Object[]) objectHandler.getObject();
             return new JsonArray(array).toJson();
         }
         return new JsonObject(obj).toJson();

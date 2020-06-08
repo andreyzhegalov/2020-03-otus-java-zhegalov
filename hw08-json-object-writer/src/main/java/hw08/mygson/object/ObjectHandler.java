@@ -5,6 +5,7 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 import hw08.mygson.MyGsonException;
 
@@ -17,10 +18,18 @@ public class ObjectHandler {
         this.obj = obj;
         this.clazz = this.obj.getClass();
         this.fields = clazz.getDeclaredFields();
+
+        checkAllowableType();
+    }
+
+    private void checkAllowableType() {
+        if (Map.class.isAssignableFrom(this.clazz)) {
+            throw new MyGsonException("Unsupported object type " + this.clazz);
+        }
     }
 
     public List<FieldHandler> getFields() {
-        List<FieldHandler> res = new ArrayList<>();
+        final List<FieldHandler> res = new ArrayList<>();
         for (int i = 0; i < fields.length; i++) {
             final var field = fields[i];
             final var filedHandler = new FieldHandler(field, this.obj);
@@ -34,12 +43,14 @@ public class ObjectHandler {
 
     public boolean isPrimitiveWrapper() {
         return clazz.equals(Boolean.class) || clazz.equals(Short.class) || clazz.equals(Integer.class)
-                || clazz.equals(Long.class) || clazz.equals(Character.class) || clazz.equals(Byte.class)
+                || clazz.equals(Long.class) || clazz.equals(Byte.class) || clazz.equals(Character.class)
                 || clazz.equals(Float.class) || clazz.equals(Double.class);
     }
 
     public boolean isString() {
-        return getType().equals(String.class);
+        final boolean isString = getType().equals(String.class);
+        final boolean isChar = getType().equals(Character.class);
+        return isString || isChar;
     }
 
     public Class<?> getType() {
@@ -47,17 +58,10 @@ public class ObjectHandler {
     }
 
     public Object getObject() {
-        if (!isAllowableType()) {
-            throw new MyGsonException("Unsupported field type");
-        }
         if (isArray()) {
             return toArrayOfObject();
         }
         return this.obj;
-    }
-
-    public boolean isAllowableType() {
-        return isString() || isArray() || getType().isMemberClass() || isPrimitiveWrapper();
     }
 
     public boolean isArray() {

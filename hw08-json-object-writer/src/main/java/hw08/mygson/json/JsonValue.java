@@ -1,5 +1,7 @@
 package hw08.mygson.json;
 
+import hw08.mygson.object.ObjectHandler;
+
 public class JsonValue {
     private final Object value;
 
@@ -8,19 +10,21 @@ public class JsonValue {
     }
 
     public String toJson() {
-        if (value == null){
+        if (value == null) {
             return "null";
         }
         final var sb = new StringBuilder();
-        final var valueClass = value.getClass();
-        if (valueClass.isMemberClass()) {
-            sb.append(new JsonObject(value).toJson());
-        } else if (valueClass.isArray()) {
-            sb.append(new JsonArray((Object[]) value).toJson());
-        } else if (valueClass.equals(String.class) || valueClass.equals(Character.class)) {
+        final var objectHandler = new ObjectHandler(value);
+
+        if (objectHandler.isString()) {
             sb.append(wrap(value.toString()));
-        } else {
+        } else if (objectHandler.isPrimitiveWrapper()) {
             sb.append(value.toString());
+        } else if (objectHandler.isArray()) {
+            final var array = (Object[]) value;
+            sb.append(new JsonArray(array).toJson());
+        } else {
+            sb.append(new JsonObject(value).toJson());
         }
         return sb.toString();
     }
