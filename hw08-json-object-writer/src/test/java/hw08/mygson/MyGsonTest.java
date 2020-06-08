@@ -183,8 +183,14 @@ public class MyGsonTest {
     }
 
     @Test
-    public void testToJsonFromObjectWithConst(){
+    public void testToJsonFromObjectWithConst() {
         final var obj = new ClassWithStatic();
+        assertEquals(getExpectedJson(obj), new MyGson().toJson(obj));
+    }
+
+    @Test
+    public void testToJsonFromObjectWithTransientField() {
+        final var obj = new ClassWithTransient();
         assertEquals(getExpectedJson(obj), new MyGson().toJson(obj));
     }
 

@@ -29,6 +29,10 @@ public class FieldHandler {
         return (field.getModifiers() & Modifier.STATIC) > 0;
     }
 
+    public boolean isTransient() {
+        return (field.getModifiers() & Modifier.TRANSIENT) > 0;
+    }
+
     public String getName() {
         return field.getName();
     }

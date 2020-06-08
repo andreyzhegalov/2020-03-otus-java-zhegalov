@@ -32,14 +32,11 @@ public class ObjectHandler {
         final List<FieldHandler> res = new ArrayList<>();
         for (int i = 0; i < fields.length; i++) {
             final var field = fields[i];
-            final var filedHandler = new FieldHandler(field, this.obj);
-            if (filedHandler.isSynthetic()) {
+            final var fieldHandler = new FieldHandler(field, this.obj);
+            if (fieldHandler.isSynthetic() || fieldHandler.isStatic() || fieldHandler.isTransient()) {
                 continue;
             }
-            if (filedHandler.isStatic()) {
-                continue;
-            }
-            res.add(filedHandler);
+            res.add(fieldHandler);
         }
         return res;
     }
