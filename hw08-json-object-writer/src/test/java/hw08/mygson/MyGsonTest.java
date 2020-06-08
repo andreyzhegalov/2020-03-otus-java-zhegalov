@@ -5,16 +5,21 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
+import java.util.stream.Stream;
 
 import com.google.gson.Gson;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.Arguments;
 
 public class MyGsonTest {
     private String getExpectedJson(Object obj) {
@@ -275,4 +280,36 @@ public class MyGsonTest {
         final var obj = new WithMap(map);
         assertThrows(MyGsonException.class, () -> new MyGson().toJson(obj));
     }
+
+    @Test
+    public void tempTest() {
+        Object o = List.of(16, 17, 18);
+        MyGson myGson = new MyGson();
+        assertEquals(getExpectedJson(o), myGson.toJson(o));
+    }
+
+    @ParameterizedTest
+    @MethodSource("generateDataForCustomTest")
+    void customTest(Object o){
+        MyGson myGson = new MyGson();
+        assertEquals(getExpectedJson(o), myGson.toJson(o));
+    }
+
+    private static Stream<Arguments> generateDataForCustomTest() {
+        return Stream.of(
+                null,
+                Arguments.of(true), Arguments.of(false),
+                Arguments.of((byte)1), Arguments.of((short)2f),
+                Arguments.of(3), Arguments.of(4L), Arguments.of(5f), Arguments.of(6d),
+                Arguments.of("aaa"), Arguments.of('b'),
+                Arguments.of(new byte[] {1, 2, 3}),
+                Arguments.of(new short[] {4, 5, 6}),
+                Arguments.of(new int[] {7, 8, 9}),
+                Arguments.of(new float[] {10f, 11f, 12f}),
+                Arguments.of(new double[] {13d, 14d, 15d}),
+                Arguments.of(List.of(16, 17, 18)),
+                Arguments.of(Collections.singletonList(19))
+        );
+    }
 }
+

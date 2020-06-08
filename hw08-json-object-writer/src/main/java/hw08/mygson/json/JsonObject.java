@@ -18,7 +18,8 @@ public class JsonObject {
             final var field = fields.get(i);
             sb.append(wrap((field.getName())));
             sb.append(":");
-            sb.append(new JsonValue(field.getObject()).toJson());
+            final var fieldObjectHandler = new ObjectHandler( field.getObject());
+            sb.append(new JsonValue(fieldObjectHandler.getObject()).toJson());
             if (i < fields.size() - 1) {
                 sb.append(",");
             }

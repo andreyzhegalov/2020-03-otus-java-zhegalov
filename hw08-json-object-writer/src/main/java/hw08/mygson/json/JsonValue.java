@@ -8,15 +8,16 @@ public class JsonValue {
     }
 
     public String toJson() {
-        final var sb = new StringBuilder();
         if (value == null){
-            sb.append("null");
+            return "null";
         }
-        else if (value.getClass().isMemberClass()) {
+        final var sb = new StringBuilder();
+        final var valueClass = value.getClass();
+        if (valueClass.isMemberClass()) {
             sb.append(new JsonObject(value).toJson());
-        } else if (value.getClass().isArray()) {
+        } else if (valueClass.isArray()) {
             sb.append(new JsonArray((Object[]) value).toJson());
-        } else if (value.getClass().equals(String.class)) {
+        } else if (valueClass.equals(String.class) || valueClass.equals(Character.class)) {
             sb.append(wrap(value.toString()));
         } else {
             sb.append(value.toString());
