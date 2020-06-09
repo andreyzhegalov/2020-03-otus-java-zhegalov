@@ -6,6 +6,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
+import hw09.jdbc.jdbc.mapper.testingclasses.CommonClass;
+
 public class EntitySQLTest {
     @Test
     public void testCtr() {
@@ -14,20 +16,16 @@ public class EntitySQLTest {
 
     @Test
     public void testGetSelectAllSqlForEmptyType() {
-        class Test {
-        }
         assertThrows(RuntimeException.class,
-                () -> new EntitySQL<Test>(new EntityClass<Test>(Test.class)).getSelectAllSql());
+                () -> new EntitySQL<Object>(new EntityClass<Object>(Object.class)).getSelectAllSql());
     }
 
     @Test
     public void testGetSelectAllSql() {
-        class ClassForTesting {
-            final int id = 0;
-            final String strField = new String();
-        }
-        assertEquals("select id, str_field from class_for_testing",
-                new EntitySQL<ClassForTesting>(new EntityClass<ClassForTesting>(ClassForTesting.class)).getSelectAllSql());
+        final var entityClass = new EntityClass<CommonClass>(CommonClass.class);
+        final var entitySql = new EntitySQL<CommonClass>(entityClass);
+        assertEquals("select id, str_field, int_field from common_class",
+                entitySql.getSelectAllSql());
     }
 
     @Test
@@ -37,12 +35,9 @@ public class EntitySQLTest {
 
     @Test
     public void testGetInsertSql() {
-        class ClassForTesting {
-            final int id = 0;
-            final String strField = new String();
-            final int intFiled = 1;
-        }
-        assertEquals("insert into classfortesting(name) values (?)", new EntitySQL<ClassForTesting>(new EntityClass<ClassForTesting>(ClassForTesting.class)) );
+        final var entityClass = new EntityClass<CommonClass>(CommonClass.class);
+        final var entitySql = new EntitySQL<CommonClass>(entityClass);
+        assertEquals("insert into common_class (id, str_field, int_field) values (?, ?, ?)",  entitySql.getInsertSql());
     }
 
     @Test

@@ -10,7 +10,7 @@ import hw09.jdbc.jdbc.mapper.annotations.Id;
 
 public class EntityClass<T> implements EntityClassMetaData<T> {
     private static final Class<? extends Annotation> Id = null;
-    final Class<T> clazz;
+    private final Class<T> clazz;
 
     public EntityClass(Class<T> clazz) {
         this.clazz = clazz;
