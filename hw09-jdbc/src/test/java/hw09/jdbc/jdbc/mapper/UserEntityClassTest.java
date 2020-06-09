@@ -10,19 +10,18 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
-import hw09.jdbc.jdbc.mapper.annotations.Id;
 import hw09.jdbc.jdbc.mapper.testingclasses.ClassWithIdNotation;
 import hw09.jdbc.jdbc.mapper.testingclasses.ClassWithManyIdNotations;
 
 public class UserEntityClassTest {
     @Test
     public void testCtr() {
-        assertDoesNotThrow(() -> new EntityClass<Object>(Object.class));
+        assertDoesNotThrow(() -> new EntityClass<Object>(new Object()));
     }
 
     @Test
     public void testGetName() {
-        assertEquals("Object", new EntityClass<Object>(Object.class).getName());
+        assertEquals("Object", new EntityClass<Object>(new Object()).getName());
     }
 
     @Test
@@ -33,19 +32,19 @@ public class UserEntityClassTest {
     @Test
     public void testGetIdFieldFailed() {
         assertThrows(RuntimeException.class,
-                () -> new EntityClass<EmptyClass>(EmptyClass.class).getIdField().getName());
+                () -> new EntityClass<EmptyClass>(new EmptyClass()).getIdField().getName());
     }
 
     @Test
     public void testGetIdFieldSuccesfull() {
         assertEquals("intField",
-                new EntityClass<ClassWithIdNotation>(ClassWithIdNotation.class).getIdField().getName());
+                new EntityClass<ClassWithIdNotation>(new ClassWithIdNotation()).getIdField().getName());
     }
 
     @Test
     public void testGetIdFieldForClassWithManyIdField() {
         assertThrows(RuntimeException.class,
-                () -> new EntityClass<ClassWithManyIdNotations>(ClassWithManyIdNotations.class).getIdField().getName());
+                () -> new EntityClass<ClassWithManyIdNotations>(new ClassWithManyIdNotations()).getIdField().getName());
     }
 
     private boolean hasFieldWithName(List<Field> fields, String name) {
@@ -54,7 +53,7 @@ public class UserEntityClassTest {
 
     @Test
     public void testGetAllFields() {
-        final var fields = new EntityClass<User>(User.class).getAllFields();
+        final var fields = new EntityClass<User>(new User()).getAllFields();
         assertEquals(3, fields.size());
         assertTrue(hasFieldWithName(fields, "id"));
         assertTrue(hasFieldWithName(fields, "name"));
@@ -63,7 +62,7 @@ public class UserEntityClassTest {
 
     @Test
     public void testGetFieldsWithoutId() {
-        final var fields = new EntityClass<User>(User.class).getFieldsWithoutId();
+        final var fields = new EntityClass<User>(new User()).getFieldsWithoutId();
         assertEquals(2, fields.size());
         assertTrue(hasFieldWithName(fields, "name"));
         assertTrue(hasFieldWithName(fields, "age"));

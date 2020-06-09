@@ -1,11 +1,22 @@
 package hw09.jdbc.jdbc.mapper;
 
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import com.google.common.base.CaseFormat;
 
 public class EntitySQL<T> implements EntitySQLMetaData {
     final EntityClassMetaData<T> entityClass;
+    final T obj;
 
-    public EntitySQL(EntityClassMetaData<T> entityClass) {
+    public EntitySQL(EntityClassMetaData<T> entityClass, T obj) {
+        if ((entityClass == null) || (obj == null)) {
+            throw new MapperException("Argument must be not null.");
+        }
+        this.obj = obj;
         this.entityClass = entityClass;
     }
 
@@ -14,10 +25,10 @@ public class EntitySQL<T> implements EntitySQLMetaData {
         StringBuilder sb = new StringBuilder();
         final var fields = entityClass.getAllFields();
         if (fields.isEmpty()) {
-            throw new RuntimeException("Can't create sql request for type " + entityClass.getName());
+            throw new MapperException("Can't create sql request for type " + entityClass.getName());
         }
         sb.append("select ");
-        sb.append(prepareAllFieldsSql());
+        sb.append(prepareAllFieldsSql(fields));
         sb.append(" from ");
         sb.append(toLowerUnderScore(entityClass.getName()));
         return sb.toString();
@@ -28,45 +39,43 @@ public class EntitySQL<T> implements EntitySQLMetaData {
         throw new UnsupportedOperationException();
     }
 
-    public String prepareAllFieldsSql() {
-        final var fields = entityClass.getAllFields();
-        final var sb = new StringBuilder();
-        for (final var field : fields) {
-            if (sb.length() > 0) {
-                sb.append(", ");
-            }
-            sb.append(toLowerUnderScore(field.getName()));
-        }
-        return sb.toString();
+    private String prepareAllFieldsSql( List<Field> fields) {
+        final String fieldsString = fields.stream().map((f) -> f.getName()).map((f) -> toLowerUnderScore(f))
+                .collect(Collectors.joining(", "));
+        return fieldsString;
     }
 
-    public String prepareAllFieldsValueSql() {
-        final var fields = entityClass.getAllFields();
-        final var sb = new StringBuilder();
-        for (int i = 0; i < fields.size(); i++) {
-            if (sb.length() > 0) {
-                sb.append(", ");
+    private String prepareAllFieldsValueSql(List<Field> fields) {
+        final List<String> values = Collections.nCopies(getValues(fields).size(), "?");
+        return values.stream().collect(Collectors.joining(", "));
+    }
+
+    public List<Object> getValues(List<Field> fields) {
+        final List<Object> res = new ArrayList<>();
+        for (Field field : fields) {
+            try {
+                res.add(field.get(obj));
+            } catch (Exception e) {
+                throw new MapperException(e);
             }
-            sb.append('?');
         }
-        return sb.toString();
+        return res;
     }
 
     @Override
     public String getInsertSql() {
         StringBuilder sb = new StringBuilder();
-        final var fields = entityClass.getAllFields();
+        final var fields = entityClass.getFieldsWithoutId();
         if (fields.isEmpty()) {
             throw new RuntimeException("Can't create sql request for type " + entityClass.getName());
         }
         sb.append("insert into ");
         sb.append(toLowerUnderScore(entityClass.getName()));
         sb.append(" (");
-        sb.append(prepareAllFieldsSql());
+        sb.append(prepareAllFieldsSql(fields));
         sb.append(") values (");
-        sb.append(prepareAllFieldsValueSql());
+        sb.append(prepareAllFieldsValueSql(fields));
         sb.append(")");
-
         return sb.toString();
     }
 

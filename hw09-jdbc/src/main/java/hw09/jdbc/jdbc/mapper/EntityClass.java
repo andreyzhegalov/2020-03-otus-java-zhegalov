@@ -1,6 +1,5 @@
 package hw09.jdbc.jdbc.mapper;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -9,11 +8,17 @@ import java.util.List;
 import hw09.jdbc.jdbc.mapper.annotations.Id;
 
 public class EntityClass<T> implements EntityClassMetaData<T> {
-    private static final Class<? extends Annotation> Id = null;
-    private final Class<T> clazz;
+    private final T entity;
+    private final Class<? extends T> clazz;
 
-    public EntityClass(Class<T> clazz) {
-        this.clazz = clazz;
+    @SuppressWarnings("unchecked")
+    public EntityClass(T entity) {
+        this.entity = entity;
+        this.clazz = (Class<T>) entity.getClass();
+    }
+
+    public T getEntity(){
+        return this.entity;
     }
 
     @Override
