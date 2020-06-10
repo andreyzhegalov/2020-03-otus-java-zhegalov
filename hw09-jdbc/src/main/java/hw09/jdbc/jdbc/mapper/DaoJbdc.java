@@ -8,18 +8,21 @@ import hw09.jdbc.jdbc.sessionmanager.SessionManagerJdbc;
 public class DaoJbdc<T> implements JdbcMapper<T> {
     private final DbExecutorImpl<T> dbExecutor;
     private final SessionManagerJdbc sessionManager;
+    private final EntityClass<T> entityClass;
+    private final EntitySQL<T> entitySQL;
 
-    public DaoJbdc(DbExecutorImpl<T> dbExecutor, SessionManagerJdbc sessionManager) {
+    public DaoJbdc(DbExecutorImpl<T> dbExecutor, SessionManagerJdbc sessionManager, Class<T> entityType) {
         this.dbExecutor = dbExecutor;
         this.sessionManager = sessionManager;
+        this.entityClass = new EntityClass<T>(entityType);
+        this.entitySQL = new EntitySQL<T>(this.entityClass);
     }
 
     @Override
     public void insert(T objectData) {
-        final EntityClass<T> entityClass = new EntityClass<T>(objectData);
-        final EntitySQL<T> entitySql = new EntitySQL<T>(entityClass, objectData);
         try {
-            final long res = dbExecutor.executeInsert(getConnection(), entitySql.getInsertSql(), entitySql.getValues());
+            final long res = dbExecutor.executeInsert(getConnection(), this.entitySQL.getInsertSql(),
+                    this.entitySQL.getValues(objectData));
             if (res == 0) {
                 throw new MapperException("Record not insert");
             }
@@ -46,4 +49,5 @@ public class DaoJbdc<T> implements JdbcMapper<T> {
     private Connection getConnection() {
         return sessionManager.getCurrentSession().getConnection();
     }
+
 }

@@ -2,51 +2,62 @@ package hw09.jdbc.jdbc.mapper;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
 import hw09.jdbc.jdbc.mapper.testingclasses.ClassWithIdNotation;
+import hw09.jdbc.jdbc.mapper.testingclasses.ClassWithManyCtr;
 import hw09.jdbc.jdbc.mapper.testingclasses.ClassWithManyIdNotations;
+import hw09.jdbc.jdbc.mapper.testingclasses.CommonClass;
 import hw09.jdbc.jdbc.mapper.testingclasses.EmptyClass;
 import hw09.jdbc.jdbc.mapper.testingclasses.User;
 
 public class UserEntityClassTest {
     @Test
     public void testCtr() {
-        assertDoesNotThrow(() -> new EntityClass<Object>(new Object()));
+        assertDoesNotThrow(() -> new EntityClass<Object>(Object.class));
     }
 
     @Test
     public void testGetName() {
-        assertEquals("Object", new EntityClass<Object>(new Object()).getName());
+        assertEquals("Object", new EntityClass<Object>(Object.class).getName());
+    }
+
+    @Test
+    public void testGetConstructorFailed() {
+        final var entityClass = new EntityClass<ClassWithManyCtr>(ClassWithManyCtr.class);
+        assertThrows(MapperException.class, () -> entityClass.getConstructor());
     }
 
     @Test
     public void testGetConstructor() {
-        assertThrows(UnsupportedOperationException.class, () -> new EntityClass<Object>(Object.class).getConstructor());
+        final var entityClass = new EntityClass<CommonClass>(CommonClass.class);
+        assertNotNull(entityClass.getConstructor());
     }
 
     @Test
     public void testGetIdFieldFailed() {
         assertThrows(RuntimeException.class,
-                () -> new EntityClass<EmptyClass>(new EmptyClass()).getIdField().getName());
+                () -> new EntityClass<EmptyClass>(EmptyClass.class).getIdField().getName());
     }
 
     @Test
     public void testGetIdFieldSuccesfull() {
         assertEquals("intField",
-                new EntityClass<ClassWithIdNotation>(new ClassWithIdNotation()).getIdField().getName());
+                new EntityClass<ClassWithIdNotation>(ClassWithIdNotation.class).getIdField().getName());
     }
 
     @Test
     public void testGetIdFieldForClassWithManyIdField() {
         assertThrows(RuntimeException.class,
-                () -> new EntityClass<ClassWithManyIdNotations>(new ClassWithManyIdNotations()).getIdField().getName());
+                () -> new EntityClass<ClassWithManyIdNotations>(ClassWithManyIdNotations.class).getIdField().getName());
     }
 
     private boolean hasFieldWithName(List<Field> fields, String name) {
@@ -55,7 +66,7 @@ public class UserEntityClassTest {
 
     @Test
     public void testGetAllFields() {
-        final var fields = new EntityClass<User>(new User()).getAllFields();
+        final var fields = new EntityClass<User>(User.class).getAllFields();
         assertEquals(3, fields.size());
         assertTrue(hasFieldWithName(fields, "id"));
         assertTrue(hasFieldWithName(fields, "name"));
@@ -64,7 +75,7 @@ public class UserEntityClassTest {
 
     @Test
     public void testGetFieldsWithoutId() {
-        final var fields = new EntityClass<User>(new User()).getFieldsWithoutId();
+        final var fields = new EntityClass<User>(User.class).getFieldsWithoutId();
         assertEquals(2, fields.size());
         assertTrue(hasFieldWithName(fields, "name"));
         assertTrue(hasFieldWithName(fields, "age"));

@@ -10,13 +10,11 @@ import com.google.common.base.CaseFormat;
 
 public class EntitySQL<T> implements EntitySQLMetaData {
     final EntityClassMetaData<T> entityClass;
-    final T obj;
 
-    public EntitySQL(EntityClassMetaData<T> entityClass, T obj) {
-        if ((entityClass == null) || (obj == null)) {
+    public EntitySQL(EntityClassMetaData<T> entityClass) {
+        if (entityClass == null) {
             throw new MapperException("Argument must be not null.");
         }
-        this.obj = obj;
         this.entityClass = entityClass;
     }
 
@@ -39,29 +37,17 @@ public class EntitySQL<T> implements EntitySQLMetaData {
         throw new UnsupportedOperationException();
     }
 
-    private String prepareAllFieldsSql( List<Field> fields) {
+    private String prepareAllFieldsSql(List<Field> fields) {
         final String fieldsString = fields.stream().map((f) -> f.getName()).map((f) -> toLowerUnderScore(f))
                 .collect(Collectors.joining(", "));
         return fieldsString;
     }
 
     private String prepareAllFieldsValueSql() {
-        final List<String> values = Collections.nCopies(getValues().size(), "?");
+        final List<String> values = Collections.nCopies(entityClass.getFieldsWithoutId().size(), "?");
         return values.stream().collect(Collectors.joining(", "));
     }
 
-    public List<Object> getValues() {
-        final var fields = entityClass.getFieldsWithoutId();
-        final List<Object> res = new ArrayList<>();
-        for (Field field : fields) {
-            try {
-                res.add(field.get(obj));
-            } catch (Exception e) {
-                throw new MapperException(e);
-            }
-        }
-        return res;
-    }
 
     @Override
     public String getInsertSql() {
@@ -84,6 +70,20 @@ public class EntitySQL<T> implements EntitySQLMetaData {
     public String getUpdateSql() {
         throw new UnsupportedOperationException();
     }
+
+    public List<Object> getValues(T obj) {
+        final var fields = entityClass.getFieldsWithoutId();
+        final List<Object> res = new ArrayList<>();
+        for (Field field : fields) {
+            try {
+                res.add(field.get(obj));
+            } catch (Exception e) {
+                throw new MapperException(e);
+            }
+        }
+        return res;
+    }
+
 
     private String toLowerUnderScore(String in) {
         return CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, in);

@@ -9,15 +9,14 @@ import hw09.jdbc.jdbc.mapper.annotations.Id;
 
 public class EntityClass<T> implements EntityClassMetaData<T> {
     private final T entity;
-    private final Class<? extends T> clazz;
+    private final Class<T> clazz;
 
-    @SuppressWarnings("unchecked")
-    public EntityClass(T entity) {
-        this.entity = entity;
-        this.clazz = (Class<T>) entity.getClass();
+    public EntityClass(Class<T> entityType) {
+        this.entity = null;
+        this.clazz = entityType;
     }
 
-    public T getEntity(){
+    public T getEntity() {
         return this.entity;
     }
 
@@ -28,7 +27,11 @@ public class EntityClass<T> implements EntityClassMetaData<T> {
 
     @Override
     public Constructor<T> getConstructor() {
-        throw new UnsupportedOperationException();
+        Constructor<?>[] ctrs = clazz.getConstructors();
+        if (ctrs.length > 1 || ctrs.length < 1){
+            throw new MapperException("Multiple constructors not supported");
+        }
+        return (Constructor<T>)ctrs[0];
     }
 
     @Override
