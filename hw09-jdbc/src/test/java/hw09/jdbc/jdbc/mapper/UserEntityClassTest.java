@@ -12,6 +12,8 @@ import org.junit.jupiter.api.Test;
 
 import hw09.jdbc.jdbc.mapper.testingclasses.ClassWithIdNotation;
 import hw09.jdbc.jdbc.mapper.testingclasses.ClassWithManyIdNotations;
+import hw09.jdbc.jdbc.mapper.testingclasses.EmptyClass;
+import hw09.jdbc.jdbc.mapper.testingclasses.User;
 
 public class UserEntityClassTest {
     @Test

@@ -45,12 +45,13 @@ public class EntitySQL<T> implements EntitySQLMetaData {
         return fieldsString;
     }
 
-    private String prepareAllFieldsValueSql(List<Field> fields) {
-        final List<String> values = Collections.nCopies(getValues(fields).size(), "?");
+    private String prepareAllFieldsValueSql() {
+        final List<String> values = Collections.nCopies(getValues().size(), "?");
         return values.stream().collect(Collectors.joining(", "));
     }
 
-    public List<Object> getValues(List<Field> fields) {
+    public List<Object> getValues() {
+        final var fields = entityClass.getFieldsWithoutId();
         final List<Object> res = new ArrayList<>();
         for (Field field : fields) {
             try {
@@ -74,7 +75,7 @@ public class EntitySQL<T> implements EntitySQLMetaData {
         sb.append(" (");
         sb.append(prepareAllFieldsSql(fields));
         sb.append(") values (");
-        sb.append(prepareAllFieldsValueSql(fields));
+        sb.append(prepareAllFieldsValueSql());
         sb.append(")");
         return sb.toString();
     }
