@@ -3,7 +3,7 @@ package hw09.jdbc.jdbc.mapper;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 import java.sql.SQLException;
 
@@ -43,7 +43,7 @@ public class JdbcMapperImplTest {
         final JdbcMapper<User> daoJdbc = new JdbcMapperImpl<>(dbExecutor, sessionManager, User.class);
         final var user = new User(0, "Name", 30);
         daoJdbc.insert(user);
-        assertThat(user.getId()).isGreaterThan(0);
+        assertThat(user.getUserId()).isGreaterThan(0);
     }
 
     @Test
@@ -51,25 +51,34 @@ public class JdbcMapperImplTest {
         final JdbcMapper<User> daoJdbc = new JdbcMapperImpl<>(dbExecutor, sessionManager, User.class);
         final var user = new User(0, "Name", 30);
         daoJdbc.insert(user);
-        final long newId = user.getId();
+        final long newId = user.getUserId();
 
-        user.setAge(35);
+        user.setUserAge(35);
         System.out.println(user);
-        assertDoesNotThrow(()-> daoJdbc.update(user));
+        assertDoesNotThrow(() -> daoJdbc.update(user));
 
-        final User newUser = daoJdbc.findById(newId, User.class);
-        assertEquals(newId, newUser.getId());
+        final User newUser = daoJdbc.findById(newId);
+        assertEquals(newId, newUser.getUserId());
     }
 
     @Test
     public void testInsertOrUpdate() {
-        assertThrows(UnsupportedOperationException.class, () -> new JdbcMapperImpl<User>(null, null, User.class).insertOrUpdate(null));
+        final JdbcMapper<User> daoJdbc = new JdbcMapperImpl<>(dbExecutor, sessionManager, User.class);
+        final long initId = 0;
+        final var user = new User(initId, "Name", 30);
+        daoJdbc.insertOrUpdate(user);
+        assertNotEquals(initId, user.getUserId());
+        user.setUserAge(35);
+        final long updatedId = user.getUserId();
+        daoJdbc.insertOrUpdate(user);
+        final var updatedUser = (User) daoJdbc.findById(updatedId);
+        assertEquals(35, updatedUser.getUserAge());
     }
 
     @Test
     public void testFindByIdFailed() throws SQLException {
         final JdbcMapper<User> daoJdbc = new JdbcMapperImpl<>(dbExecutor, sessionManager, User.class);
-        final User newUser = daoJdbc.findById(0, User.class);
+        final User newUser = daoJdbc.findById(0);
         assertThat(newUser).isNull();
     }
 
@@ -79,25 +88,23 @@ public class JdbcMapperImplTest {
         final var user = new User(0, "Name", 30);
         daoJdbc.insert(user);
 
-        final User newUser = daoJdbc.findById(user.getId(), User.class);
+        final User newUser = daoJdbc.findById(user.getUserId());
         assertThat(newUser).isNotNull();
-        assertThat(newUser.getName()).isEqualTo("Name");
-        assertThat(newUser.getAge()).isEqualTo(30);
+        assertThat(newUser.getUserName()).isEqualTo("Name");
+        assertThat(newUser.getUserAge()).isEqualTo(30);
     }
 
     private void createTable(DataSource dataSource) throws SQLException {
         try (var connection = dataSource.getConnection();
                 var pst = connection.prepareStatement(
-                        "create table user(id bigint(20) auto_increment, name varchar(255), age int(3))")) {
+                        "create table user(user_id bigint(20) auto_increment, user_name varchar(255), user_age int(3))")) {
             pst.executeUpdate();
         }
         System.out.println("user table created");
     }
 
     private void deleteTable(DataSource dataSource) throws SQLException {
-        try (var connection = dataSource.getConnection();
-                var pst = connection.prepareStatement(
-                        "drop table user")) {
+        try (var connection = dataSource.getConnection(); var pst = connection.prepareStatement("drop table user")) {
             pst.executeUpdate();
         }
         System.out.println("user table deleted");

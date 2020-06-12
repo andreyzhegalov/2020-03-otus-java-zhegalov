@@ -92,6 +92,18 @@ public class EntityClass<T> implements EntityClassMetaData<T> {
         }
     }
 
+    public List<Object> getValues(T entity, List<Field> fields) {
+        final List<Object> res = new ArrayList<>();
+        for (Field field : fields) {
+            try {
+                res.add(field.get(entity));
+            } catch (Exception e) {
+                throw new MapperException(e);
+            }
+        }
+        return res;
+    }
+
     public Object getFieldValue(T entity, String fieldName){
         try {
             final var field = getField(fieldName);
@@ -99,6 +111,10 @@ public class EntityClass<T> implements EntityClassMetaData<T> {
         } catch (Exception e) {
             throw new MapperException(e);
         }
+    }
+
+    public long getIdValue(T entity){
+        return (long)getFieldValue(entity, getIdField().getName());
     }
 
     private Field getField(String fieldName) {

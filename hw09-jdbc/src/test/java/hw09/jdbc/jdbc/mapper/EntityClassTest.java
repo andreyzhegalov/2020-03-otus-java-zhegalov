@@ -17,7 +17,7 @@ import hw09.jdbc.jdbc.mapper.testingclasses.CommonClass;
 import hw09.jdbc.jdbc.mapper.testingclasses.EmptyClass;
 import hw09.jdbc.jdbc.mapper.testingclasses.User;
 
-public class UserEntityClassTest {
+public class EntityClassTest {
     @Test
     public void testCtr() {
         assertDoesNotThrow(() -> new EntityClass<User>(User.class));
@@ -60,17 +60,17 @@ public class UserEntityClassTest {
     public void testGetAllFields() {
         final var fields = new EntityClass<User>(User.class).getAllFields();
         assertEquals(3, fields.size());
-        assertTrue(hasFieldWithName(fields, "id"));
-        assertTrue(hasFieldWithName(fields, "name"));
-        assertTrue(hasFieldWithName(fields, "age"));
+        assertTrue(hasFieldWithName(fields, "userId"));
+        assertTrue(hasFieldWithName(fields, "userName"));
+        assertTrue(hasFieldWithName(fields, "userAge"));
     }
 
     @Test
     public void testGetFieldsWithoutId() {
         final var fields = new EntityClass<User>(User.class).getFieldsWithoutId();
         assertEquals(2, fields.size());
-        assertTrue(hasFieldWithName(fields, "name"));
-        assertTrue(hasFieldWithName(fields, "age"));
+        assertTrue(hasFieldWithName(fields, "userName"));
+        assertTrue(hasFieldWithName(fields, "userAge"));
     }
 
     @Test
@@ -84,8 +84,8 @@ public class UserEntityClassTest {
     public void testSetField() {
         final var userClassEntity = new EntityClass<User>(User.class);
         final User user = new User();
-        userClassEntity.setFieldValue(user, "id", 1);
-        assertEquals(1, user.getId());
+        userClassEntity.setFieldValue(user, "userId", 1);
+        assertEquals(1, user.getUserId());
     }
 
     @Test
@@ -93,6 +93,13 @@ public class UserEntityClassTest {
         final var userClassEntity = new EntityClass<User>(User.class);
         final int age = 30;
         final User user = new User(0, "Name", age);
-        assertEquals(age, userClassEntity.getFieldValue(user, "age"));
+        assertEquals(age, userClassEntity.getFieldValue(user, "userAge"));
+    }
+
+    @Test
+    public void testGetId(){
+        final var userClassEntity = new EntityClass<User>(User.class);
+        final User user = new User(1, "Name", 30);
+        assertEquals(1, userClassEntity.getIdValue(user));
     }
 }

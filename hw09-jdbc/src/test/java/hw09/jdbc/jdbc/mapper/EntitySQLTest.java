@@ -24,13 +24,13 @@ public class EntitySQLTest {
     @Test
     public void testGetSelectAllSql() {
         final var entitySql = new EntitySQL<CommonClass>(entityClass);
-        assertEquals("select id, str_field, int_field from common_class", entitySql.getSelectAllSql());
+        assertEquals("select int_id, str_field, int_field from common_class", entitySql.getSelectAllSql());
     }
 
     @Test
     public void testGetSelectByIdSql() {
         final var entitySql = new EntitySQL<CommonClass>(entityClass);
-        assertEquals("select id, str_field, int_field from common_class where id = ?", entitySql.getSelectByIdSql());
+        assertEquals("select int_id, str_field, int_field from common_class where int_id = ?", entitySql.getSelectByIdSql());
     }
 
     @Test
@@ -42,7 +42,7 @@ public class EntitySQLTest {
     @Test
     public void testGetUpdateSql() {
         final var entitySql = new EntitySQL<CommonClass>(entityClass);
-        assertEquals("update common_class set str_field = ?, int_field = ? where id = ?", entitySql.getUpdateSql());
+        assertEquals("update common_class set str_field = ?, int_field = ? where int_id = ?", entitySql.getUpdateSql());
     }
 
 }

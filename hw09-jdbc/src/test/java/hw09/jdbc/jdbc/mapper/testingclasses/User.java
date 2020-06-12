@@ -4,43 +4,33 @@ import hw09.jdbc.jdbc.mapper.annotations.Id;
 
 public class User {
     @Id
-    private long id;
-    private String name;
-    private int age;
+    private long userId;
+    private String userName;
+    private int userAge;
 
     public User(){
     }
 
     public User(long id, String name, int age) {
-        this.id = id;
-        this.name = name;
-        this.age  = age;
+        this.userId = id;
+        this.userName = name;
+        this.userAge  = age;
     }
 
-    public long getId()
+    public long getUserId()
     {
-        return id;
+        return userId;
     }
 
-    public String getName() {
-        return name;
+    public String getUserName() {
+        return userName;
     }
 
-    public int getAge() {
-        return age;
+    public int getUserAge() {
+        return userAge;
     }
 
-    public void setAge(int age){
-        this.age = age;
+    public void setUserAge(int age){
+        this.userAge = age;
     }
-
-    @Override
-    public String toString() {
-        return "User{" +
-            "id = " + getId() +
-            ", name = " + getName() +
-            ", age = " + getAge() +
-            "}";
-    }
-
 }
