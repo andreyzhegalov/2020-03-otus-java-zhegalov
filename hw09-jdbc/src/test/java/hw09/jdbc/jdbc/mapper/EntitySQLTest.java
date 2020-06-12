@@ -41,7 +41,8 @@ public class EntitySQLTest {
 
     @Test
     public void testGetUpdateSql() {
-        assertThrows(UnsupportedOperationException.class, () -> new EntitySQL<CommonClass>(entityClass).getUpdateSql());
+        final var entitySql = new EntitySQL<CommonClass>(entityClass);
+        assertEquals("update common_class set str_field = ?, int_field = ? where id = ?", entitySql.getUpdateSql());
     }
 
 }

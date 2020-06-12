@@ -82,11 +82,20 @@ public class EntityClass<T> implements EntityClassMetaData<T> {
         return getAllFields().stream().filter((f)->!f.equals(getIdField())).collect(Collectors.toList());
     }
 
-    public void setField(T entity, String fieldName, Object value){
+    public void setFieldValue(T entity, String fieldName, Object value){
         try {
             final var field = getField(fieldName);
             field.setAccessible(true);
             field.set(entity, value);
+        } catch (Exception e) {
+            throw new MapperException(e);
+        }
+    }
+
+    public Object getFieldValue(T entity, String fieldName){
+        try {
+            final var field = getField(fieldName);
+            return field.get(entity);
         } catch (Exception e) {
             throw new MapperException(e);
         }

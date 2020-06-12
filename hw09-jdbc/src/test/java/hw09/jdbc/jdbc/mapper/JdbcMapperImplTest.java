@@ -1,6 +1,8 @@
 package hw09.jdbc.jdbc.mapper;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.sql.SQLException;
@@ -46,7 +48,17 @@ public class JdbcMapperImplTest {
 
     @Test
     public void testUpdate() {
-        assertThrows(UnsupportedOperationException.class, () -> new JdbcMapperImpl<User>(null, null, User.class).update(null));
+        final JdbcMapper<User> daoJdbc = new JdbcMapperImpl<>(dbExecutor, sessionManager, User.class);
+        final var user = new User(0, "Name", 30);
+        daoJdbc.insert(user);
+        final long newId = user.getId();
+
+        user.setAge(35);
+        System.out.println(user);
+        assertDoesNotThrow(()-> daoJdbc.update(user));
+
+        final User newUser = daoJdbc.findById(newId, User.class);
+        assertEquals(newId, newUser.getId());
     }
 
     @Test

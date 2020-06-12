@@ -71,7 +71,16 @@ public class EntitySQL<T> implements EntitySQLMetaData {
 
     @Override
     public String getUpdateSql() {
-        throw new UnsupportedOperationException();
+        final var fields = entityClass.getFieldsWithoutId();
+        StringBuilder sb = new StringBuilder();
+        sb.append("update ");
+        sb.append(toLowerUnderScore(entityClass.getName()));
+        sb.append(" set ");
+        final String sqlPart = fields.stream().map((f) -> f.getName()).map((f) -> toLowerUnderScore(f) + " = ?")
+                .collect(Collectors.joining(", "));
+        sb.append(sqlPart);
+        sb.append(" where id = ?");
+        return sb.toString();
     }
 
     public List<Object> getValues(T obj) {

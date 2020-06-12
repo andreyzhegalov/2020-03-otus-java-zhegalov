@@ -77,14 +77,22 @@ public class UserEntityClassTest {
     public void testSetFieldShouldThrowException() {
         final var userClassEntity = new EntityClass<User>(User.class);
         final User user = new User();
-        assertThrows(MapperException.class, () -> userClassEntity.setField(user, "???", null));
+        assertThrows(MapperException.class, () -> userClassEntity.setFieldValue(user, "???", null));
     }
 
     @Test
     public void testSetField() {
         final var userClassEntity = new EntityClass<User>(User.class);
         final User user = new User();
-        userClassEntity.setField(user, "id", 1);
+        userClassEntity.setFieldValue(user, "id", 1);
         assertEquals(1, user.getId());
+    }
+
+    @Test
+    public void testGetField() {
+        final var userClassEntity = new EntityClass<User>(User.class);
+        final int age = 30;
+        final User user = new User(0, "Name", age);
+        assertEquals(age, userClassEntity.getFieldValue(user, "age"));
     }
 }

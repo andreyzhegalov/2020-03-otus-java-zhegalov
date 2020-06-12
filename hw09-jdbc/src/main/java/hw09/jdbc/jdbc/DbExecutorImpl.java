@@ -13,8 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * @author sergey
- * created on 03.02.19.
+ * @author sergey created on 03.02.19.
  */
 public class DbExecutorImpl<T> implements DbExecutor<T> {
     private static final Logger logger = LoggerFactory.getLogger(DbExecutorImpl.class);
@@ -39,13 +38,29 @@ public class DbExecutorImpl<T> implements DbExecutor<T> {
     }
 
     @Override
-    public Optional<T> executeSelect(Connection connection, String sql, long id,
-                                     Function<ResultSet, T> rsHandler) throws SQLException {
+    public Optional<T> executeSelect(Connection connection, String sql, long id, Function<ResultSet, T> rsHandler)
+            throws SQLException {
         try (var pst = connection.prepareStatement(sql)) {
             pst.setLong(1, id);
             try (var rs = pst.executeQuery()) {
                 return Optional.ofNullable(rsHandler.apply(rs));
             }
+        }
+    }
+
+    @Override
+    public void executeUpdate(Connection connection, String sql, long id, List<Object> params) throws SQLException {
+        Savepoint savePoint = connection.setSavepoint("savePointName");
+        try (var pst = connection.prepareStatement(sql)) {
+            for (int idx = 0; idx < params.size(); idx++) {
+                pst.setObject(idx + 1, params.get(idx));
+            }
+            pst.setLong(params.size() + 1, id);
+            pst.executeUpdate();
+        } catch (SQLException ex) {
+            connection.rollback(savePoint);
+            logger.error(ex.getMessage(), ex);
+            throw ex;
         }
     }
 }

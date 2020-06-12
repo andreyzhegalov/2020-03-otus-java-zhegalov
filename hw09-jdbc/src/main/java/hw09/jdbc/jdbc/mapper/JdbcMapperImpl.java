@@ -29,7 +29,7 @@ public class JdbcMapperImpl<T> implements JdbcMapper<T> {
         try {
             final long id = dbExecutor.executeInsert(getConnection(), this.entitySQL.getInsertSql(),
                     this.entitySQL.getValues(objectData));
-            entityClass.setField(objectData, entityClass.getIdField().getName(), id);
+            entityClass.setFieldValue(objectData, entityClass.getIdField().getName(), id);
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
             throw new MapperException(e);
@@ -38,7 +38,14 @@ public class JdbcMapperImpl<T> implements JdbcMapper<T> {
 
     @Override
     public void update(T objectData) {
-        throw new UnsupportedOperationException();
+        try {
+            final long id = (long) entityClass.getFieldValue(objectData, entityClass.getIdField().getName());
+            final var params = this.entitySQL.getValues(objectData);
+            dbExecutor.executeUpdate(getConnection(), entitySQL.getUpdateSql(), id, params);
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            throw new MapperException(e);
+        }
     }
 
     @Override
@@ -53,11 +60,11 @@ public class JdbcMapperImpl<T> implements JdbcMapper<T> {
                 try {
                     if (rs.next()) {
                         final var ctr = entityClass.getConstructor();
-                        final T entity = ctr.newInstance();
+                        final T objectData = ctr.newInstance();
                         for (final var field : entityClass.getAllFields()) {
-                            entityClass.setField(entity, field.getName(), rs.getObject(field.getName()));
+                            entityClass.setFieldValue(objectData, field.getName(), rs.getObject(field.getName()));
                         }
-                        return entity;
+                        return objectData;
                     }
                     return null;
                 } catch (SQLException e) {
