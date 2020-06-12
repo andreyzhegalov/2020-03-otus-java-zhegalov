@@ -4,9 +4,12 @@ import hw09.jdbc.jdbc.mapper.annotations.Id;
 
 public class CommonClass {
     @Id
-    private final int id;
-    private final String strField ;
-    private final int intField;
+    private int id;
+    private String strField ;
+    private int intField;
+
+    public CommonClass(){
+    }
 
     public CommonClass(int id, String strField, int intField) {
         this.id = id;

@@ -2,22 +2,20 @@ package hw09.jdbc.jdbc.mapper;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.google.common.base.Optional;
 
 import hw09.jdbc.jdbc.mapper.annotations.Id;
 
 public class EntityClass<T> implements EntityClassMetaData<T> {
-    private final T entity;
     private final Class<T> clazz;
 
     public EntityClass(Class<T> entityType) {
-        this.entity = null;
         this.clazz = entityType;
-    }
-
-    public T getEntity() {
-        return this.entity;
     }
 
     @Override
@@ -28,10 +26,12 @@ public class EntityClass<T> implements EntityClassMetaData<T> {
     @Override
     public Constructor<T> getConstructor() {
         Constructor<?>[] ctrs = clazz.getConstructors();
-        if (ctrs.length > 1 || ctrs.length < 1){
-            throw new MapperException("Multiple constructors not supported");
+        for (final Constructor<?> constructor : ctrs) {
+            if (constructor.getParameterCount() == 0) {
+                return (Constructor<T>) constructor;
+            }
         }
-        return (Constructor<T>)ctrs[0];
+        throw new MapperException("not allowded constructor founded");
     }
 
     @Override
@@ -69,5 +69,19 @@ public class EntityClass<T> implements EntityClassMetaData<T> {
         final var res = getAllFields();
         res.remove(getIdField());
         return res;
+    }
+
+    public void setField(T entity, String fieldName, Object value){
+        try {
+            final var field = getField(fieldName);
+            field.setAccessible(true);
+            field.set(entity, value);
+        } catch (Exception e) {
+            throw new MapperException(e);
+        }
+    }
+
+    private Field getField(String fieldName) {
+        return getAllFields().stream().filter((f) -> f.getName().equals(fieldName)).findFirst().orElseThrow();
     }
 }

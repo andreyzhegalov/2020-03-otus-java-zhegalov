@@ -6,14 +6,12 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
 import hw09.jdbc.jdbc.mapper.testingclasses.ClassWithIdNotation;
-import hw09.jdbc.jdbc.mapper.testingclasses.ClassWithManyCtr;
 import hw09.jdbc.jdbc.mapper.testingclasses.ClassWithManyIdNotations;
 import hw09.jdbc.jdbc.mapper.testingclasses.CommonClass;
 import hw09.jdbc.jdbc.mapper.testingclasses.EmptyClass;
@@ -28,12 +26,6 @@ public class UserEntityClassTest {
     @Test
     public void testGetName() {
         assertEquals("Object", new EntityClass<Object>(Object.class).getName());
-    }
-
-    @Test
-    public void testGetConstructorFailed() {
-        final var entityClass = new EntityClass<ClassWithManyCtr>(ClassWithManyCtr.class);
-        assertThrows(MapperException.class, () -> entityClass.getConstructor());
     }
 
     @Test
@@ -79,5 +71,20 @@ public class UserEntityClassTest {
         assertEquals(2, fields.size());
         assertTrue(hasFieldWithName(fields, "name"));
         assertTrue(hasFieldWithName(fields, "age"));
+    }
+
+    @Test
+    public void testSetFieldShouldThrowException() {
+        final var userClassEntity = new EntityClass<User>(User.class);
+        final User user = new User();
+        assertThrows(MapperException.class, () -> userClassEntity.setField(user, "???", null));
+    }
+
+    @Test
+    public void testSetField() {
+        final var userClassEntity = new EntityClass<User>(User.class);
+        final User user = new User();
+        userClassEntity.setField(user, "id", 1);
+        assertEquals(1, user.getId());
     }
 }

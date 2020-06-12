@@ -1,7 +1,7 @@
 package hw09.jdbc.jdbc.mapper;
 
 public interface JdbcMapper<T> {
-    void insert(T objectData);
+    long insert(T objectData);
 
     void update(T objectData);
 
