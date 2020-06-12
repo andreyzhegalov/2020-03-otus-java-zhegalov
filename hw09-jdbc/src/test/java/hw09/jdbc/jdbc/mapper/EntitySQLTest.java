@@ -36,8 +36,8 @@ public class EntitySQLTest {
 
     @Test
     public void testGetSelectByIdSql() {
-        assertThrows(UnsupportedOperationException.class,
-                () -> new EntitySQL<CommonClass>(entityClass).getSelectByIdSql());
+        final var entitySql = new EntitySQL<CommonClass>(entityClass);
+        assertEquals("select id, str_field, int_field from common_class where id = ?", entitySql.getSelectByIdSql());
     }
 
     @Test

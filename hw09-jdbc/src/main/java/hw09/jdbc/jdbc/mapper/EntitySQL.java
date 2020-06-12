@@ -34,7 +34,10 @@ public class EntitySQL<T> implements EntitySQLMetaData {
 
     @Override
     public String getSelectByIdSql() {
-        throw new UnsupportedOperationException();
+        StringBuilder sb = new StringBuilder();
+        sb.append(getSelectAllSql());
+        sb.append(" where id = ?");
+        return sb.toString();
     }
 
     private String prepareAllFieldsSql(List<Field> fields) {
