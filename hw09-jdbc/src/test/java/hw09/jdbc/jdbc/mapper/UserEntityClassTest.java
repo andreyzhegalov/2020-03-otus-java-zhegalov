@@ -20,12 +20,12 @@ import hw09.jdbc.jdbc.mapper.testingclasses.User;
 public class UserEntityClassTest {
     @Test
     public void testCtr() {
-        assertDoesNotThrow(() -> new EntityClass<Object>(Object.class));
+        assertDoesNotThrow(() -> new EntityClass<User>(User.class));
     }
 
     @Test
     public void testGetName() {
-        assertEquals("Object", new EntityClass<Object>(Object.class).getName());
+        assertEquals("User", new EntityClass<User>(User.class).getName());
     }
 
     @Test

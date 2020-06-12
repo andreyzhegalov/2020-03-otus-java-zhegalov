@@ -9,15 +9,15 @@ import org.slf4j.LoggerFactory;
 import hw09.jdbc.jdbc.DbExecutorImpl;
 import hw09.jdbc.jdbc.sessionmanager.SessionManagerJdbc;
 
-public class DaoJbdc<T> implements JdbcMapper<T> {
-    private static final Logger logger = LoggerFactory.getLogger(DaoJbdc.class);
+public class JdbcMapperImpl<T> implements JdbcMapper<T> {
+    private static final Logger logger = LoggerFactory.getLogger(JdbcMapperImpl.class);
 
     private final DbExecutorImpl<T> dbExecutor;
     private final SessionManagerJdbc sessionManager;
     private final EntityClass<T> entityClass;
     private final EntitySQL<T> entitySQL;
 
-    public DaoJbdc(DbExecutorImpl<T> dbExecutor, SessionManagerJdbc sessionManager, Class<T> entityType) {
+    public JdbcMapperImpl(DbExecutorImpl<T> dbExecutor, SessionManagerJdbc sessionManager, Class<T> entityType) {
         this.dbExecutor = dbExecutor;
         this.sessionManager = sessionManager;
         this.entityClass = new EntityClass<T>(entityType);
@@ -25,10 +25,11 @@ public class DaoJbdc<T> implements JdbcMapper<T> {
     }
 
     @Override
-    public long insert(T objectData) {
+    public void insert(T objectData) {
         try {
-            return dbExecutor.executeInsert(getConnection(), this.entitySQL.getInsertSql(),
+            final long id = dbExecutor.executeInsert(getConnection(), this.entitySQL.getInsertSql(),
                     this.entitySQL.getValues(objectData));
+            entityClass.setField(objectData, entityClass.getIdField().getName(), id);
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
             throw new MapperException(e);
@@ -48,7 +49,7 @@ public class DaoJbdc<T> implements JdbcMapper<T> {
     @Override
     public T findById(long id, Class<T> clazz) {
         try {
-            return dbExecutor.executeSelect(getConnection(), "select id, name, age from user where id  = ?", id, rs -> {
+            return dbExecutor.executeSelect(getConnection(), entitySQL.getSelectByIdSql(), id, rs -> {
                 try {
                     if (rs.next()) {
                         final var ctr = entityClass.getConstructor();
@@ -81,9 +82,4 @@ public class DaoJbdc<T> implements JdbcMapper<T> {
     private Connection getConnection() {
         return sessionManager.getCurrentSession().getConnection();
     }
-
-    // public static Class<?>[] toClasses(Object[] args) {
-    // return Arrays.stream(args).map(Object::getClass).toArray(Class<?>[]::new);
-    // }
-
 }

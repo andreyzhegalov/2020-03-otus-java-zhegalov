@@ -7,7 +7,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.junit.jupiter.api.Test;
 
 import hw09.jdbc.jdbc.mapper.testingclasses.CommonClass;
-import hw09.jdbc.jdbc.mapper.testingclasses.EmptyClass;
 
 public class EntitySQLTest {
     final EntityClass<CommonClass> entityClass = new EntityClass<>(CommonClass.class);
@@ -20,12 +19,6 @@ public class EntitySQLTest {
     @Test
     public void testCtr() {
         assertDoesNotThrow(() -> new EntitySQL<CommonClass>(entityClass));
-    }
-
-    @Test
-    public void testGetSelectAllSqlForEmptyType() {
-        final var emptyEntityClass = new EntityClass<EmptyClass>(EmptyClass.class);
-        assertThrows(RuntimeException.class, () -> new EntitySQL<EmptyClass>(emptyEntityClass).getSelectAllSql());
     }
 
     @Test
