@@ -18,13 +18,6 @@ dependencies {
     }
 }
 
-test {
-}
-
-test {
-    useJUnitPlatform()
-}
-
 jacocoTestReport {
     reports {
         xml.enabled true
@@ -38,3 +31,5 @@ test {
         events "passed", "skipped", "failed"
     }
 }
+
+check.dependsOn jacocoTestReport
