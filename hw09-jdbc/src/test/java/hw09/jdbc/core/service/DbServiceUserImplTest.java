@@ -1,14 +1,13 @@
-package hw09.jdbc.jdbc.dao;
+package hw09.jdbc.core.service;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.sql.SQLException;
 
 import javax.sql.DataSource;
+
+import java.util.Optional;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,12 +16,14 @@ import org.junit.jupiter.api.Test;
 import hw09.jdbc.core.model.User;
 import hw09.jdbc.h2.DataSourceH2;
 import hw09.jdbc.jdbc.DbExecutorImpl;
+import hw09.jdbc.jdbc.dao.UserDaoMapperJdbc;
 import hw09.jdbc.jdbc.sessionmanager.SessionManagerJdbc;
 
-public class UserDaoMapperJdbcTest {
+public class DbServiceUserImplTest {
     private SessionManagerJdbc sessionManager;
     private DataSourceH2 dataSource;
     private DbExecutorImpl<User> dbExecutor;
+    private UserDaoMapperJdbc userDao;
 
     @BeforeEach
     private void setUp() throws SQLException {
@@ -30,46 +31,26 @@ public class UserDaoMapperJdbcTest {
         createTable(dataSource);
         sessionManager = new SessionManagerJdbc(dataSource);
         dbExecutor = new DbExecutorImpl<>();
-        sessionManager.beginSession();
+        userDao = new UserDaoMapperJdbc(sessionManager, dbExecutor);
     }
 
     @AfterEach
     private void tearDown() throws SQLException {
-        sessionManager.close();
         deleteTable(dataSource);
     }
 
     @Test
-    public void testCtr() {
-        assertDoesNotThrow(() -> new UserDaoMapperJdbc(sessionManager, dbExecutor));
+    public void testSaveUser() {
+        var dbServiceUser = new DbServiceUserImpl(userDao);
+        assertTrue(dbServiceUser.saveUser(new User(0, "dbServiceUser")) > 0);
     }
 
     @Test
-    public void testInsertUser() {
-        final var userDao = new UserDaoMapperJdbc(sessionManager, dbExecutor);
-        final var user = new User(0, "UserName", 25);
-        userDao.insertUser(user);
-        assertNotEquals(0, user.getId());
-    }
-
-    @Test
-    public void testFindByIdFialed() {
-        final var userDao = new UserDaoMapperJdbc(sessionManager, dbExecutor);
-        assertFalse(userDao.findById(0).isPresent());
-    }
-
-    @Test
-    public void testFindById() {
-        final var userDao = new UserDaoMapperJdbc(sessionManager, dbExecutor);
-        final User user = new User(0, "TestUser", 20);
-        final long id = userDao.insertUser(user);
-        assertTrue(userDao.findById(id).isPresent());
-    }
-
-    @Test
-    public void testGetSessionManager() {
-        final var userDao = new UserDaoMapperJdbc(sessionManager, dbExecutor);
-        assertNotNull(userDao.getSessionManager());
+    public void testGetUser() {
+        var dbServiceUser = new DbServiceUserImpl(userDao);
+        var id = dbServiceUser.saveUser(new User(0, "dbServiceUser"));
+        Optional<User> user = dbServiceUser.getUser(id);
+        assertNotNull(user.get());
     }
 
     private void createTable(DataSource dataSource) throws SQLException {
@@ -87,5 +68,4 @@ public class UserDaoMapperJdbcTest {
         }
         System.out.println("user table deleted");
     }
-
 }
