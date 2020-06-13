@@ -3,9 +3,12 @@ package hw09.jdbc.jdbc.mapper;
 import java.lang.reflect.InvocationTargetException;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import hw09.jdbc.jdbc.DbExecutorImpl;
 import hw09.jdbc.jdbc.sessionmanager.SessionManagerJdbc;
 
@@ -24,11 +27,16 @@ public class JdbcMapperImpl<T> implements JdbcMapper<T> {
         this.entitySQL = new EntitySQL<>(this.entityClass);
     }
 
+    private List<Object> getFieldsValue(T objectData) {
+        return entityClass.getFieldsWithoutId().stream().map((f) -> entityClass.getFieldValue(objectData, f.getName()))
+                .collect(Collectors.toList());
+    }
+
     @Override
     public void insert(T objectData) {
         try {
             final long id = dbExecutor.executeInsert(getConnection(), this.entitySQL.getInsertSql(),
-                    this.entityClass.getValues(objectData, entityClass.getFieldsWithoutId()));
+                    getFieldsValue(objectData));
             entityClass.setFieldValue(objectData, entityClass.getIdField().getName(), id);
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
@@ -40,8 +48,7 @@ public class JdbcMapperImpl<T> implements JdbcMapper<T> {
     public void update(T objectData) {
         try {
             final long id = entityClass.getIdValue(objectData);
-            final var params = this.entityClass.getValues(objectData, entityClass.getFieldsWithoutId());
-            dbExecutor.executeUpdate(getConnection(), entitySQL.getUpdateSql(), id, params);
+            dbExecutor.executeUpdate(getConnection(), entitySQL.getUpdateSql(), id, getFieldsValue(objectData));
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
             throw new MapperException(e);

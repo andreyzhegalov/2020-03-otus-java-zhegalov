@@ -13,8 +13,8 @@ import org.junit.jupiter.api.Test;
 
 import hw09.jdbc.jdbc.mapper.testingclasses.ClassWithIdNotation;
 import hw09.jdbc.jdbc.mapper.testingclasses.ClassWithManyIdNotations;
+import hw09.jdbc.jdbc.mapper.testingclasses.ClassWithoutNotation;
 import hw09.jdbc.jdbc.mapper.testingclasses.CommonClass;
-import hw09.jdbc.jdbc.mapper.testingclasses.EmptyClass;
 import hw09.jdbc.jdbc.mapper.testingclasses.User;
 
 public class EntityClassTest {
@@ -36,8 +36,8 @@ public class EntityClassTest {
 
     @Test
     public void testGetIdFieldFailed() {
-        assertThrows(RuntimeException.class,
-                () -> new EntityClass<EmptyClass>(EmptyClass.class).getIdField().getName());
+        assertThrows(MapperException.class,
+                () -> new EntityClass<ClassWithoutNotation>(ClassWithoutNotation.class).getIdField().getName());
     }
 
     @Test
@@ -48,12 +48,12 @@ public class EntityClassTest {
 
     @Test
     public void testGetIdFieldForClassWithManyIdField() {
-        assertThrows(RuntimeException.class,
+        assertThrows(MapperException.class,
                 () -> new EntityClass<ClassWithManyIdNotations>(ClassWithManyIdNotations.class).getIdField().getName());
     }
 
     private boolean hasFieldWithName(List<Field> fields, String name) {
-        return null != fields.stream().filter(field -> name.equals(field.getName())).findAny().orElse(null);
+        return fields.stream().anyMatch(field -> name.equals(field.getName()));
     }
 
     @Test
@@ -99,7 +99,8 @@ public class EntityClassTest {
     @Test
     public void testGetId(){
         final var userClassEntity = new EntityClass<User>(User.class);
-        final User user = new User(1, "Name", 30);
-        assertEquals(1, userClassEntity.getIdValue(user));
+        final long userId = 1L;
+        final User user = new User(userId, "Name", 30);
+        assertEquals(userId, userClassEntity.getIdValue(user));
     }
 }

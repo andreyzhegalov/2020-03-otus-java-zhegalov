@@ -53,12 +53,13 @@ public class JdbcMapperImplTest {
         daoJdbc.insert(user);
         final long newId = user.getUserId();
 
-        user.setUserAge(35);
-        System.out.println(user);
+        final int newAge = 35;
+        user.setUserAge(newAge);
         assertDoesNotThrow(() -> daoJdbc.update(user));
 
         final User newUser = daoJdbc.findById(newId);
         assertEquals(newId, newUser.getUserId());
+        assertEquals(newAge, newUser.getUserAge());
     }
 
     @Test
@@ -68,11 +69,12 @@ public class JdbcMapperImplTest {
         final var user = new User(initId, "Name", 30);
         daoJdbc.insertOrUpdate(user);
         assertNotEquals(initId, user.getUserId());
-        user.setUserAge(35);
-        final long updatedId = user.getUserId();
+        final long newId  = user.getUserId();
+        final int newAge = 35;
+        user.setUserAge(newAge);
         daoJdbc.insertOrUpdate(user);
-        final var updatedUser = (User) daoJdbc.findById(updatedId);
-        assertEquals(35, updatedUser.getUserAge());
+        final User updatedUser = daoJdbc.findById(newId);
+        assertEquals(newAge, updatedUser.getUserAge());
     }
 
     @Test
@@ -87,7 +89,6 @@ public class JdbcMapperImplTest {
         final JdbcMapper<User> daoJdbc = new JdbcMapperImpl<>(dbExecutor, sessionManager, User.class);
         final var user = new User(0, "Name", 30);
         daoJdbc.insert(user);
-
         final User newUser = daoJdbc.findById(user.getUserId());
         assertThat(newUser).isNotNull();
         assertThat(newUser.getUserName()).isEqualTo("Name");

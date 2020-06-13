@@ -1,7 +1,6 @@
 package hw09.jdbc.jdbc.mapper;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -24,7 +23,7 @@ public class EntitySQL<T> implements EntitySQLMetaData {
             throw new MapperException("Can't create sql request for type " + entityClass.getName());
         }
         sb.append("select ");
-        sb.append(prepareAllFieldsSql(fields));
+        sb.append(prepareSqlFields(fields));
         sb.append(" from ");
         sb.append(NameConverterHelper.toLowerUnderScore(entityClass.getName()));
         return sb.toString();
@@ -38,13 +37,13 @@ public class EntitySQL<T> implements EntitySQLMetaData {
         return sb.toString();
     }
 
-    private String prepareAllFieldsSql(List<Field> fields) {
+    private String prepareSqlFields(List<Field> fields) {
         final String fieldsString = fields.stream().map((f) -> f.getName())
                 .map((f) -> NameConverterHelper.toLowerUnderScore(f)).collect(Collectors.joining(", "));
         return fieldsString;
     }
 
-    private String prepareAllFieldsValueSql() {
+    private String prepareSqlValues() {
         final List<String> values = Collections.nCopies(entityClass.getFieldsWithoutId().size(), "?");
         return values.stream().collect(Collectors.joining(", "));
     }
@@ -54,14 +53,14 @@ public class EntitySQL<T> implements EntitySQLMetaData {
         StringBuilder sb = new StringBuilder();
         final var fields = entityClass.getFieldsWithoutId();
         if (fields.isEmpty()) {
-            throw new RuntimeException("Can't create sql request for type " + entityClass.getName());
+            throw new MapperException("Can't create sql request for type " + entityClass.getName());
         }
         sb.append("insert into ");
         sb.append(NameConverterHelper.toLowerUnderScore(entityClass.getName()));
         sb.append(" (");
-        sb.append(prepareAllFieldsSql(fields));
+        sb.append(prepareSqlFields(fields));
         sb.append(") values (");
-        sb.append(prepareAllFieldsValueSql());
+        sb.append(prepareSqlValues());
         sb.append(")");
         return sb.toString();
     }
@@ -80,13 +79,12 @@ public class EntitySQL<T> implements EntitySQLMetaData {
         return sb.toString();
     }
 
-    private String prepareWhereIdPart(){
+    private String prepareWhereIdPart() {
         StringBuilder sb = new StringBuilder();
         sb.append(" where ");
         sb.append(NameConverterHelper.toLowerUnderScore(entityClass.getIdField().getName()));
         sb.append(" = ?");
         return sb.toString();
     }
-
 
 }

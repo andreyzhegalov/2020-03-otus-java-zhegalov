@@ -1,8 +1,8 @@
 package hw09.jdbc.jdbc.mapper.testingclasses;
 
-import hw09.jdbc.jdbc.mapper.annotations.Id;
-
 import java.math.BigDecimal;
+
+import hw09.jdbc.jdbc.mapper.annotations.Id;
 
 public class Account {
     @Id
@@ -10,7 +10,7 @@ public class Account {
     private String type;
     private BigDecimal rest;
 
-    public Account(){
+    public Account() {
     }
 
     public Account(long no, String type, BigDecimal rest) {
@@ -43,6 +43,3 @@ public class Account {
         return rest;
     }
 }
-
-
-

@@ -15,23 +15,20 @@ public class EntityClass<T> implements EntityClassMetaData<T> {
     private final Constructor<T> constructor;
 
     public EntityClass(Class<T> entityType) {
-        if (entityType == null){
+        if (entityType == null) {
             throw new MapperException(new IllegalArgumentException());
         }
         this.clazz = entityType;
         this.fields = new ArrayList<>();
         for (final var field : clazz.getDeclaredFields()) {
             field.setAccessible(true);
-            if (field.isSynthetic()) {
-                continue;
-            }
             fields.add(field);
         }
         this.idField = findIdField();
         this.constructor = findConstructor();
     }
 
-    private Field findIdField(){
+    private Field findIdField() {
         final List<Field> res = new ArrayList<>();
         for (final var field : getAllFields()) {
             if (field.isAnnotationPresent(Id.class)) {
@@ -39,22 +36,23 @@ public class EntityClass<T> implements EntityClassMetaData<T> {
             }
         }
         if (res.isEmpty()) {
-            throw new RuntimeException("No Id annotation");
+            throw new MapperException("No Id annotation in class " + clazz);
         }
         if (res.size() > 1) {
-            throw new RuntimeException("Above one Id annotation present");
+            throw new MapperException("Above one Id annotation present in class " + clazz);
         }
         return res.get(0);
     }
 
-    private Constructor<T> findConstructor(){
+    @SuppressWarnings("unchecked")
+    private Constructor<T> findConstructor() {
         Constructor<?>[] ctrs = clazz.getConstructors();
         for (final Constructor<?> constructor : ctrs) {
             if (constructor.getParameterCount() == 0) {
                 return (Constructor<T>) constructor;
             }
         }
-        throw new MapperException("not allowded constructor founded");
+        throw new MapperException("Not allowded constructor founded in class " + clazz);
     }
 
     @Override
@@ -69,7 +67,7 @@ public class EntityClass<T> implements EntityClassMetaData<T> {
 
     @Override
     public Field getIdField() {
-        return idField;
+        return this.idField;
     }
 
     @Override
@@ -79,10 +77,10 @@ public class EntityClass<T> implements EntityClassMetaData<T> {
 
     @Override
     public List<Field> getFieldsWithoutId() {
-        return getAllFields().stream().filter((f)->!f.equals(getIdField())).collect(Collectors.toList());
+        return getAllFields().stream().filter((f) -> !f.equals(getIdField())).collect(Collectors.toList());
     }
 
-    public void setFieldValue(T entity, String fieldName, Object value){
+    public void setFieldValue(T entity, String fieldName, Object value) {
         try {
             final var field = getField(fieldName);
             field.setAccessible(true);
@@ -92,19 +90,7 @@ public class EntityClass<T> implements EntityClassMetaData<T> {
         }
     }
 
-    public List<Object> getValues(T entity, List<Field> fields) {
-        final List<Object> res = new ArrayList<>();
-        for (Field field : fields) {
-            try {
-                res.add(field.get(entity));
-            } catch (Exception e) {
-                throw new MapperException(e);
-            }
-        }
-        return res;
-    }
-
-    public Object getFieldValue(T entity, String fieldName){
+    public Object getFieldValue(T entity, String fieldName) {
         try {
             final var field = getField(fieldName);
             return field.get(entity);
@@ -113,8 +99,8 @@ public class EntityClass<T> implements EntityClassMetaData<T> {
         }
     }
 
-    public long getIdValue(T entity){
-        return (long)getFieldValue(entity, getIdField().getName());
+    public long getIdValue(T entity) {
+        return (long) getFieldValue(entity, getIdField().getName());
     }
 
     private Field getField(String fieldName) {

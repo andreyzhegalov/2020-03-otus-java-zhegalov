@@ -1,4 +1,5 @@
 package hw09.jdbc.jdbc.mapper;
+
 import com.google.common.base.CaseFormat;
 
 public class NameConverterHelper {
@@ -6,4 +7,3 @@ public class NameConverterHelper {
         return CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, in);
     }
 }
-

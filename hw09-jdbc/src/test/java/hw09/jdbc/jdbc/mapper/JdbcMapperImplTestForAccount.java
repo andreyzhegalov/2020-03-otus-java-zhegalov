@@ -24,6 +24,7 @@ public class JdbcMapperImplTestForAccount {
     private SessionManagerJdbc sessionManager;
     private DbExecutorImpl<Account> dbExecutor;
     private DataSourceH2 dataSource;
+    private JdbcMapper<Account> daoJdbc;
 
     @BeforeEach
     private void setUp() throws SQLException {
@@ -31,6 +32,7 @@ public class JdbcMapperImplTestForAccount {
         createTable(dataSource);
         sessionManager = new SessionManagerJdbc(dataSource);
         dbExecutor = new DbExecutorImpl<>();
+        daoJdbc = new JdbcMapperImpl<>(dbExecutor, sessionManager, Account.class);
         sessionManager.beginSession();
     }
 
@@ -42,20 +44,18 @@ public class JdbcMapperImplTestForAccount {
 
     @Test
     public void testInsert() throws SQLException {
-        final JdbcMapper<Account> daoJdbc = new JdbcMapperImpl<>(dbExecutor, sessionManager, Account.class);
-        final var user = new Account(0, "CD", BigDecimal(30));
+        final var user = new Account(0, "CD", new BigDecimal(30));
         daoJdbc.insert(user);
         assertThat(user.getNo()).isGreaterThan(0);
     }
 
     @Test
     public void testUpdate() {
-        final JdbcMapper<Account> daoJdbc = new JdbcMapperImpl<>(dbExecutor, sessionManager, Account.class);
-        final var user = new Account(0, "CD", BigDecimal(30));
+        final var user = new Account(0, "CD", new BigDecimal(30));
         daoJdbc.insert(user);
         final long newId = user.getNo();
 
-        user.setRest(BigDecimal(35));
+        user.setRest(new BigDecimal(35));
         System.out.println(user);
         assertDoesNotThrow(() -> daoJdbc.update(user));
 
@@ -65,39 +65,32 @@ public class JdbcMapperImplTestForAccount {
 
     @Test
     public void testInsertOrUpdate() {
-        final JdbcMapper<Account> daoJdbc = new JdbcMapperImpl<>(dbExecutor, sessionManager, Account.class);
         final long initId = 0;
-        final var account = new Account(initId, "CD", BigDecimal(30));
+        final var account = new Account(initId, "CD", new BigDecimal(30));
         daoJdbc.insertOrUpdate(account);
         assertNotEquals(initId, account.getNo());
-        account.setRest(BigDecimal(35));
+        account.setRest(new BigDecimal(35));
         final long updatedId = account.getNo();
         daoJdbc.insertOrUpdate(account);
         final var updatedUser = (Account) daoJdbc.findById(updatedId);
-        assertEquals(BigDecimal(35), updatedUser.getRest());
-    }
-
-    private BigDecimal BigDecimal(int i) {
-        return null;
+        assertEquals(new BigDecimal(35), updatedUser.getRest());
     }
 
     @Test
     public void testFindByIdFailed() throws SQLException {
-        final JdbcMapper<Account> daoJdbc = new JdbcMapperImpl<>(dbExecutor, sessionManager, Account.class);
         final Account newUser = daoJdbc.findById(0);
         assertThat(newUser).isNull();
     }
 
     @Test
     public void testFindById() throws SQLException {
-        final JdbcMapper<Account> daoJdbc = new JdbcMapperImpl<>(dbExecutor, sessionManager, Account.class);
-        final var account = new Account(0, "CD", BigDecimal(30));
+        final var account = new Account(0, "CD", new BigDecimal(30));
         daoJdbc.insert(account);
 
         final Account newUser = daoJdbc.findById(account.getNo());
         assertThat(newUser).isNotNull();
         assertThat(newUser.getType()).isEqualTo("CD");
-        assertThat(newUser.getRest()).isEqualTo(BigDecimal(30));
+        assertThat(newUser.getRest()).isEqualTo(new BigDecimal(30));
     }
 
     private void createTable(DataSource dataSource) throws SQLException {
