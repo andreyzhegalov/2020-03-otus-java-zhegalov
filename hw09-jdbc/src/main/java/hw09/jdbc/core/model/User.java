@@ -8,6 +8,11 @@ public class User {
     private final long id;
     private final String name;
 
+    public User(){
+        this.id = 0;
+        this.name = new String();
+    }
+
     public User(long id, String name) {
         this.id = id;
         this.name = name;
