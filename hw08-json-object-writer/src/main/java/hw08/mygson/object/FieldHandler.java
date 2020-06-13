@@ -6,8 +6,8 @@ import java.lang.reflect.Field;
 import hw08.mygson.MyGsonException;
 
 public class FieldHandler {
-    private Field field;
-    private Object obj;
+    private final Field field;
+    private final Object obj;
 
     public FieldHandler(Field field, Object obj) {
         if (field == null) {
