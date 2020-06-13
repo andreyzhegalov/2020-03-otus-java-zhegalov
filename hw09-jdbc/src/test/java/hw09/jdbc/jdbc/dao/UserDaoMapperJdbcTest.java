@@ -1,9 +1,11 @@
 package hw09.jdbc.jdbc.dao;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.sql.SQLException;
@@ -14,6 +16,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import hw09.jdbc.core.dao.UserDaoException;
 import hw09.jdbc.core.model.User;
 import hw09.jdbc.h2.DataSourceH2;
 import hw09.jdbc.jdbc.DbExecutorImpl;
@@ -64,6 +67,34 @@ public class UserDaoMapperJdbcTest {
         final User user = new User(0, "TestUser", 20);
         final long id = userDao.insertUser(user);
         assertTrue(userDao.findById(id).isPresent());
+    }
+
+    @Test
+    public void testUpdateUser() {
+        final var userDao = new UserDaoMapperJdbc(sessionManager, dbExecutor);
+        final User user = new User(0, "TestUser", 20);
+        userDao.insertUser(user);
+        final int newAge = 35;
+        user.setAge(newAge);
+        assertDoesNotThrow(() -> userDao.updateUser(user));
+        final var updatedUser = userDao.findById(user.getId());
+        assertTrue(updatedUser.isPresent());
+        assertEquals(newAge, updatedUser.get().getAge());
+    }
+
+    @Test
+    public void testUpdateUserFailed() {
+        final var userDao = new UserDaoMapperJdbc(sessionManager, dbExecutor);
+        final User user = new User(0, "TestUser", 20);
+        assertThrows(UserDaoException.class, () -> userDao.updateUser(user));
+    }
+
+    @Test
+    public void testInsertOrUpdate() {
+        final var userDao = new UserDaoMapperJdbc(sessionManager, dbExecutor);
+        final User user = new User(0, "TestUser", 20);
+        assertDoesNotThrow(() -> userDao.insertOrUpdate(user));
+        assertTrue(user.getId() > 0);
     }
 
     @Test

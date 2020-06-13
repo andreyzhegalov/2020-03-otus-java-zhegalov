@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.sql.SQLException;
 
@@ -44,6 +45,13 @@ public class JdbcMapperImplTest {
         final var user = new User(0, "Name", 30);
         daoJdbc.insert(user);
         assertThat(user.getUserId()).isGreaterThan(0);
+    }
+
+    @Test
+    public void testUpdateFaied() {
+        final JdbcMapper<User> daoJdbc = new JdbcMapperImpl<>(dbExecutor, sessionManager, User.class);
+        final var user = new User(0, "Name", 30);
+        assertThrows( MapperException.class, () -> daoJdbc.update(user));
     }
 
     @Test

@@ -48,6 +48,10 @@ public class JdbcMapperImpl<T> implements JdbcMapper<T> {
     public void update(T objectData) {
         try {
             final long id = entityClass.getIdValue(objectData);
+            final var object = findById(id);
+            if (object == null) {
+                throw new MapperException("Failed update object data. No item with id " + id);
+            }
             dbExecutor.executeUpdate(getConnection(), entitySQL.getUpdateSql(), id, getFieldsValue(objectData));
         } catch (Exception e) {
             logger.error(e.getMessage(), e);

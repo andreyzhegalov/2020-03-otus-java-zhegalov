@@ -48,4 +48,24 @@ public class UserDaoMapperJdbc implements UserDao {
     public SessionManager getSessionManager() {
         return this.sessionManager;
     }
+
+    @Override
+    public void updateUser(User user) {
+        try {
+            jdbcMapperImpl.update(user);
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            throw new UserDaoException(e);
+        }
+    }
+
+    @Override
+    public void insertOrUpdate(User user) {
+        try {
+            jdbcMapperImpl.insertOrUpdate(user);
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            throw new UserDaoException(e);
+        }
+    }
 }

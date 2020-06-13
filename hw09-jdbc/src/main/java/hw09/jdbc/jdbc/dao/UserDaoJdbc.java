@@ -7,11 +7,12 @@ import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import hw09.jdbc.core.dao.UserDao;
 import hw09.jdbc.core.dao.UserDaoException;
-import hw09.jdbc.jdbc.DbExecutorImpl;
 import hw09.jdbc.core.model.User;
 import hw09.jdbc.core.sessionmanager.SessionManager;
+import hw09.jdbc.jdbc.DbExecutorImpl;
 import hw09.jdbc.jdbc.sessionmanager.SessionManagerJdbc;
 
 public class UserDaoJdbc implements UserDao {
@@ -56,6 +57,16 @@ public class UserDaoJdbc implements UserDao {
     }
 
     @Override
+    public void updateUser(User user) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void insertOrUpdate(User user) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
     public SessionManager getSessionManager() {
         return sessionManager;
     }
@@ -63,4 +74,5 @@ public class UserDaoJdbc implements UserDao {
     private Connection getConnection() {
         return sessionManager.getCurrentSession().getConnection();
     }
+
 }

@@ -10,7 +10,7 @@ public class User {
     @Id
     private final long id;
     private final String name;
-    private final int age;
+    private int age;
 
     public User(){
         this.id = -1;
@@ -40,6 +40,10 @@ public class User {
 
     public int getAge() {
         return age;
+    }
+
+    public void setAge(int age){
+        this.age = age;
     }
 
     @Override
