@@ -1,9 +1,14 @@
 package hw10.core.model;
 
 
-import javax.persistence.*;
-
-import org.hibernate.annotations.Fetch;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
 @Entity
 @Table(name = "users")
@@ -16,6 +21,9 @@ public class User {
 
     @Column(name = "name")
     private String name;
+
+    @OneToOne(targetEntity = AdressDataSet.class, cascade = CascadeType.ALL)
+    private AdressDataSet adress;
 
     public User() {
     }
@@ -39,6 +47,14 @@ public class User {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public void setAdress(AdressDataSet adress) {
+        this.adress = adress;
+    }
+
+    public AdressDataSet getAdress() {
+        return adress;
     }
 
     @Override

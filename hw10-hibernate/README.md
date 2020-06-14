@@ -12,7 +12,7 @@
 5. Конфигурация Hibernate должна быть вынесена в файл.
 6. Добавьте в User поля:
 ````
-адрес (OneToOne) 
+адрес (OneToOne)
 class AddressDataSet {
 private String street;
 }

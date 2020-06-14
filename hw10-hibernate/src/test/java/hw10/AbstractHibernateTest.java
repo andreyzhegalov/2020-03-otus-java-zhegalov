@@ -6,6 +6,8 @@ import org.hibernate.stat.EntityStatistics;
 import org.hibernate.stat.Statistics;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+
+import hw10.core.model.AdressDataSet;
 import hw10.core.model.User;
 import hw10.hibernate.HibernateUtils;
 
@@ -23,7 +25,7 @@ public abstract class AbstractHibernateTest {
 
     @BeforeEach
     public void setUp() {
-        sessionFactory = HibernateUtils.buildSessionFactory(HIBERNATE_CFG_XML_FILE_RESOURCE, User.class);
+        sessionFactory = HibernateUtils.buildSessionFactory(HIBERNATE_CFG_XML_FILE_RESOURCE, User.class, AdressDataSet.class);
     }
 
     @AfterEach
