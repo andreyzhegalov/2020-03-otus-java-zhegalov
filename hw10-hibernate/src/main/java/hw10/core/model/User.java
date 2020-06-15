@@ -1,16 +1,14 @@
 package hw10.core.model;
 
-
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -30,16 +28,18 @@ public class User {
     @OneToOne(targetEntity = AdressDataSet.class, cascade = CascadeType.ALL)
     private AdressDataSet adress;
 
-    @Column(name = "phone")
-    @OneToMany(fetch = FetchType.LAZY, targetEntity = PhoneDataSet.class, cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id")
-    private List<PhoneDataSet> phones;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<PhoneDataSet> phones = new ArrayList<>();
 
     public User() {
     }
 
+    public User(String name) {
+        this.name = name;
+    }
+
     public User(long id, String name) {
-        this.id = id;
+        this.id = -1L;
         this.name = name;
     }
 
@@ -67,23 +67,23 @@ public class User {
         return adress;
     }
 
-
-    public void setPhones(List<PhoneDataSet> phones) {
-        this.phones = phones;
-    }
-
     public List<PhoneDataSet> getPhones() {
         return phones;
     }
 
-    @Override
-    public String toString() {
-        return "User{" +
-            "id = " + getId() +
-            ", name = " + getName() +
-            ", adress = " + getAdress() +
-            ", phones = " + getPhones() +
-            "}";
+    public void addPhone(PhoneDataSet phone) {
+        phones.add(phone);
+        phone.setUser(this);
     }
 
+    public void removePhone(PhoneDataSet phone) {
+        phones.remove(phone);
+        phone.setUser(null);
+    }
+
+    @Override
+    public String toString() {
+        return "User{" + "id = " + getId() + ", name = " + getName() + ", adress = " + getAdress() + ", phones = "
+                + getPhones() + "}";
+    }
 }

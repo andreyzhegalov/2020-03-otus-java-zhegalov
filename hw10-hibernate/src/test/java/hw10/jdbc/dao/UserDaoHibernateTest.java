@@ -4,13 +4,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.Optional;
 
-import org.hibernate.proxy.HibernateProxy;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
-import java.util.List;
 import hw10.AbstractHibernateTest;
 import hw10.core.model.AdressDataSet;
 import hw10.core.model.PhoneDataSet;
@@ -35,14 +32,12 @@ class UserDaoHibernateTest extends AbstractHibernateTest {
     @Test
     @DisplayName(" корректно загружать пользователя по заданному id")
     void shouldFindCorrectUserById() {
-        User expectedUser = new User(0, "Вася");
+        User expectedUser = new User("Вася");
         AdressDataSet userAdress = new AdressDataSet();
         userAdress.setStreet("some street");
         expectedUser.setAdress(userAdress);
-        final List<PhoneDataSet> phones = new ArrayList<>();
-        phones.add(new PhoneDataSet(0, "12345"));
-        phones.add(new PhoneDataSet(0, "54321"));
-        expectedUser.setPhones(phones);
+        expectedUser.addPhone(new PhoneDataSet("12345"));
+        expectedUser.addPhone(new PhoneDataSet("54321"));
 
         saveUser(expectedUser);
         assertThat(expectedUser.getId()).isGreaterThan(0);
@@ -53,20 +48,18 @@ class UserDaoHibernateTest extends AbstractHibernateTest {
 
         assertThat(mayBeUser.get().getPhones()).isNotNull();
         // assertThat(mayBeUser.get().getPhones()).isInstanceOf(HibernateProxy.class);
-        // assertThat(mayBeUser).isPresent().get().isEqualToComparingFieldByField(expectedUser);
+        assertThat(mayBeUser).isPresent().get().isEqualToComparingFieldByField(expectedUser);
     }
 
     @DisplayName(" корректно сохранять пользователя")
     @Test
     void shouldCorrectSaveUser() {
-        User expectedUser = new User(0, "Вася");
+        User expectedUser = new User("Вася");
         AdressDataSet userAdress = new AdressDataSet();
         userAdress.setStreet("some street");
         expectedUser.setAdress(userAdress);
-        final List<PhoneDataSet> phones = new ArrayList<>();
-        phones.add(new PhoneDataSet(0, "12345"));
-        phones.add(new PhoneDataSet(0, "54321"));
-        expectedUser.setPhones(phones);
+        expectedUser.addPhone(new PhoneDataSet("12345"));
+        expectedUser.addPhone(new PhoneDataSet("54321"));
 
         sessionManagerHibernate.beginSession();
         userDaoHibernate.insertOrUpdate(expectedUser);

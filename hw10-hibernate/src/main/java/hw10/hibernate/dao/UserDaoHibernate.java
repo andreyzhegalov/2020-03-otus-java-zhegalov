@@ -1,17 +1,17 @@
 package hw10.hibernate.dao;
 
+import java.util.Optional;
 
 import org.hibernate.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import hw10.core.dao.UserDao;
 import hw10.core.dao.UserDaoException;
 import hw10.core.model.User;
 import hw10.core.sessionmanager.SessionManager;
 import hw10.hibernate.sessionmanager.DatabaseSessionHibernate;
 import hw10.hibernate.sessionmanager.SessionManagerHibernate;
-
-import java.util.Optional;
 
 public class UserDaoHibernate implements UserDao {
     private static Logger logger = LoggerFactory.getLogger(UserDaoHibernate.class);
@@ -75,7 +75,6 @@ public class UserDaoHibernate implements UserDao {
             throw new UserDaoException(e);
         }
     }
-
 
     @Override
     public SessionManager getSessionManager() {
