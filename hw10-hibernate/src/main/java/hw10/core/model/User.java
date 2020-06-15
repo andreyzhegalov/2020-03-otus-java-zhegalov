@@ -1,12 +1,17 @@
 package hw10.core.model;
 
 
+import java.util.List;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -24,6 +29,11 @@ public class User {
 
     @OneToOne(targetEntity = AdressDataSet.class, cascade = CascadeType.ALL)
     private AdressDataSet adress;
+
+    @Column(name = "phone")
+    @OneToMany(fetch = FetchType.LAZY, targetEntity = PhoneDataSet.class, cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id")
+    private List<PhoneDataSet> phones;
 
     public User() {
     }
@@ -57,11 +67,23 @@ public class User {
         return adress;
     }
 
+
+    public void setPhones(List<PhoneDataSet> phones) {
+        this.phones = phones;
+    }
+
+    public List<PhoneDataSet> getPhones() {
+        return phones;
+    }
+
     @Override
     public String toString() {
         return "User{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                '}';
+            "id = " + getId() +
+            ", name = " + getName() +
+            ", adress = " + getAdress() +
+            ", phones = " + getPhones() +
+            "}";
     }
+
 }
