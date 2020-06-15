@@ -1,6 +1,10 @@
 package hw10.hibernate.dao;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
+
+import javax.persistence.EntityGraph;
 
 import org.hibernate.Session;
 import org.slf4j.Logger;
@@ -23,10 +27,15 @@ public class UserDaoHibernate implements UserDao {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public Optional<User> findById(long id) {
         DatabaseSessionHibernate currentSession = sessionManager.getCurrentSession();
         try {
-            return Optional.ofNullable(currentSession.getHibernateSession().find(User.class, id));
+            EntityGraph<User> graph = (EntityGraph<User>) currentSession.getHibernateSession().getEntityGraph("graph.userEntity.addresesAndPhones");
+            Map<String, Object> properties = new HashMap<>();
+            properties.put("javax.persistence.loadgraph", graph);
+
+            return Optional.ofNullable(currentSession.getHibernateSession().find(User.class, id, properties));
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
         }

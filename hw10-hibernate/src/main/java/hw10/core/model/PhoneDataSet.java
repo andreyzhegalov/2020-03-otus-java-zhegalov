@@ -58,10 +58,23 @@ public class PhoneDataSet {
         return 31;
     }
 
+    // @Override
+    // public boolean equals(Object o) {
+    //     if (this == o) return true;
+    //     if (!(o instanceof PhoneDataSet )) return false;
+    //     return id != null && id.equals(((PhoneDataSet) o).getId());
+    // }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof PhoneDataSet )) return false;
-        return id != null && id.equals(((PhoneDataSet) o).getId());
+        if (o == null || getClass() != o.getClass()) return false;
+
+        PhoneDataSet object = (PhoneDataSet) o;
+
+        if (id != null ? !id.equals(object.id) : object.id != null) return false;
+        if (user != null ? !user.equals(object.user) : object.user != null) return false;
+        return !(number != null ? !number.equals(object.number) : object.number != null);
     }
+
 }

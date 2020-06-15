@@ -30,5 +30,24 @@ public class AdressDataSet {
         return street;
     }
 
+    @Override
+    public int hashCode() {
+        int result = 17;
+        result = 31 * result + (int)(id ^ (id >>> 32));
+        result = 31 * result + (street != null ? street.hashCode() : 0);
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        AdressDataSet object = (AdressDataSet) o;
+
+        if (id != object.id) return false;
+        return !(street != null ? !street.equals(object.street) : object.street != null);
+    }
+
 }
 

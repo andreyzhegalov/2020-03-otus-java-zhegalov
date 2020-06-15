@@ -9,12 +9,16 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedEntityGraph;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.NamedAttributeNode;
 
 @Entity
 @Table(name = "users")
+@NamedEntityGraph(name = "graph.userEntity.addresesAndPhones", attributeNodes = {
+        @NamedAttributeNode(value = "phones") })
 public class User {
 
     @Id
@@ -39,7 +43,7 @@ public class User {
     }
 
     public User(long id, String name) {
-        this.id = -1L;
+        this.id = id;
         this.name = name;
     }
 
@@ -86,4 +90,28 @@ public class User {
         return "User{" + "id = " + getId() + ", name = " + getName() + ", adress = " + getAdress() + ", phones = "
                 + getPhones() + "}";
     }
+
+    @Override
+    public int hashCode() {
+        int result = 17;
+        result = 31 * result + (int)(id ^ (id >>> 32));
+        result = 31 * result + (name != null ? name.hashCode() : 0);
+        result = 31 * result + (adress != null ? adress.hashCode() : 0);
+        result = 31 * result + (phones != null ? phones.hashCode() : 0);
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        User object = (User) o;
+
+        if (id != object.id) return false;
+        if (name != null ? !name.equals(object.name) : object.name != null) return false;
+        if (adress != null ? !adress.equals(object.adress) : object.adress != null) return false;
+        return !(phones != null ? !phones.equals(object.phones) : object.phones != null);
+    }
+
 }
