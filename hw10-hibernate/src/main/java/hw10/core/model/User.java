@@ -2,6 +2,7 @@ package hw10.core.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -94,7 +95,7 @@ public class User {
     @Override
     public int hashCode() {
         int result = 17;
-        result = 31 * result + (int)(id ^ (id >>> 32));
+        result = 31 * result + (int) (id ^ (id >>> 32));
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (adress != null ? adress.hashCode() : 0);
         result = 31 * result + (phones != null ? phones.hashCode() : 0);
@@ -103,15 +104,22 @@ public class User {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
 
         User object = (User) o;
 
-        if (id != object.id) return false;
-        if (name != null ? !name.equals(object.name) : object.name != null) return false;
-        if (adress != null ? !adress.equals(object.adress) : object.adress != null) return false;
-        return !(phones != null ? !phones.equals(object.phones) : object.phones != null);
+        if (id != object.id)
+            return false;
+        if (name != null ? !name.equals(object.name) : object.name != null)
+            return false;
+        if (adress != null ? !adress.equals(object.adress) : object.adress != null)
+            return false;
+
+        return Objects.deepEquals(this.getPhones() != null ? this.getPhones().toArray() : this.getPhones(),
+                object.getPhones() != null ? object.getPhones().toArray() : object.getPhones());
     }
 
 }

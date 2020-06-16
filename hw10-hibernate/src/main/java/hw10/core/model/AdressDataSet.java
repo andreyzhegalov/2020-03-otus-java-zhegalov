@@ -18,6 +18,13 @@ public class AdressDataSet {
     @Column(name = "adress")
     private String street;
 
+    public AdressDataSet() {
+    }
+
+    public AdressDataSet(String street) {
+        this.street = street;
+    }
+
     public long getId() {
         return id;
     }
@@ -48,6 +55,7 @@ public class AdressDataSet {
         if (id != object.id) return false;
         return !(street != null ? !street.equals(object.street) : object.street != null);
     }
+
 
 }
 

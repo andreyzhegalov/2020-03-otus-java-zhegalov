@@ -1,6 +1,7 @@
 package hw10.jdbc.dao;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.Optional;
 
@@ -33,9 +34,7 @@ class UserDaoHibernateTest extends AbstractHibernateTest {
     @DisplayName(" корректно загружать пользователя по заданному id")
     void shouldFindCorrectUserById() {
         User expectedUser = new User("Вася");
-        AdressDataSet userAdress = new AdressDataSet();
-        userAdress.setStreet("some street");
-        expectedUser.setAdress(userAdress);
+        expectedUser.setAdress(new AdressDataSet("some street"));
         expectedUser.addPhone(new PhoneDataSet("12345"));
         expectedUser.addPhone(new PhoneDataSet("54321"));
 
@@ -48,16 +47,43 @@ class UserDaoHibernateTest extends AbstractHibernateTest {
 
         assertThat(mayBeUser.get().getPhones()).isNotNull();
         assertThat(mayBeUser.get().getPhones().size()).isEqualTo(2);
-        // assertThat(mayBeUser.get()).isEqualToComparingFieldByField(expectedUser);
-        System.out.println(expectedUser.getPhones());
-        System.out.println(mayBeUser.get().getPhones());
-
-        // assertThat(mayBeUser.get().getPhones()).isEqualTo(expectedUser.getPhones());
+        assertEquals(mayBeUser.get(), expectedUser);
     }
 
     @DisplayName(" корректно сохранять пользователя")
     @Test
-    void shouldCorrectSaveUser() {
+    void shouldCorrectSaveNewUser() {
+        User expectedUser = new User("Name");
+        AdressDataSet userAdress = new AdressDataSet();
+        userAdress.setStreet("Some street");
+        expectedUser.setAdress( new AdressDataSet());
+        expectedUser.addPhone(new PhoneDataSet("12345"));
+        expectedUser.addPhone(new PhoneDataSet("54321"));
+
+        sessionManagerHibernate.beginSession();
+        userDaoHibernate.insertOrUpdate(expectedUser);
+        long id = expectedUser.getId();
+        sessionManagerHibernate.commitSession();
+
+        assertThat(id).isGreaterThan(0);
+
+        User actualUser = loadUser(id);
+        assertThat(actualUser).isNotNull().hasFieldOrPropertyWithValue("name", expectedUser.getName());
+
+        expectedUser = new User(id, "Не Вася");
+        sessionManagerHibernate.beginSession();
+        userDaoHibernate.insertOrUpdate(expectedUser);
+        long newId = expectedUser.getId();
+        sessionManagerHibernate.commitSession();
+
+        // assertThat(newId).isGreaterThan(0).isEqualTo(id);
+        // actualUser = loadUser(newId);
+        // assertThat(actualUser).isNotNull().hasFieldOrPropertyWithValue("name",
+        // expectedUser.getName());
+    }
+
+    @Test
+    void shouldCorrectSaveExistUser() {
         User expectedUser = new User("Вася");
         AdressDataSet userAdress = new AdressDataSet();
         userAdress.setStreet("some street");
@@ -83,7 +109,8 @@ class UserDaoHibernateTest extends AbstractHibernateTest {
 
         // assertThat(newId).isGreaterThan(0).isEqualTo(id);
         // actualUser = loadUser(newId);
-        // assertThat(actualUser).isNotNull().hasFieldOrPropertyWithValue("name", expectedUser.getName());
+        // assertThat(actualUser).isNotNull().hasFieldOrPropertyWithValue("name",
+        // expectedUser.getName());
     }
 
     @DisplayName(" возвращать менеджер сессий")
