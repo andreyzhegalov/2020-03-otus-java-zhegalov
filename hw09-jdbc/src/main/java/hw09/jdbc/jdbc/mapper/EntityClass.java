@@ -11,6 +11,7 @@ import hw09.jdbc.jdbc.mapper.annotations.Id;
 public class EntityClass<T> implements EntityClassMetaData<T> {
     private final Class<T> clazz;
     private final List<Field> fields;
+    private final List<Field> fieldsWithoutId;
     private final Field idField;
     private final Constructor<T> constructor;
 
@@ -25,6 +26,7 @@ public class EntityClass<T> implements EntityClassMetaData<T> {
             fields.add(field);
         }
         this.idField = findIdField();
+        fieldsWithoutId = this.fields.stream().filter((f) -> !f.equals(this.idField)).collect(Collectors.toList());
         this.constructor = findConstructor();
     }
 
@@ -77,7 +79,7 @@ public class EntityClass<T> implements EntityClassMetaData<T> {
 
     @Override
     public List<Field> getFieldsWithoutId() {
-        return getAllFields().stream().filter((f) -> !f.equals(getIdField())).collect(Collectors.toList());
+        return this.fieldsWithoutId;
     }
 
     public void setFieldValue(T entity, String fieldName, Object value) {
@@ -104,6 +106,7 @@ public class EntityClass<T> implements EntityClassMetaData<T> {
     }
 
     private Field getField(String fieldName) {
-        return getAllFields().stream().filter((f) -> f.getName().equals(fieldName)).findFirst().orElseThrow();
+        return getAllFields().stream().filter((f) -> f.getName().equals(fieldName)).findFirst()
+                .orElseThrow(() -> new MapperException("Field with name " + fieldName + " not found"));
     }
 }

@@ -20,12 +20,15 @@ import hw09.jdbc.core.dao.UserDaoException;
 import hw09.jdbc.core.model.User;
 import hw09.jdbc.h2.DataSourceH2;
 import hw09.jdbc.jdbc.DbExecutorImpl;
+import hw09.jdbc.jdbc.mapper.JdbcMapper;
+import hw09.jdbc.jdbc.mapper.JdbcMapperImpl;
 import hw09.jdbc.jdbc.sessionmanager.SessionManagerJdbc;
 
 public class UserDaoMapperJdbcTest {
     private SessionManagerJdbc sessionManager;
     private DataSourceH2 dataSource;
     private DbExecutorImpl<User> dbExecutor;
+    private JdbcMapper<User> userJdbcMapper;
 
     @BeforeEach
     private void setUp() throws SQLException {
@@ -33,6 +36,7 @@ public class UserDaoMapperJdbcTest {
         createTable(dataSource);
         sessionManager = new SessionManagerJdbc(dataSource);
         dbExecutor = new DbExecutorImpl<>();
+        userJdbcMapper = new JdbcMapperImpl<>(dbExecutor, sessionManager, User.class);
         sessionManager.beginSession();
     }
 
@@ -44,12 +48,12 @@ public class UserDaoMapperJdbcTest {
 
     @Test
     public void testCtr() {
-        assertDoesNotThrow(() -> new UserDaoMapperJdbc(sessionManager, dbExecutor));
+        assertDoesNotThrow(() -> new UserDaoMapperJdbc(sessionManager, userJdbcMapper));
     }
 
     @Test
     public void testInsertUser() {
-        final var userDao = new UserDaoMapperJdbc(sessionManager, dbExecutor);
+        final var userDao = new UserDaoMapperJdbc(sessionManager, userJdbcMapper);
         final var user = new User(0, "UserName", 25);
         userDao.insertUser(user);
         assertNotEquals(0, user.getId());
@@ -57,13 +61,13 @@ public class UserDaoMapperJdbcTest {
 
     @Test
     public void testFindByIdFialed() {
-        final var userDao = new UserDaoMapperJdbc(sessionManager, dbExecutor);
+        final var userDao = new UserDaoMapperJdbc(sessionManager, userJdbcMapper);
         assertFalse(userDao.findById(0).isPresent());
     }
 
     @Test
     public void testFindById() {
-        final var userDao = new UserDaoMapperJdbc(sessionManager, dbExecutor);
+        final var userDao = new UserDaoMapperJdbc(sessionManager, userJdbcMapper);
         final User user = new User(0, "TestUser", 20);
         final long id = userDao.insertUser(user);
         assertTrue(userDao.findById(id).isPresent());
@@ -71,7 +75,7 @@ public class UserDaoMapperJdbcTest {
 
     @Test
     public void testUpdateUser() {
-        final var userDao = new UserDaoMapperJdbc(sessionManager, dbExecutor);
+        final var userDao = new UserDaoMapperJdbc(sessionManager, userJdbcMapper);
         final User user = new User(0, "TestUser", 20);
         userDao.insertUser(user);
         final int newAge = 35;
@@ -84,14 +88,14 @@ public class UserDaoMapperJdbcTest {
 
     @Test
     public void testUpdateUserFailed() {
-        final var userDao = new UserDaoMapperJdbc(sessionManager, dbExecutor);
+        final var userDao = new UserDaoMapperJdbc(sessionManager, userJdbcMapper);
         final User user = new User(0, "TestUser", 20);
         assertThrows(UserDaoException.class, () -> userDao.updateUser(user));
     }
 
     @Test
     public void testInsertOrUpdate() {
-        final var userDao = new UserDaoMapperJdbc(sessionManager, dbExecutor);
+        final var userDao = new UserDaoMapperJdbc(sessionManager, userJdbcMapper);
         final User user = new User(0, "TestUser", 20);
         assertDoesNotThrow(() -> userDao.insertOrUpdate(user));
         assertTrue(user.getId() > 0);
@@ -99,7 +103,7 @@ public class UserDaoMapperJdbcTest {
 
     @Test
     public void testGetSessionManager() {
-        final var userDao = new UserDaoMapperJdbc(sessionManager, dbExecutor);
+        final var userDao = new UserDaoMapperJdbc(sessionManager, userJdbcMapper);
         assertNotNull(userDao.getSessionManager());
     }
 

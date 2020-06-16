@@ -51,7 +51,7 @@ public class JdbcMapperImplTest {
     public void testUpdateFaied() {
         final JdbcMapper<User> daoJdbc = new JdbcMapperImpl<>(dbExecutor, sessionManager, User.class);
         final var user = new User(0, "Name", 30);
-        assertThrows( MapperException.class, () -> daoJdbc.update(user));
+        assertThrows(MapperException.class, () -> daoJdbc.update(user));
     }
 
     @Test
@@ -77,7 +77,7 @@ public class JdbcMapperImplTest {
         final var user = new User(initId, "Name", 30);
         daoJdbc.insertOrUpdate(user);
         assertNotEquals(initId, user.getUserId());
-        final long newId  = user.getUserId();
+        final long newId = user.getUserId();
         final int newAge = 35;
         user.setUserAge(newAge);
         daoJdbc.insertOrUpdate(user);

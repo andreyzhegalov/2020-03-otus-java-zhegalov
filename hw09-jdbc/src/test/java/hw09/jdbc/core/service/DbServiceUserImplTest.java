@@ -4,10 +4,9 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.sql.SQLException;
+import java.util.Optional;
 
 import javax.sql.DataSource;
-
-import java.util.Optional;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,12 +16,15 @@ import hw09.jdbc.core.model.User;
 import hw09.jdbc.h2.DataSourceH2;
 import hw09.jdbc.jdbc.DbExecutorImpl;
 import hw09.jdbc.jdbc.dao.UserDaoMapperJdbc;
+import hw09.jdbc.jdbc.mapper.JdbcMapper;
+import hw09.jdbc.jdbc.mapper.JdbcMapperImpl;
 import hw09.jdbc.jdbc.sessionmanager.SessionManagerJdbc;
 
 public class DbServiceUserImplTest {
     private SessionManagerJdbc sessionManager;
     private DataSourceH2 dataSource;
     private DbExecutorImpl<User> dbExecutor;
+    private JdbcMapper<User> userJdbcMapper;
     private UserDaoMapperJdbc userDao;
 
     @BeforeEach
@@ -31,7 +33,8 @@ public class DbServiceUserImplTest {
         createTable(dataSource);
         sessionManager = new SessionManagerJdbc(dataSource);
         dbExecutor = new DbExecutorImpl<>();
-        userDao = new UserDaoMapperJdbc(sessionManager, dbExecutor);
+        userJdbcMapper = new JdbcMapperImpl<>(dbExecutor, sessionManager, User.class);
+        userDao = new UserDaoMapperJdbc(sessionManager, userJdbcMapper);
     }
 
     @AfterEach

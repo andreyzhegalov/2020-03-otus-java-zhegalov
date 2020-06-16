@@ -82,20 +82,12 @@ public class JdbcMapperImpl<T> implements JdbcMapper<T> {
                         }
                         return objectData;
                     }
-                    return null;
-                } catch (SQLException e) {
-                    logger.error(e.getMessage(), e);
-                } catch (InstantiationException e) {
-                    logger.error(e.getMessage(), e);
-                } catch (IllegalAccessException e) {
-                    logger.error(e.getMessage(), e);
-                } catch (IllegalArgumentException e) {
-                    logger.error(e.getMessage(), e);
-                } catch (InvocationTargetException e) {
+                } catch (SQLException | InstantiationException | IllegalAccessException | IllegalArgumentException
+                        | InvocationTargetException e) {
                     logger.error(e.getMessage(), e);
                 }
                 return null;
-            }).get();
+            }).orElseThrow(() -> new MapperException("Entity with Id = " + id + " not found"));
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
         }

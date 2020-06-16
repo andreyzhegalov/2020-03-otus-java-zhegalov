@@ -97,7 +97,7 @@ public class EntityClassTest {
     }
 
     @Test
-    public void testGetId(){
+    public void testGetId() {
         final var userClassEntity = new EntityClass<User>(User.class);
         final long userId = 1L;
         final User user = new User(userId, "Name", 30);
