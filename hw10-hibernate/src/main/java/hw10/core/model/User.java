@@ -2,6 +2,7 @@ package hw10.core.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Objects;
 
 import javax.persistence.CascadeType;
@@ -14,6 +15,9 @@ import javax.persistence.NamedEntityGraph;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
+import hw10.core.dao.UserDaoException;
+
 import javax.persistence.NamedAttributeNode;
 
 @Entity
@@ -82,7 +86,10 @@ public class User {
     }
 
     public void removePhone(PhoneDataSet phone) {
-        phones.remove(phone);
+        if (!phones.remove(phone))
+        {
+            throw new UserDaoException(new NoSuchElementException());
+        }
         phone.setUser(null);
     }
 
