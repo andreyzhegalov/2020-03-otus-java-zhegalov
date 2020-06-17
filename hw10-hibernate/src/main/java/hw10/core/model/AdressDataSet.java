@@ -2,9 +2,12 @@ package hw10.core.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -12,11 +15,15 @@ import javax.persistence.Table;
 public class AdressDataSet {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @Column(name = "id")
+    @Column(name = "id", unique = true, nullable = false)
     private long id;
 
-    @Column(name = "adress")
+    @Column(name = "street")
     private String street;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
 
     public AdressDataSet() {
     }
@@ -37,25 +44,33 @@ public class AdressDataSet {
         return street;
     }
 
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
     @Override
     public int hashCode() {
         int result = 17;
-        result = 31 * result + (int)(id ^ (id >>> 32));
+        result = 31 * result + (int) (id ^ (id >>> 32));
         result = 31 * result + (street != null ? street.hashCode() : 0);
         return result;
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
 
         AdressDataSet object = (AdressDataSet) o;
 
-        if (id != object.id) return false;
+        if (id != object.id)
+            return false;
         return !(street != null ? !street.equals(object.street) : object.street != null);
     }
-
-
 }
-

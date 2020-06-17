@@ -37,12 +37,12 @@ class UserDaoHibernateTest {
     }
 
     // protected EntityStatistics getUserStatistics() {
-    //     Statistics stats = sessionFactory.getStatistics();
-    //     return stats.getEntityStatistics(User.class.getName());
+    // Statistics stats = sessionFactory.getStatistics();
+    // return stats.getEntityStatistics(User.class.getName());
     // }
 
     @Test
-    void shouldFindCorrectUserById() {
+    void shouldCorrectFindUserById() {
         User expectedUser = new User("Name");
         expectedUser.setAdress(new AdressDataSet("some street"));
         expectedUser.addPhone(new PhoneDataSet("12345"));
@@ -74,37 +74,37 @@ class UserDaoHibernateTest {
         final Optional<User> actualUser = findUserDao(newUserId);
         assertThat(actualUser.isPresent()).isTrue();
         assertThat(actualUser).get().isEqualTo(newUser);
+        System.out.println(actualUser.get().getAdress().getStreet());
     }
 
-    // @Test
-    // void shouldCorrectSaveExistUser() {
-    //     final User existedUser = new User("Name");
-    //     existedUser.setAdress(new AdressDataSet("some street"));
-    //     existedUser.addPhone(new PhoneDataSet("12345"));
-    //     existedUser.addPhone(new PhoneDataSet("54321"));
-    //
-    //     saveUserDao(existedUser);
-    //     final long existedUserId = existedUser.getId();
-    //     assertThat(existedUserId).isGreaterThan(0);
-    //
-    //     final Optional<User> mayBeModifiedUser = findUserDao(existedUserId);
-    //     assertThat(mayBeModifiedUser.isPresent()).isTrue();
-    //     final User modifiedUser = mayBeModifiedUser.get();
-    //     modifiedUser.setName("New Name");
-    //     modifiedUser.getAdress().setStreet("new street");
-    //     ;
-    //     modifiedUser.removePhone(modifiedUser.getPhones().get(0));
-    //     modifiedUser.getPhones().get(0).setNumber("11111");
-    //     saveUserDao(modifiedUser);
-    //
-    //     final Optional<User> mayBeUpdatedUser = findUserDao(mayBeModifiedUser.get().getId());
-    //     assertThat(mayBeUpdatedUser.isPresent()).isTrue();
-    //     final User updatedUser = mayBeUpdatedUser.get();
-    //     assertThat(existedUser.getId()).isEqualTo(updatedUser.getId());
-    //
-    //     assertThat(modifiedUser).isEqualTo(updatedUser);
-    // }
-    //
+    @Test
+    void shouldCorrectSaveExistUser() {
+        final User existedUser = new User("Name");
+        existedUser.setAdress(new AdressDataSet("some street"));
+        existedUser.addPhone(new PhoneDataSet("12345"));
+        existedUser.addPhone(new PhoneDataSet("54321"));
+
+        saveUserDao(existedUser);
+        final long existedUserId = existedUser.getId();
+        assertThat(existedUserId).isGreaterThan(0);
+
+        final Optional<User> mayBeModifiedUser = findUserDao(existedUserId);
+        assertThat(mayBeModifiedUser.isPresent()).isTrue();
+        final User modifiedUser = mayBeModifiedUser.get();
+        modifiedUser.setName("New Name");
+        modifiedUser.getAdress().setStreet("new street");
+        modifiedUser.removePhone(modifiedUser.getPhones().get(0));
+        modifiedUser.getPhones().get(0).setNumber("11111");
+        saveUserDao(modifiedUser);
+
+        final Optional<User> mayBeUpdatedUser = findUserDao(mayBeModifiedUser.get().getId());
+        assertThat(mayBeUpdatedUser.isPresent()).isTrue();
+        final User updatedUser = mayBeUpdatedUser.get();
+        assertThat(existedUser.getId()).isEqualTo(updatedUser.getId());
+
+        assertThat(modifiedUser).isEqualTo(updatedUser);
+    }
+
     private void saveUserDao(User user) {
         sessionManagerHibernate.beginSession();
         userDaoHibernate.insertOrUpdate(user);

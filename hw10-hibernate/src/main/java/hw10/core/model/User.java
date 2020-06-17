@@ -8,17 +8,17 @@ import java.util.Objects;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedAttributeNode;
 import javax.persistence.NamedEntityGraph;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import hw10.core.dao.UserDaoException;
-
-import javax.persistence.NamedAttributeNode;
 
 @Entity
 @Table(name = "users")
@@ -28,13 +28,13 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @Column(name = "id")
+    @Column(name = "id", unique = true, nullable = false)
     private long id;
 
     @Column(name = "name")
     private String name;
 
-    @OneToOne(targetEntity = AdressDataSet.class, cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = false)
     private AdressDataSet adress;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -69,6 +69,13 @@ public class User {
     }
 
     public void setAdress(AdressDataSet adress) {
+        if (adress == null) {
+            if (this.adress != null) {
+                this.adress.setUser(null);
+            }
+        } else {
+            adress.setUser(this);
+        }
         this.adress = adress;
     }
 
@@ -86,8 +93,7 @@ public class User {
     }
 
     public void removePhone(PhoneDataSet phone) {
-        if (!phones.remove(phone))
-        {
+        if (!phones.remove(phone)) {
             throw new UserDaoException(new NoSuchElementException());
         }
         phone.setUser(null);
