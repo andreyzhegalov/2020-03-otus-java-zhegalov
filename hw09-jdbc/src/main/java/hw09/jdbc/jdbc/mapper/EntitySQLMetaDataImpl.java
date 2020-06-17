@@ -5,14 +5,14 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class EntitySQL<T> implements EntitySQLMetaData {
+public class EntitySQLMetaDataImpl<T> implements EntitySQLMetaData {
     private final EntityClassMetaData<T> entityClass;
     private final String selectAllSql;
     private final String selectByIdSql;
     private final String insertSql;
     private final String updateSql;
 
-    public EntitySQL(EntityClassMetaData<T> entityClass) {
+    public EntitySQLMetaDataImpl(EntityClassMetaData<T> entityClass) {
         if (entityClass == null) {
             throw new MapperException("Argument must be not null.");
         }
@@ -68,21 +68,20 @@ public class EntitySQL<T> implements EntitySQLMetaData {
 
     private String prepareUpdateSql() {
         final var fields = entityClass.getFieldsWithoutId();
-        final String sqlPart = fields.stream().map((f) -> f.getName())
+        final String sqlPart = fields.stream().map(Field::getName)
                 .map((f) -> NameConverterHelper.toLowerUnderScore(f) + " = ?").collect(Collectors.joining(", "));
         return String.format("update %s set %s%s", NameConverterHelper.toLowerUnderScore(entityClass.getName()),
                 sqlPart, prepareWhereIdPart());
     }
 
     private String prepareSqlFields(List<Field> fields) {
-        final String fieldsString = fields.stream().map((f) -> f.getName())
-                .map((f) -> NameConverterHelper.toLowerUnderScore(f)).collect(Collectors.joining(", "));
-        return fieldsString;
+        return fields.stream().map(Field::getName)
+                .map(NameConverterHelper::toLowerUnderScore).collect(Collectors.joining(", "));
     }
 
     private String prepareSqlValues() {
         final List<String> values = Collections.nCopies(entityClass.getFieldsWithoutId().size(), "?");
-        return values.stream().collect(Collectors.joining(", "));
+        return String.join(", ", values);
     }
 
     private String prepareWhereIdPart() {

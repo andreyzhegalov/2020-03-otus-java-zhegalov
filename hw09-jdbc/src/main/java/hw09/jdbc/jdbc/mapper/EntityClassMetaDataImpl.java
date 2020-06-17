@@ -8,14 +8,14 @@ import java.util.stream.Collectors;
 
 import hw09.jdbc.jdbc.mapper.annotations.Id;
 
-public class EntityClass<T> implements EntityClassMetaData<T> {
+public class EntityClassMetaDataImpl<T> implements EntityClassMetaData<T> {
     private final Class<T> clazz;
     private final List<Field> fields;
     private final List<Field> fieldsWithoutId;
     private final Field idField;
     private final Constructor<T> constructor;
 
-    public EntityClass(Class<T> entityType) {
+    public EntityClassMetaDataImpl(Class<T> entityType) {
         if (entityType == null) {
             throw new MapperException(new IllegalArgumentException());
         }

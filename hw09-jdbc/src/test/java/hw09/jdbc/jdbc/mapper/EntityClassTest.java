@@ -20,36 +20,36 @@ import hw09.jdbc.jdbc.mapper.testingclasses.User;
 public class EntityClassTest {
     @Test
     public void testCtr() {
-        assertDoesNotThrow(() -> new EntityClass<User>(User.class));
+        assertDoesNotThrow(() -> new EntityClassMetaDataImpl<User>(User.class));
     }
 
     @Test
     public void testGetName() {
-        assertEquals("User", new EntityClass<User>(User.class).getName());
+        assertEquals("User", new EntityClassMetaDataImpl<User>(User.class).getName());
     }
 
     @Test
     public void testGetConstructor() {
-        final var entityClass = new EntityClass<CommonClass>(CommonClass.class);
+        final var entityClass = new EntityClassMetaDataImpl<CommonClass>(CommonClass.class);
         assertNotNull(entityClass.getConstructor());
     }
 
     @Test
     public void testGetIdFieldFailed() {
         assertThrows(MapperException.class,
-                () -> new EntityClass<ClassWithoutNotation>(ClassWithoutNotation.class).getIdField().getName());
+                () -> new EntityClassMetaDataImpl<ClassWithoutNotation>(ClassWithoutNotation.class).getIdField().getName());
     }
 
     @Test
     public void testGetIdFieldSuccesfull() {
         assertEquals("intField",
-                new EntityClass<ClassWithIdNotation>(ClassWithIdNotation.class).getIdField().getName());
+                new EntityClassMetaDataImpl<ClassWithIdNotation>(ClassWithIdNotation.class).getIdField().getName());
     }
 
     @Test
     public void testGetIdFieldForClassWithManyIdField() {
         assertThrows(MapperException.class,
-                () -> new EntityClass<ClassWithManyIdNotations>(ClassWithManyIdNotations.class).getIdField().getName());
+                () -> new EntityClassMetaDataImpl<ClassWithManyIdNotations>(ClassWithManyIdNotations.class).getIdField().getName());
     }
 
     private boolean hasFieldWithName(List<Field> fields, String name) {
@@ -58,7 +58,7 @@ public class EntityClassTest {
 
     @Test
     public void testGetAllFields() {
-        final var fields = new EntityClass<User>(User.class).getAllFields();
+        final var fields = new EntityClassMetaDataImpl<User>(User.class).getAllFields();
         assertEquals(3, fields.size());
         assertTrue(hasFieldWithName(fields, "userId"));
         assertTrue(hasFieldWithName(fields, "userName"));
@@ -67,7 +67,7 @@ public class EntityClassTest {
 
     @Test
     public void testGetFieldsWithoutId() {
-        final var fields = new EntityClass<User>(User.class).getFieldsWithoutId();
+        final var fields = new EntityClassMetaDataImpl<User>(User.class).getFieldsWithoutId();
         assertEquals(2, fields.size());
         assertTrue(hasFieldWithName(fields, "userName"));
         assertTrue(hasFieldWithName(fields, "userAge"));
@@ -75,14 +75,14 @@ public class EntityClassTest {
 
     @Test
     public void testSetFieldShouldThrowException() {
-        final var userClassEntity = new EntityClass<User>(User.class);
+        final var userClassEntity = new EntityClassMetaDataImpl<User>(User.class);
         final User user = new User();
         assertThrows(MapperException.class, () -> userClassEntity.setFieldValue(user, "???", null));
     }
 
     @Test
     public void testSetField() {
-        final var userClassEntity = new EntityClass<User>(User.class);
+        final var userClassEntity = new EntityClassMetaDataImpl<User>(User.class);
         final User user = new User();
         userClassEntity.setFieldValue(user, "userId", 1);
         assertEquals(1, user.getUserId());
@@ -90,7 +90,7 @@ public class EntityClassTest {
 
     @Test
     public void testGetField() {
-        final var userClassEntity = new EntityClass<User>(User.class);
+        final var userClassEntity = new EntityClassMetaDataImpl<User>(User.class);
         final int age = 30;
         final User user = new User(0, "Name", age);
         assertEquals(age, userClassEntity.getFieldValue(user, "userAge"));
@@ -98,7 +98,7 @@ public class EntityClassTest {
 
     @Test
     public void testGetId() {
-        final var userClassEntity = new EntityClass<User>(User.class);
+        final var userClassEntity = new EntityClassMetaDataImpl<User>(User.class);
         final long userId = 1L;
         final User user = new User(userId, "Name", 30);
         assertEquals(userId, userClassEntity.getIdValue(user));

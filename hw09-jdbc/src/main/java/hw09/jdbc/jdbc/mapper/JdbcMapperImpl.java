@@ -17,14 +17,14 @@ public class JdbcMapperImpl<T> implements JdbcMapper<T> {
 
     private final DbExecutorImpl<T> dbExecutor;
     private final SessionManagerJdbc sessionManager;
-    private final EntityClass<T> entityClass;
-    private final EntitySQL<T> entitySQL;
+    private final EntityClassMetaDataImpl<T> entityClass;
+    private final EntitySQLMetaDataImpl<T> entitySQL;
 
     public JdbcMapperImpl(DbExecutorImpl<T> dbExecutor, SessionManagerJdbc sessionManager, Class<T> entityType) {
         this.dbExecutor = dbExecutor;
         this.sessionManager = sessionManager;
-        this.entityClass = new EntityClass<>(entityType);
-        this.entitySQL = new EntitySQL<>(this.entityClass);
+        this.entityClass = new EntityClassMetaDataImpl<>(entityType);
+        this.entitySQL = new EntitySQLMetaDataImpl<>(this.entityClass);
     }
 
     private List<Object> getFieldsValue(T objectData) {
