@@ -73,4 +73,13 @@ public class AdressDataSet {
             return false;
         return !(street != null ? !street.equals(object.street) : object.street != null);
     }
+
+    @Override
+    public String toString() {
+        return "AdressDataSet{" +
+            "id = " + getId() +
+            ", street = " + getStreet() +
+            "}";
+    }
+
 }

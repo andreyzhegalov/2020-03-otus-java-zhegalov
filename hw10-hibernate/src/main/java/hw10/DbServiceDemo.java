@@ -7,6 +7,8 @@ import hw10.core.dao.UserDao;
 import hw10.hibernate.dao.UserDaoHibernate;
 import hw10.core.service.DBServiceUser;
 import hw10.core.service.DbServiceUserImpl;
+import hw10.core.model.AdressDataSet;
+import hw10.core.model.PhoneDataSet;
 import hw10.core.model.User;
 import hw10.hibernate.HibernateUtils;
 import hw10.hibernate.sessionmanager.SessionManagerHibernate;
@@ -17,15 +19,17 @@ public class DbServiceDemo {
     private static Logger logger = LoggerFactory.getLogger(DbServiceDemo.class);
 
     public static void main(String[] args) {
-        // Все главное см в тестах
-        SessionFactory sessionFactory = HibernateUtils.buildSessionFactory("hibernate.cfg.xml", User.class);
+        SessionFactory sessionFactory = HibernateUtils.buildSessionFactory("hibernate.cfg.xml", User.class,
+                AdressDataSet.class, PhoneDataSet.class);
 
         SessionManagerHibernate sessionManager = new SessionManagerHibernate(sessionFactory);
         UserDao userDao = new UserDaoHibernate(sessionManager);
         DBServiceUser dbServiceUser = new DbServiceUserImpl(userDao);
 
-
-        long id = dbServiceUser.saveUser(new User(0, "Вася"));
+        final var user = new User(0, "Вася");
+        user.setAdress(new AdressDataSet("some street"));
+        user.addPhone(new PhoneDataSet("111111"));
+        long id = dbServiceUser.saveUser(user);
         Optional<User> mayBeCreatedUser = dbServiceUser.getUser(id);
 
         id = dbServiceUser.saveUser(new User(1L, "А! Нет. Это же совсем не Вася"));
