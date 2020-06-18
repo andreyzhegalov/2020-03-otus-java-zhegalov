@@ -10,7 +10,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "phone")
+@Table(name = "phones")
 public class PhoneDataSet {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)

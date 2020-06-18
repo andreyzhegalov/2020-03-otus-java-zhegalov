@@ -22,7 +22,7 @@ import hw10.core.dao.UserDaoException;
 
 @Entity
 @Table(name = "users")
-@NamedEntityGraph(name = "graph.userEntity.addresesAndPhones", attributeNodes = {
+@NamedEntityGraph(name = "graph.userEntity.addresesAndPhones", attributeNodes = { @NamedAttributeNode(value = "adress"),
         @NamedAttributeNode(value = "phones") })
 public class User {
 
@@ -38,7 +38,7 @@ public class User {
     private AdressDataSet adress;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<PhoneDataSet> phones = new ArrayList<>();
+    private final List<PhoneDataSet> phones = new ArrayList<>();
 
     public User() {
     }
@@ -111,7 +111,7 @@ public class User {
         result = 31 * result + (int) (id ^ (id >>> 32));
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (adress != null ? adress.hashCode() : 0);
-        result = 31 * result + (phones != null ? phones.hashCode() : 0);
+        result = 31 * result + phones.hashCode();
         return result;
     }
 
@@ -126,9 +126,9 @@ public class User {
 
         if (id != object.id)
             return false;
-        if (name != null ? !name.equals(object.name) : object.name != null)
+        if (!Objects.equals(name, object.name))
             return false;
-        if (adress != null ? !adress.equals(object.adress) : object.adress != null)
+        if (!Objects.equals(adress, object.adress))
             return false;
 
         return Objects.deepEquals(this.getPhones() != null ? this.getPhones().toArray() : this.getPhones(),

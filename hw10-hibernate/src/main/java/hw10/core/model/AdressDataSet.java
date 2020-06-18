@@ -9,6 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import java.util.Objects;
 
 @Entity
 @Table(name = "adress")
@@ -71,7 +72,7 @@ public class AdressDataSet {
 
         if (id != object.id)
             return false;
-        return !(street != null ? !street.equals(object.street) : object.street != null);
+        return Objects.equals(street, object.street);
     }
 
     @Override

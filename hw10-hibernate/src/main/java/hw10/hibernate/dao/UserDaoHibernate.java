@@ -18,7 +18,7 @@ import hw10.hibernate.sessionmanager.DatabaseSessionHibernate;
 import hw10.hibernate.sessionmanager.SessionManagerHibernate;
 
 public class UserDaoHibernate implements UserDao {
-    private static Logger logger = LoggerFactory.getLogger(UserDaoHibernate.class);
+    private static final Logger logger = LoggerFactory.getLogger(UserDaoHibernate.class);
 
     private final SessionManagerHibernate sessionManager;
 

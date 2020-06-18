@@ -66,6 +66,7 @@ class UserDaoHibernateTest {
         sessionManagerHibernate.beginSession();
         Optional<User> mayBeUser = userDaoHibernate.findById(expectedUser.getId());
         sessionManagerHibernate.commitSession();
+        assertThat(mayBeUser.isPresent()).isTrue();
         assertThat(mayBeUser.get()).isEqualTo(expectedUser);
     }
 
