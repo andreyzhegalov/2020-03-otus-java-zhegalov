@@ -5,6 +5,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.util.Optional;
 
 import org.hibernate.SessionFactory;
+import org.hibernate.stat.EntityStatistics;
+import org.hibernate.stat.Statistics;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -36,10 +38,20 @@ class UserDaoHibernateTest {
         sessionFactory.close();
     }
 
-    // protected EntityStatistics getUserStatistics() {
-    // Statistics stats = sessionFactory.getStatistics();
-    // return stats.getEntityStatistics(User.class.getName());
-    // }
+    private EntityStatistics getUserStatistics() {
+        final Statistics stats = sessionFactory.getStatistics();
+        return stats.getEntityStatistics(User.class.getName());
+    }
+
+    private EntityStatistics getAdressStatistics() {
+        final Statistics stats = sessionFactory.getStatistics();
+        return stats.getEntityStatistics(AdressDataSet.class.getName());
+    }
+
+    private EntityStatistics getPhoneStatistics() {
+        final Statistics stats = sessionFactory.getStatistics();
+        return stats.getEntityStatistics(AdressDataSet.class.getName());
+    }
 
     @Test
     void shouldCorrectFindUserById() {
@@ -74,7 +86,10 @@ class UserDaoHibernateTest {
         final Optional<User> actualUser = findUserDao(newUserId);
         assertThat(actualUser.isPresent()).isTrue();
         assertThat(actualUser).get().isEqualTo(newUser);
-        System.out.println(actualUser.get().getAdress().getStreet());
+
+        assertThat(getUserStatistics().getUpdateCount()).isZero();
+        assertThat(getAdressStatistics().getUpdateCount()).isZero();
+        assertThat(getPhoneStatistics().getUpdateCount()).isZero();
     }
 
     @Test
@@ -103,6 +118,7 @@ class UserDaoHibernateTest {
         assertThat(existedUser.getId()).isEqualTo(updatedUser.getId());
 
         assertThat(modifiedUser).isEqualTo(updatedUser);
+
     }
 
     private void saveUserDao(User user) {
