@@ -38,19 +38,9 @@ class UserDaoHibernateTest {
         sessionFactory.close();
     }
 
-    private EntityStatistics getUserStatistics() {
+    private EntityStatistics getEntityStatistic(Class<?> clazz) {
         final Statistics stats = sessionFactory.getStatistics();
-        return stats.getEntityStatistics(User.class.getName());
-    }
-
-    private EntityStatistics getAdressStatistics() {
-        final Statistics stats = sessionFactory.getStatistics();
-        return stats.getEntityStatistics(AdressDataSet.class.getName());
-    }
-
-    private EntityStatistics getPhoneStatistics() {
-        final Statistics stats = sessionFactory.getStatistics();
-        return stats.getEntityStatistics(AdressDataSet.class.getName());
+        return stats.getEntityStatistics(clazz.getName());
     }
 
     @Test
@@ -88,9 +78,9 @@ class UserDaoHibernateTest {
         assertThat(actualUser.isPresent()).isTrue();
         assertThat(actualUser).get().isEqualTo(newUser);
 
-        assertThat(getUserStatistics().getUpdateCount()).isZero();
-        assertThat(getAdressStatistics().getUpdateCount()).isZero();
-        assertThat(getPhoneStatistics().getUpdateCount()).isZero();
+        assertThat(getEntityStatistic(User.class).getUpdateCount()).isZero();
+        assertThat(getEntityStatistic(AdressDataSet.class).getUpdateCount()).isZero();
+        assertThat(getEntityStatistic(PhoneDataSet.class).getUpdateCount()).isZero();
     }
 
     @Test
@@ -119,7 +109,6 @@ class UserDaoHibernateTest {
         assertThat(existedUser.getId()).isEqualTo(updatedUser.getId());
 
         assertThat(modifiedUser).isEqualTo(updatedUser);
-
     }
 
     private void saveUserDao(User user) {
@@ -139,5 +128,4 @@ class UserDaoHibernateTest {
     void getSessionManager() {
         assertThat(userDaoHibernate.getSessionManager()).isNotNull().isEqualTo(sessionManagerHibernate);
     }
-
 }

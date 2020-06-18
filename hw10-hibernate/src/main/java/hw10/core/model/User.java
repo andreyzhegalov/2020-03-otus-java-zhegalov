@@ -37,7 +37,7 @@ public class User {
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = true, orphanRemoval = true)
     private AdressDataSet adress;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private final List<PhoneDataSet> phones = new ArrayList<>();
 
     public User() {
@@ -83,20 +83,26 @@ public class User {
         return adress;
     }
 
-    public List<PhoneDataSet> getPhones() {
-        return phones;
-    }
-
     public void addPhone(PhoneDataSet phone) {
+        if (phone == null) {
+            return;
+        }
         phones.add(phone);
         phone.setUser(this);
     }
 
     public void removePhone(PhoneDataSet phone) {
+        if (phone == null) {
+            return;
+        }
         if (!phones.remove(phone)) {
             throw new UserDaoException(new NoSuchElementException());
         }
         phone.setUser(null);
+    }
+
+    public List<PhoneDataSet> getPhones() {
+        return phones;
     }
 
     @Override

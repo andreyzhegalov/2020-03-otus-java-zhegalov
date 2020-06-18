@@ -2,8 +2,8 @@ package hw10.hibernate.sessionmanager;
 
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import hw10.core.sessionmanager.DatabaseSession;
 
+import hw10.core.sessionmanager.DatabaseSession;
 
 public class DatabaseSessionHibernate implements DatabaseSession {
     private final Session session;

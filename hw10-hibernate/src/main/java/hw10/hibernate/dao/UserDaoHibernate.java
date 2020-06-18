@@ -29,10 +29,11 @@ public class UserDaoHibernate implements UserDao {
     @Override
     @SuppressWarnings("unchecked")
     public Optional<User> findById(long id) {
-        DatabaseSessionHibernate currentSession = sessionManager.getCurrentSession();
+        final DatabaseSessionHibernate currentSession = sessionManager.getCurrentSession();
         try {
-            EntityGraph<User> graph = (EntityGraph<User>) currentSession.getHibernateSession().getEntityGraph("graph.userEntity.addresesAndPhones");
-            Map<String, Object> properties = new HashMap<>();
+            final EntityGraph<User> graph = (EntityGraph<User>) currentSession.getHibernateSession()
+                    .getEntityGraph("graph.userEntity.addresesAndPhones");
+            final Map<String, Object> properties = new HashMap<>();
             properties.put("javax.persistence.loadgraph", graph);
 
             return Optional.ofNullable(currentSession.getHibernateSession().find(User.class, id, properties));
@@ -44,9 +45,9 @@ public class UserDaoHibernate implements UserDao {
 
     @Override
     public long insertUser(User user) {
-        DatabaseSessionHibernate currentSession = sessionManager.getCurrentSession();
+        final DatabaseSessionHibernate currentSession = sessionManager.getCurrentSession();
         try {
-            Session hibernateSession = currentSession.getHibernateSession();
+            final Session hibernateSession = currentSession.getHibernateSession();
             hibernateSession.persist(user);
             hibernateSession.flush();
             return user.getId();
@@ -58,9 +59,9 @@ public class UserDaoHibernate implements UserDao {
 
     @Override
     public void updateUser(User user) {
-        DatabaseSessionHibernate currentSession = sessionManager.getCurrentSession();
+        final DatabaseSessionHibernate currentSession = sessionManager.getCurrentSession();
         try {
-            Session hibernateSession = currentSession.getHibernateSession();
+            final Session hibernateSession = currentSession.getHibernateSession();
             hibernateSession.merge(user);
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
@@ -70,9 +71,9 @@ public class UserDaoHibernate implements UserDao {
 
     @Override
     public void insertOrUpdate(User user) {
-        DatabaseSessionHibernate currentSession = sessionManager.getCurrentSession();
+        final DatabaseSessionHibernate currentSession = sessionManager.getCurrentSession();
         try {
-            Session hibernateSession = currentSession.getHibernateSession();
+            final Session hibernateSession = currentSession.getHibernateSession();
             if (user.getId() > 0) {
                 hibernateSession.merge(user);
             } else {

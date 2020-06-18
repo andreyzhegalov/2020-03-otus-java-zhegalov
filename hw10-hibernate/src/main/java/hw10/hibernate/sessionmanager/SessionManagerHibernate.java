@@ -3,6 +3,7 @@ package hw10.hibernate.sessionmanager;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+
 import hw10.core.sessionmanager.SessionManager;
 import hw10.core.sessionmanager.SessionManagerException;
 
@@ -54,12 +55,12 @@ public class SessionManagerHibernate implements SessionManager {
         if (databaseSession == null) {
             return;
         }
-        Session session = databaseSession.getHibernateSession();
+        final Session session = databaseSession.getHibernateSession();
         if (session == null || !session.isConnected()) {
             return;
         }
 
-        Transaction transaction = databaseSession.getTransaction();
+        final Transaction transaction = databaseSession.getTransaction();
         if (transaction == null || !transaction.isActive()) {
             return;
         }
@@ -82,12 +83,12 @@ public class SessionManagerHibernate implements SessionManager {
         if (databaseSession == null) {
             throw new SessionManagerException("DatabaseSession not opened ");
         }
-        Session session = databaseSession.getHibernateSession();
+        final Session session = databaseSession.getHibernateSession();
         if (session == null || !session.isConnected()) {
             throw new SessionManagerException("Session not opened ");
         }
 
-        Transaction transaction = databaseSession.getTransaction();
+        final Transaction transaction = databaseSession.getTransaction();
         if (transaction == null || !transaction.isActive()) {
             throw new SessionManagerException("Transaction not opened ");
         }
