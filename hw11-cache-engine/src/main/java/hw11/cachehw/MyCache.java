@@ -1,24 +1,43 @@
 package hw11.cachehw;
 
-/**
- * @author sergey created on 14.12.18.
- */
+import java.util.WeakHashMap;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class MyCache<K, V> implements HwCache<K, V> {
-    // Надо реализовать эти методы
+    private static Logger logger = LoggerFactory.getLogger(MyCache.class);
+    private final WeakHashMap<K, V> cache = new WeakHashMap<>();
 
     @Override
     public void put(K key, V value) {
-        throw new UnsupportedOperationException();
+        logger.debug("put {} : {}", key, value);
+        if( key == null ){
+            return;
+        }
+        cache.put(key, value);
     }
 
     @Override
     public void remove(K key) {
-        throw new UnsupportedOperationException();
+        logger.debug("remove key {}", key);
+        if(key == null){
+            return;
+        }
+        cache.remove(key);
     }
 
     @Override
     public V get(K key) {
-        return null;
+        logger.debug("get key {} ", key);
+        if( key == null){
+            return null;
+        }
+        if (!cache.containsKey(key)){
+            logger.debug("key {} not exist in the cache", key);
+            throw new HwCacheExeption("Key "+ key + " not exist in the cache");
+        }
+        return cache.get(key);
     }
 
     @Override
@@ -29,5 +48,9 @@ public class MyCache<K, V> implements HwCache<K, V> {
     @Override
     public void removeListener(HwListener<K, V> listener) {
         throw new UnsupportedOperationException();
+    }
+
+    public int getSize(){
+        return cache.size();
     }
 }
