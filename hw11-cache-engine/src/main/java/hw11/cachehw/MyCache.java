@@ -1,5 +1,7 @@
 package hw11.cachehw;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.WeakHashMap;
 
 import org.slf4j.Logger;
@@ -9,10 +11,12 @@ public class MyCache<K, V> implements HwCache<K, V> {
     private static Logger logger = LoggerFactory.getLogger(MyCache.class);
     private final WeakHashMap<K, V> cache = new WeakHashMap<>();
 
+    private final List<HwListener<K, V>> listeners = new ArrayList<>();
+
     @Override
     public void put(K key, V value) {
         logger.debug("put {} : {}", key, value);
-        if( key == null ){
+        if (key == null) {
             return;
         }
         cache.put(key, value);
@@ -21,7 +25,7 @@ public class MyCache<K, V> implements HwCache<K, V> {
     @Override
     public void remove(K key) {
         logger.debug("remove key {}", key);
-        if(key == null){
+        if (key == null) {
             return;
         }
         cache.remove(key);
@@ -30,27 +34,43 @@ public class MyCache<K, V> implements HwCache<K, V> {
     @Override
     public V get(K key) {
         logger.debug("get key {} ", key);
-        if( key == null){
+        if (key == null) {
             return null;
         }
-        if (!cache.containsKey(key)){
-            logger.debug("key {} not exist in the cache", key);
-            throw new HwCacheExeption("Key "+ key + " not exist in the cache");
+        if (!cache.containsKey(key)) {
+            throw new HwCacheExeption("Key " + key + " not exist in the cache");
         }
         return cache.get(key);
     }
 
     @Override
     public void addListener(HwListener<K, V> listener) {
-        throw new UnsupportedOperationException();
+        logger.debug("add listener {}", listener);
+        if (null == listener) {
+            throw new HwCacheExeption("new listener is null");
+        }
+        if (!listeners.add(listener)) {
+            throw new HwCacheExeption("could not add new listener");
+        }
     }
 
     @Override
     public void removeListener(HwListener<K, V> listener) {
-        throw new UnsupportedOperationException();
+        logger.debug("remove listener {}", listener);
+        if (null == listener) {
+            return;
+        }
+        if (0 == getListenerCnt()) {
+            throw new HwCacheExeption("Listener not found for delete");
+        }
+        listeners.remove(listener);
     }
 
-    public int getSize(){
+    public int getSize() {
         return cache.size();
+    }
+
+    public int getListenerCnt() {
+        return listeners.size();
     }
 }
