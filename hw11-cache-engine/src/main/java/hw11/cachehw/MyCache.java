@@ -20,6 +20,7 @@ public class MyCache<K, V> implements HwCache<K, V> {
             return;
         }
         cache.put(key, value);
+        listeners.stream().forEach(l -> l.notify(key, value, "put"));
     }
 
     @Override
@@ -28,7 +29,8 @@ public class MyCache<K, V> implements HwCache<K, V> {
         if (key == null) {
             return;
         }
-        cache.remove(key);
+        final var value = cache.remove(key);
+        listeners.stream().forEach(l -> l.notify(key, value, "remove"));
     }
 
     @Override
@@ -40,7 +42,9 @@ public class MyCache<K, V> implements HwCache<K, V> {
         if (!cache.containsKey(key)) {
             throw new HwCacheExeption("Key " + key + " not exist in the cache");
         }
-        return cache.get(key);
+        final var value = cache.get(key);
+        listeners.stream().forEach(l -> l.notify(key, value, "get"));
+        return value;
     }
 
     @Override

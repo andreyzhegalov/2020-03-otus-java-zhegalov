@@ -4,8 +4,11 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.mock;
 
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
+import org.mockito.Mockito;
 
 public class MyCacheTest {
 
@@ -108,4 +111,65 @@ public class MyCacheTest {
         assertEquals(0, cache.getListenerCnt());
     }
 
+    @Test
+    public void notifyListenerWhenSendPutTest(){
+        HwListener<Integer, Integer> listener = Mockito.mock(HwListener.class);
+
+        MyCache<Integer, Integer> cache = new MyCache<>();
+        cache.addListener(listener);
+
+        cache.put(1,1);
+
+        Mockito.verify(listener, Mockito.times(1)).notify(Mockito.any(), Mockito.any(), Mockito.any());
+        Mockito.verify(listener).notify(1,1,"put");
+        Mockito.verifyNoMoreInteractions(listener);
+    }
+
+    @Test
+    public void notifyListenerWhenSendGetTest(){
+        HwListener<Integer, Integer> listener = Mockito.mock(HwListener.class);
+
+        MyCache<Integer, Integer> cache = new MyCache<>();
+        cache.put(1,1);
+
+        cache.addListener(listener);
+        cache.get(1);
+
+        Mockito.verify(listener, Mockito.times(1)).notify(Mockito.any(), Mockito.any(), Mockito.any());
+        Mockito.verify(listener).notify(1,1,"get");
+        Mockito.verifyNoMoreInteractions(listener);
+    }
+
+    @Test
+    public void notifyListenerWhenSendRemoveTest(){
+        HwListener<Integer, Integer> listener = Mockito.mock(HwListener.class);
+
+        MyCache<Integer, Integer> cache = new MyCache<>();
+        cache.put(1,1);
+
+        cache.addListener(listener);
+        cache.remove(1);
+
+        Mockito.verify(listener, Mockito.times(1)).notify(Mockito.any(), Mockito.any(), Mockito.any());
+        Mockito.verify(listener).notify(1,1,"remove");
+        Mockito.verifyNoMoreInteractions(listener);
+    }
+
+    @Test
+    public void sendNotifyManyListenerTest(){
+        HwListener<Integer, Integer> listener1 = Mockito.mock(HwListener.class);
+        HwListener<Integer, Integer> listener2 = Mockito.mock(HwListener.class);
+
+        MyCache<Integer, Integer> cache = new MyCache<>();
+        cache.addListener(listener1);
+        cache.addListener(listener2);
+
+        cache.put(1,1);
+
+        Mockito.verify(listener1, Mockito.times(1)).notify(Mockito.any(), Mockito.any(), Mockito.any());
+        Mockito.verifyNoMoreInteractions(listener1);
+
+        Mockito.verify(listener2, Mockito.times(1)).notify(Mockito.any(), Mockito.any(), Mockito.any());
+        Mockito.verifyNoMoreInteractions(listener2);
+    }
 }
