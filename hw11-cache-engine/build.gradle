@@ -32,6 +32,10 @@ test {
     testLogging {
         events "passed", "skipped", "failed"
     }
+    minHeapSize = "20m"
+    maxHeapSize = "20m"
+    jvmArgs '-XX:+UseG1GC'
+    // jvmArgs '-Xlog:gc=debug'
 }
 
 check.dependsOn jacocoTestReport

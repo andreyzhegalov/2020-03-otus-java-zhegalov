@@ -5,9 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import java.util.concurrent.TimeUnit;
-
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
@@ -172,30 +169,5 @@ public class MyCacheTest {
 
         Mockito.verify(listener2, Mockito.times(1)).notify(Mockito.any(), Mockito.any(), Mockito.any());
         Mockito.verifyNoMoreInteractions(listener2);
-    }
-
-    @Disabled("Used only with weak reference for listener")
-    @Test
-    public void autoRemoveRefListenerTest() throws InterruptedException {
-        var listener1 = new HwListener<Integer, Integer>() {
-            @Override
-            public void notify(Integer key, Integer value, String action) {
-            }
-        };
-        var listener2 = new HwListener<Integer, Integer>() {
-            @Override
-            public void notify(Integer key, Integer value, String action) {
-            }
-        };
-        MyCache<Integer, Integer> cache = new MyCache<>();
-        cache.addListener(listener1);
-        cache.addListener(listener2);
-
-        listener1 = null;
-        listener2 = null;
-        System.gc();
-
-        Thread.sleep(TimeUnit.SECONDS.toMillis(1));
-        assertEquals(0, cache.getListenerCnt());
     }
 }
