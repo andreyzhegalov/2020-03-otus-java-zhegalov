@@ -1,4 +1,4 @@
-package hw11.jdbc.dao;
+package hw11.hibernate.dao;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -15,7 +15,6 @@ import hw11.core.model.AdressDataSet;
 import hw11.core.model.PhoneDataSet;
 import hw11.core.model.User;
 import hw11.hibernate.HibernateUtils;
-import hw11.hibernate.dao.UserDaoHibernate;
 import hw11.hibernate.sessionmanager.SessionManagerHibernate;
 
 class UserDaoHibernateTest {

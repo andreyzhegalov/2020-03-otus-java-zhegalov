@@ -20,16 +20,14 @@ import hw11.hibernate.dao.UserDaoHibernate;
 import hw11.hibernate.sessionmanager.SessionManagerHibernate;
 
 public class DbServiceUserImplTest {
-    private SessionFactory sessionFactory;
-    private SessionManagerHibernate sessionManager;
     private UserDao userDao;
 
     @BeforeEach
     public void setUp() {
-        sessionFactory = HibernateUtils.buildSessionFactory("hibernate.cfg.xml", User.class,
+        SessionFactory sessionFactory = HibernateUtils.buildSessionFactory("hibernate.cfg.xml", User.class,
                 AdressDataSet.class, PhoneDataSet.class);
 
-        sessionManager = new SessionManagerHibernate(sessionFactory);
+        SessionManagerHibernate sessionManager = new SessionManagerHibernate(sessionFactory);
         userDao = new UserDaoHibernate(sessionManager);
     }
 

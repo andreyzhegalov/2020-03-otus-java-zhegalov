@@ -67,12 +67,12 @@ public class MyCacheTest {
     @Test
     public void getNoExistValueTest() {
         MyCache<Integer, Integer> cache = new MyCache<>();
-        assertThrows(HwCacheExeption.class, () -> cache.get(1));
+        assertThrows(HwCacheException.class, () -> cache.get(1));
     }
 
     @Test
     public void addNullListenerTest() {
-        assertThrows(HwCacheExeption.class, () -> new MyCache<Object, Object>().addListener(null));
+        assertThrows(HwCacheException.class, () -> new MyCache<>().addListener(null));
     }
 
     @Test
@@ -89,7 +89,7 @@ public class MyCacheTest {
 
     @Test
     public void removeNullListenerTest() {
-        assertDoesNotThrow(() -> new MyCache<Object, Object>().removeListener(null));
+        assertDoesNotThrow(() -> new MyCache<>().removeListener(null));
     }
 
     @Test
@@ -100,7 +100,7 @@ public class MyCacheTest {
             }
         };
         MyCache<Integer, Integer> cache = new MyCache<>();
-        assertThrows(HwCacheExeption.class, () -> cache.removeListener(listener));
+        assertThrows(HwCacheException.class, () -> cache.removeListener(listener));
     }
 
     @Test
@@ -129,8 +129,7 @@ public class MyCacheTest {
 
         cache.put(1, 1);
 
-        Mockito.verify(listener, Mockito.times(1)).notify(Mockito.any(), Mockito.any(), Mockito.any());
-        Mockito.verify(listener).notify(1, 1, "put");
+        Mockito.verify(listener, Mockito.times(1)).notify(1, 1, "put");
         Mockito.verifyNoMoreInteractions(listener);
     }
 
@@ -144,8 +143,7 @@ public class MyCacheTest {
         cache.addListener(listener);
         cache.get(1);
 
-        Mockito.verify(listener, Mockito.times(1)).notify(Mockito.any(), Mockito.any(), Mockito.any());
-        Mockito.verify(listener).notify(1, 1, "get");
+        Mockito.verify(listener, Mockito.times(1)).notify(1, 1, "get");
         Mockito.verifyNoMoreInteractions(listener);
     }
 
@@ -159,8 +157,7 @@ public class MyCacheTest {
         cache.addListener(listener);
         cache.remove(1);
 
-        Mockito.verify(listener, Mockito.times(1)).notify(Mockito.any(), Mockito.any(), Mockito.any());
-        Mockito.verify(listener).notify(1, 1, "remove");
+        Mockito.verify(listener, Mockito.times(1)).notify(1, 1, "remove");
         Mockito.verifyNoMoreInteractions(listener);
     }
 

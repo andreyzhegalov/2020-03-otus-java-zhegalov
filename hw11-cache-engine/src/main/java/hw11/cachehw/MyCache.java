@@ -1,20 +1,23 @@
 package hw11.cachehw;
 
+import java.lang.ref.Reference;
 import java.lang.ref.ReferenceQueue;
 import java.lang.ref.SoftReference;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.WeakHashMap;
+
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class MyCache<K, V> implements HwCache<K, V> {
-    private static Logger logger = LoggerFactory.getLogger(MyCache.class);
-    private final WeakHashMap<K, V> cache = new WeakHashMap<>();
+    private static final Logger logger = LoggerFactory.getLogger(MyCache.class);
 
+    private final WeakHashMap<K, V> cache = new WeakHashMap<>();
     private final ReferenceQueue<HwListener<K, V>> refQueue = new ReferenceQueue<>();
-    private final List<SoftReference<HwListener<K, V>>> listeners = new ArrayList<>();
+    private final List<Reference<HwListener<K, V>>> listeners = new ArrayList<>();
 
     public MyCache() {
         new Thread(() -> {
@@ -22,10 +25,7 @@ public class MyCache<K, V> implements HwCache<K, V> {
             while (!Thread.currentThread().isInterrupted()) {
                 try {
                     final var removedRef = refQueue.remove();
-                    if (!listeners.remove(removedRef)) {
-                        logger.error("Error remove reference to listener");
-                    }
-                    logger.debug("Listener reference cleaned");
+                    listeners.remove(removedRef);
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
                 }
@@ -59,10 +59,10 @@ public class MyCache<K, V> implements HwCache<K, V> {
         if (key == null) {
             return null;
         }
-        if (!cache.containsKey(key)) {
-            throw new HwCacheExeption("Key " + key + " not exist in the cache");
-        }
         final var value = cache.get(key);
+        if (!cache.containsKey(key)) {
+            throw new HwCacheException("Key " + key + " not exist in the cache");
+        }
         notifyAllListeners(key, value, "get");
         return value;
     }
@@ -71,11 +71,10 @@ public class MyCache<K, V> implements HwCache<K, V> {
     public void addListener(HwListener<K, V> listener) {
         logger.debug("Add listener {}", listener);
         if (listener == null) {
-            throw new HwCacheExeption("New listener is null");
+            throw new HwCacheException("New listener is null");
         }
-        if (!listeners.add(new SoftReference<>(listener, refQueue))) {
-            throw new HwCacheExeption("Could not add new listener");
-        }
+        final var refListener = new SoftReference<>(listener, refQueue);
+        listeners.add(refListener);
     }
 
     @Override
@@ -85,16 +84,19 @@ public class MyCache<K, V> implements HwCache<K, V> {
             return;
         }
         if (getListenerCnt() == 0) {
-            throw new HwCacheExeption("Remove failed. Has no one listener");
+            throw new HwCacheException("Remove failed. Has no one listener");
         }
-        final var refListener = listeners.stream().filter(l -> l.get().equals(listener)).findFirst();
+        final var refListener = listeners.stream().filter(l -> Objects.equals(l.get(), listener)).findFirst();
+        if(refListener.isEmpty()){
+            throw new HwCacheException("Remove listener not found.");
+        }
         listeners.remove(refListener.get());
     }
 
     private void notifyAllListeners(K key, V value, String action) {
-        listeners.stream().forEach(l -> {
+        listeners.forEach(l -> {
             if (l.get() != null) {
-                l.get().notify(key, value, action);
+                Objects.requireNonNull(l.get()).notify(key, value, action);
             }
         });
     }

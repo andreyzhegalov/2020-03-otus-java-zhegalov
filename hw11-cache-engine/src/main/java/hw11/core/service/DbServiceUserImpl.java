@@ -4,7 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import hw11.cachehw.HwCache;
-import hw11.cachehw.HwCacheExeption;
+import hw11.cachehw.HwCacheException;
 import hw11.core.dao.UserDao;
 import hw11.core.model.User;
 import hw11.core.sessionmanager.SessionManager;
@@ -12,7 +12,7 @@ import hw11.core.sessionmanager.SessionManager;
 import java.util.Optional;
 
 public class DbServiceUserImpl implements DBServiceUser {
-    private static Logger logger = LoggerFactory.getLogger(DbServiceUserImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(DbServiceUserImpl.class);
 
     private final UserDao userDao;
     private final HwCache<Long, User> cache;
@@ -24,7 +24,7 @@ public class DbServiceUserImpl implements DBServiceUser {
 
     @Override
     public long saveUser(User user) {
-        long userId = -1;
+        long userId;
         try (SessionManager sessionManager = userDao.getSessionManager()) {
             sessionManager.beginSession();
             try {
@@ -51,7 +51,7 @@ public class DbServiceUserImpl implements DBServiceUser {
             try {
                 final var user = cache.get(id);
                 return Optional.of(user);
-            } catch (HwCacheExeption e) {
+            } catch (HwCacheException ignored) {
             }
         }
 

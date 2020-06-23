@@ -13,7 +13,7 @@ public class AutoRemoveTest {
     public void autoRemoveRefListenerTest() {
         MyCache<Integer, Integer> cache = new MyCache<>();
 
-        final int LISTENER_CNT = 100000;
+        final int LISTENER_CNT = 100_000;
         for (int i = 0; i < LISTENER_CNT; i++) {
             var listener = new HwListener<Integer, Integer>() {
                 @Override
