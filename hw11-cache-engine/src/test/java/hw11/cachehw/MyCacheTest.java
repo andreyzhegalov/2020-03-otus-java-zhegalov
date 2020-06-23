@@ -4,10 +4,11 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.mock;
 
+import java.util.concurrent.TimeUnit;
+
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 
 public class MyCacheTest {
@@ -112,51 +113,51 @@ public class MyCacheTest {
     }
 
     @Test
-    public void notifyListenerWhenSendPutTest(){
+    public void notifyListenerWhenSendPutTest() {
         HwListener<Integer, Integer> listener = Mockito.mock(HwListener.class);
 
         MyCache<Integer, Integer> cache = new MyCache<>();
         cache.addListener(listener);
 
-        cache.put(1,1);
+        cache.put(1, 1);
 
         Mockito.verify(listener, Mockito.times(1)).notify(Mockito.any(), Mockito.any(), Mockito.any());
-        Mockito.verify(listener).notify(1,1,"put");
+        Mockito.verify(listener).notify(1, 1, "put");
         Mockito.verifyNoMoreInteractions(listener);
     }
 
     @Test
-    public void notifyListenerWhenSendGetTest(){
+    public void notifyListenerWhenSendGetTest() {
         HwListener<Integer, Integer> listener = Mockito.mock(HwListener.class);
 
         MyCache<Integer, Integer> cache = new MyCache<>();
-        cache.put(1,1);
+        cache.put(1, 1);
 
         cache.addListener(listener);
         cache.get(1);
 
         Mockito.verify(listener, Mockito.times(1)).notify(Mockito.any(), Mockito.any(), Mockito.any());
-        Mockito.verify(listener).notify(1,1,"get");
+        Mockito.verify(listener).notify(1, 1, "get");
         Mockito.verifyNoMoreInteractions(listener);
     }
 
     @Test
-    public void notifyListenerWhenSendRemoveTest(){
+    public void notifyListenerWhenSendRemoveTest() {
         HwListener<Integer, Integer> listener = Mockito.mock(HwListener.class);
 
         MyCache<Integer, Integer> cache = new MyCache<>();
-        cache.put(1,1);
+        cache.put(1, 1);
 
         cache.addListener(listener);
         cache.remove(1);
 
         Mockito.verify(listener, Mockito.times(1)).notify(Mockito.any(), Mockito.any(), Mockito.any());
-        Mockito.verify(listener).notify(1,1,"remove");
+        Mockito.verify(listener).notify(1, 1, "remove");
         Mockito.verifyNoMoreInteractions(listener);
     }
 
     @Test
-    public void sendNotifyManyListenerTest(){
+    public void sendNotifyManyListenerTest() {
         HwListener<Integer, Integer> listener1 = Mockito.mock(HwListener.class);
         HwListener<Integer, Integer> listener2 = Mockito.mock(HwListener.class);
 
@@ -164,12 +165,37 @@ public class MyCacheTest {
         cache.addListener(listener1);
         cache.addListener(listener2);
 
-        cache.put(1,1);
+        cache.put(1, 1);
 
         Mockito.verify(listener1, Mockito.times(1)).notify(Mockito.any(), Mockito.any(), Mockito.any());
         Mockito.verifyNoMoreInteractions(listener1);
 
         Mockito.verify(listener2, Mockito.times(1)).notify(Mockito.any(), Mockito.any(), Mockito.any());
         Mockito.verifyNoMoreInteractions(listener2);
+    }
+
+    @Disabled("Used only with weak reference for listener")
+    @Test
+    public void autoRemoveRefListenerTest() throws InterruptedException {
+        var listener1 = new HwListener<Integer, Integer>() {
+            @Override
+            public void notify(Integer key, Integer value, String action) {
+            }
+        };
+        var listener2 = new HwListener<Integer, Integer>() {
+            @Override
+            public void notify(Integer key, Integer value, String action) {
+            }
+        };
+        MyCache<Integer, Integer> cache = new MyCache<>();
+        cache.addListener(listener1);
+        cache.addListener(listener2);
+
+        listener1 = null;
+        listener2 = null;
+        System.gc();
+
+        Thread.sleep(TimeUnit.SECONDS.toMillis(1));
+        assertEquals(0, cache.getListenerCnt());
     }
 }
