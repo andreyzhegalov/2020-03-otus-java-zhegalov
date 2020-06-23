@@ -93,7 +93,7 @@ public class MyCacheTest {
     }
 
     @Test
-    public void removeListener() {
+    public void removeNotExistListener() {
         final var listener = new HwListener<Integer, Integer>() {
             @Override
             public void notify(Integer key, Integer value, String action) {
@@ -101,6 +101,17 @@ public class MyCacheTest {
         };
         MyCache<Integer, Integer> cache = new MyCache<>();
         assertThrows(HwCacheExeption.class, () -> cache.removeListener(listener));
+    }
+
+    @Test
+    public void removeListener() {
+        final var listener = new HwListener<Integer, Integer>() {
+            @Override
+            public void notify(Integer key, Integer value, String action) {
+            }
+        };
+        MyCache<Integer, Integer> cache = new MyCache<>();
+        assertEquals(0, cache.getListenerCnt());
 
         assertDoesNotThrow(() -> cache.addListener(listener));
         assertEquals(1, cache.getListenerCnt());

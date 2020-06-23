@@ -24,7 +24,7 @@ public class DbServiceDemo {
 
         SessionManagerHibernate sessionManager = new SessionManagerHibernate(sessionFactory);
         UserDao userDao = new UserDaoHibernate(sessionManager);
-        DBServiceUser dbServiceUser = new DbServiceUserImpl(userDao);
+        DBServiceUser dbServiceUser = new DbServiceUserImpl(userDao, null);
 
         final var user = new User(0, "Вася");
         user.setAdress(new AdressDataSet("some street"));
