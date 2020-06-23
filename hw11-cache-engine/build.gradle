@@ -35,7 +35,7 @@ test {
     minHeapSize = "20m"
     maxHeapSize = "20m"
     jvmArgs '-XX:+UseG1GC'
-    // jvmArgs '-Xlog:gc=debug'
+    jvmArgs '-Xlog:gc=debug'
 }
 
 check.dependsOn jacocoTestReport

@@ -40,11 +40,7 @@ public class MyCache<K, V> implements HwCache<K, V> {
             return;
         }
         cache.put(key, value);
-        listeners.stream().forEach(l -> {
-            if (l.get() != null) {
-                l.get().notify(key, value, "put");
-            }
-        });
+        notifyAllListeners(key, value, "put");
     }
 
     @Override
@@ -54,11 +50,7 @@ public class MyCache<K, V> implements HwCache<K, V> {
             return;
         }
         final var value = cache.remove(key);
-        listeners.stream().forEach(l -> {
-            if (l.get() != null) {
-                l.get().notify(key, value, "remove");
-            }
-        });
+        notifyAllListeners(key, value, "remove");
     }
 
     @Override
@@ -71,18 +63,14 @@ public class MyCache<K, V> implements HwCache<K, V> {
             throw new HwCacheExeption("Key " + key + " not exist in the cache");
         }
         final var value = cache.get(key);
-        listeners.stream().forEach(l -> {
-            if (l.get() != null) {
-                l.get().notify(key, value, "get");
-            }
-        });
+        notifyAllListeners(key, value, "get");
         return value;
     }
 
     @Override
     public void addListener(HwListener<K, V> listener) {
         logger.debug("Add listener {}", listener);
-        if (null == listener) {
+        if (listener == null) {
             throw new HwCacheExeption("New listener is null");
         }
         if (!listeners.add(new SoftReference<>(listener, refQueue))) {
@@ -93,14 +81,22 @@ public class MyCache<K, V> implements HwCache<K, V> {
     @Override
     public void removeListener(HwListener<K, V> listener) {
         logger.debug("Remove listener {}", listener);
-        if (null == listener) {
+        if (listener == null) {
             return;
         }
-        if (0 == getListenerCnt()) {
+        if (getListenerCnt() == 0) {
             throw new HwCacheExeption("Remove failed. Has no one listener");
         }
         final var refListener = listeners.stream().filter(l -> l.get().equals(listener)).findFirst();
         listeners.remove(refListener.get());
+    }
+
+    private void notifyAllListeners(K key, V value, String action) {
+        listeners.stream().forEach(l -> {
+            if (l.get() != null) {
+                l.get().notify(key, value, action);
+            }
+        });
     }
 
     public int getSize() {

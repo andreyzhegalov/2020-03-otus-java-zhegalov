@@ -1,7 +1,9 @@
 package hw11.cachehw;
 
-
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.util.concurrent.TimeUnit;
 
 import org.junit.jupiter.api.Test;
 
@@ -22,5 +24,16 @@ public class AutoRemoveTest {
         }
         assertTrue(cache.getListenerCnt() < LISTENER_CNT);
     }
-}
 
+    @Test
+    public void autoClearCacheTest() throws InterruptedException {
+        MyCache<String, Integer> cache = new MyCache<>();
+        String key = new String("1");
+        cache.put(key, 1);
+        key = null;
+        assertEquals(1, cache.getSize());
+        System.gc();
+        Thread.sleep(TimeUnit.SECONDS.toMillis(1));
+        assertEquals(0, cache.getSize());
+    }
+}
