@@ -15,9 +15,9 @@ public class DbServiceUserImpl implements DBServiceUser {
     private static final Logger logger = LoggerFactory.getLogger(DbServiceUserImpl.class);
 
     private final UserDao userDao;
-    private final HwCache<Long, User> cache;
+    private final HwCache<String, User> cache;
 
-    public DbServiceUserImpl(UserDao userDao, HwCache<Long, User> cache) {
+    public DbServiceUserImpl(UserDao userDao, HwCache<String, User> cache) {
         this.userDao = userDao;
         this.cache = cache;
     }
@@ -40,7 +40,7 @@ public class DbServiceUserImpl implements DBServiceUser {
             }
         }
         if (cache != null) {
-            cache.put(userId, user);
+            cache.put(String.valueOf(userId), user);
         }
         return userId;
     }
@@ -49,7 +49,7 @@ public class DbServiceUserImpl implements DBServiceUser {
     public Optional<User> getUser(long id) {
         if (cache != null) {
             try {
-                final var user = cache.get(id);
+                final var user = cache.get(String.valueOf(id));
                 return Optional.of(user);
             } catch (HwCacheException ignored) {
             }
@@ -59,6 +59,9 @@ public class DbServiceUserImpl implements DBServiceUser {
             sessionManager.beginSession();
             try {
                 Optional<User> userOptional = userDao.findById(id);
+                if ((cache != null) && (userOptional.isPresent())){
+                    cache.put(String.valueOf(id), userOptional.get());
+                }
 
                 logger.info("user: {}", userOptional.orElse(null));
                 return userOptional;

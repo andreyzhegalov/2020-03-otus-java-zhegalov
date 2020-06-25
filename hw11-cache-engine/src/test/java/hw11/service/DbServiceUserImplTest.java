@@ -51,7 +51,7 @@ public class DbServiceUserImplTest {
 
     @Test
     public void testGetUserWithCache() {
-        final HwCache<Long, User> cache = new MyCache<>();
+        final HwCache<String, User> cache = new MyCache<>();
         final DBServiceUser dbServiceUser = new DbServiceUserImpl(userDao, cache);
 
         final List<Long> idList = new ArrayList<>();

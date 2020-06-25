@@ -96,7 +96,11 @@ public class MyCache<K, V> implements HwCache<K, V> {
     private void notifyAllListeners(K key, V value, String action) {
         listeners.forEach(l -> {
             if (l.get() != null) {
-                Objects.requireNonNull(l.get()).notify(key, value, action);
+                try {
+                    Objects.requireNonNull(l.get()).notify(key, value, action);
+                } catch (Exception e) {
+                    logger.error("Notify listener failed");
+                }
             }
         });
     }
