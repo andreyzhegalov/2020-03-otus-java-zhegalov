@@ -1,0 +1,41 @@
+plugins {
+    id 'java'
+    id 'jacoco'
+}
+
+sourceCompatibility = JavaVersion.VERSION_13
+targetCompatibility = JavaVersion.VERSION_13
+
+dependencies {
+    dependencies {
+        implementation 'com.google.guava:guava'
+        implementation 'org.hibernate:hibernate-core'
+        implementation 'com.h2database:h2'
+        implementation 'ch.qos.logback:logback-classic'
+        implementation 'org.ehcache:ehcache'
+
+        testImplementation 'org.assertj:assertj-core'
+        testImplementation group: 'org.mockito', name: 'mockito-junit-jupiter'
+        testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-engine'
+    }
+}
+
+jacocoTestReport {
+    reports {
+        xml.enabled true
+        html.enabled true
+    }
+}
+
+test {
+    useJUnitPlatform()
+    testLogging {
+        events "passed", "skipped", "failed"
+    }
+    minHeapSize = "20m"
+    maxHeapSize = "20m"
+    jvmArgs '-XX:+UseG1GC'
+    // jvmArgs '-Xlog:gc=debug'
+}
+
+check.dependsOn jacocoTestReport
