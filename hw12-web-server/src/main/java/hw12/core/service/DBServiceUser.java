@@ -3,6 +3,7 @@ package hw12.core.service;
 import hw12.core.model.User;
 
 import java.util.Optional;
+import java.util.List;
 
 public interface DBServiceUser {
 
@@ -10,4 +11,5 @@ public interface DBServiceUser {
 
     Optional<User> getUser(long id);
 
+    List<User> getAllUsers();
 }

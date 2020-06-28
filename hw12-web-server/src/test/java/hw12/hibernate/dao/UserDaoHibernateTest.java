@@ -3,6 +3,7 @@ package hw12.hibernate.dao;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.Optional;
+import java.util.List;
 
 import org.hibernate.SessionFactory;
 import org.hibernate.stat.EntityStatistics;
@@ -57,6 +58,26 @@ class UserDaoHibernateTest {
         sessionManagerHibernate.commitSession();
         assertThat(mayBeUser.isPresent()).isTrue();
         assertThat(mayBeUser.get()).isEqualTo(expectedUser);
+    }
+
+    @Test
+    public void getAllUsersInEmptyDbTest(){
+        sessionManagerHibernate.beginSession();
+        final List<User> users =userDaoHibernate.getAllUsers();
+        sessionManagerHibernate.commitSession();
+        assertThat(users).isEmpty();
+    }
+
+    @Test
+    public void getAllUsersTest(){
+        saveUserDao(new User("Name1"));
+        saveUserDao(new User("Name2"));
+
+        sessionManagerHibernate.beginSession();
+        final List<User> users =userDaoHibernate.getAllUsers();
+        sessionManagerHibernate.commitSession();
+
+        assertThat(users).hasSize(2);
     }
 
     @Test

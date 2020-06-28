@@ -4,9 +4,12 @@ import hw12.core.model.User;
 import hw12.core.sessionmanager.SessionManager;
 
 import java.util.Optional;
+import java.util.List;
 
 public interface UserDao {
     Optional<User> findById(long id);
+
+    List<User> getAllUsers();
 
     long insertUser(User user);
 

@@ -1,5 +1,9 @@
 package hw12.core.service;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -8,8 +12,6 @@ import hw12.cachehw.HwCacheException;
 import hw12.core.dao.UserDao;
 import hw12.core.model.User;
 import hw12.core.sessionmanager.SessionManager;
-
-import java.util.Optional;
 
 public class DbServiceUserImpl implements DBServiceUser {
     private static final Logger logger = LoggerFactory.getLogger(DbServiceUserImpl.class);
@@ -59,7 +61,7 @@ public class DbServiceUserImpl implements DBServiceUser {
             sessionManager.beginSession();
             try {
                 Optional<User> userOptional = userDao.findById(id);
-                if ((cache != null) && (userOptional.isPresent())){
+                if ((cache != null) && (userOptional.isPresent())) {
                     cache.put(String.valueOf(id), userOptional.get());
                 }
 
@@ -71,5 +73,24 @@ public class DbServiceUserImpl implements DBServiceUser {
             }
             return Optional.empty();
         }
+    }
+
+    public List<User> getAllUsers() {
+        try (SessionManager sessionManager = userDao.getSessionManager()) {
+            sessionManager.beginSession();
+            try {
+                final var users = userDao.getAllUsers();
+                if (cache != null) {
+                    for (final var user : users) {
+                        cache.put(String.valueOf(user.getId()), user);
+                    }
+                }
+                return users;
+            } catch (Exception e) {
+                logger.error(e.getMessage(), e);
+                sessionManager.rollbackSession();
+            }
+        }
+        return new ArrayList<>();
     }
 }
