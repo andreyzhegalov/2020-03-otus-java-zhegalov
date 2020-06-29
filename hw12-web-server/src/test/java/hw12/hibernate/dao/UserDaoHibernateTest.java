@@ -1,9 +1,10 @@
 package hw12.hibernate.dao;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import java.util.Optional;
 import java.util.List;
+import java.util.Optional;
 
 import org.hibernate.SessionFactory;
 import org.hibernate.stat.EntityStatistics;
@@ -12,6 +13,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import hw12.core.dao.UserDaoException;
 import hw12.core.model.AdressDataSet;
 import hw12.core.model.PhoneDataSet;
 import hw12.core.model.User;
@@ -46,6 +48,7 @@ class UserDaoHibernateTest {
     @Test
     void shouldCorrectFindUserById() {
         User expectedUser = new User("Name");
+        expectedUser.setPassword("11111");
         expectedUser.setAdress(new AdressDataSet("some street"));
         expectedUser.addPhone(new PhoneDataSet("12345"));
         expectedUser.addPhone(new PhoneDataSet("54321"));
@@ -61,20 +64,43 @@ class UserDaoHibernateTest {
     }
 
     @Test
-    public void getAllUsersInEmptyDbTest(){
+    public void getUserByNameWhenDbEmpty() {
         sessionManagerHibernate.beginSession();
-        final List<User> users =userDaoHibernate.getAllUsers();
+        assertThrows(UserDaoException.class, () -> userDaoHibernate.findByName("Name"));
+    }
+
+    @Test
+    public void getUserByName() {
+        User expectedUser = new User("Name");
+        expectedUser.setPassword("11111");
+        expectedUser.setAdress(new AdressDataSet("some street"));
+        expectedUser.addPhone(new PhoneDataSet("12345"));
+        expectedUser.addPhone(new PhoneDataSet("54321"));
+        saveUserDao(expectedUser);
+        assertThat(expectedUser.getId()).isGreaterThan(0);
+
+        sessionManagerHibernate.beginSession();
+        Optional<User> mayBeUser = userDaoHibernate.findByName("Name");
+        sessionManagerHibernate.commitSession();
+        assertThat(mayBeUser).isPresent();
+        assertThat(mayBeUser.get()).isEqualTo(expectedUser);
+    }
+
+    @Test
+    public void getAllUsersInEmptyDbTest() {
+        sessionManagerHibernate.beginSession();
+        final List<User> users = userDaoHibernate.getAllUsers();
         sessionManagerHibernate.commitSession();
         assertThat(users).isEmpty();
     }
 
     @Test
-    public void getAllUsersTest(){
+    public void getAllUsersTest() {
         saveUserDao(new User("Name1"));
         saveUserDao(new User("Name2"));
 
         sessionManagerHibernate.beginSession();
-        final List<User> users =userDaoHibernate.getAllUsers();
+        final List<User> users = userDaoHibernate.getAllUsers();
         sessionManagerHibernate.commitSession();
 
         assertThat(users).hasSize(2);
@@ -83,6 +109,7 @@ class UserDaoHibernateTest {
     @Test
     void shouldCorrectSaveNewUser() {
         User newUser = new User("Name");
+        newUser.setPassword("11111");
         newUser.setAdress(new AdressDataSet("some street"));
         newUser.addPhone(new PhoneDataSet("12345"));
         newUser.addPhone(new PhoneDataSet("54321"));
@@ -106,6 +133,7 @@ class UserDaoHibernateTest {
     @Test
     void shouldCorrectSaveExistUser() {
         final User existedUser = new User("Name");
+        existedUser.setPassword("11111");
         existedUser.setAdress(new AdressDataSet("some street"));
         existedUser.addPhone(new PhoneDataSet("12345"));
         existedUser.addPhone(new PhoneDataSet("54321"));

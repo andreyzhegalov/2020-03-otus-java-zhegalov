@@ -11,5 +11,7 @@ public interface DBServiceUser {
 
     Optional<User> getUser(long id);
 
+    Optional<User> getUserByName(String name);
+
     List<User> getAllUsers();
 }

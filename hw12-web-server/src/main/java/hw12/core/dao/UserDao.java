@@ -9,6 +9,8 @@ import java.util.List;
 public interface UserDao {
     Optional<User> findById(long id);
 
+    Optional<User> findByName(String name);
+
     List<User> getAllUsers();
 
     long insertUser(User user);

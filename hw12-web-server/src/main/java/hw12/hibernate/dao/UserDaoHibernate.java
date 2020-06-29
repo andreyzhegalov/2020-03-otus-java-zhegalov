@@ -48,6 +48,26 @@ public class UserDaoHibernate implements UserDao {
         return Optional.empty();
     }
 
+    @SuppressWarnings("unchecked")
+    public Optional<User> findByName(String name) {
+        final DatabaseSessionHibernate currentSession = sessionManager.getCurrentSession();
+        try {
+            final EntityGraph<User> graph = (EntityGraph<User>) currentSession.getHibernateSession()
+                    .getEntityGraph("graph.userEntity.addresesAndPhones");
+
+            final Session hibernateSession = currentSession.getHibernateSession();
+            final CriteriaBuilder cb = hibernateSession.getCriteriaBuilder();
+            final CriteriaQuery<User> cq = cb.createQuery(User.class);
+            final Root<User> rootEntry = cq.from(User.class);
+            final CriteriaQuery<User> filterByName = cq.select(rootEntry).where(cb.equal(rootEntry.get("name"), name));
+            TypedQuery<User> query = hibernateSession.createQuery(filterByName);
+            return Optional.of(query.setHint("javax.persistence.loadgraph", graph).getSingleResult());
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            throw new UserDaoException(e);
+        }
+    }
+
     @Override
     @SuppressWarnings("unchecked")
     public List<User> getAllUsers() {

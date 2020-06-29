@@ -25,7 +25,6 @@ public class DbServiceUserImplTest {
     @Test
     public void getUserTest() {
         Mockito.when(userDao.getSessionManager()).thenReturn(sessionManager);
-        System.out.println(userDao);
         final DBServiceUser dbUserService = new DbServiceUserImpl(userDao, null);
         dbUserService.getUser(1L);
         Mockito.verify(userDao, Mockito.times(1)).getSessionManager();
@@ -33,9 +32,17 @@ public class DbServiceUserImplTest {
     }
 
     @Test
+    public void getUserByName() {
+        Mockito.when(userDao.getSessionManager()).thenReturn(sessionManager);
+        final DBServiceUser dbUserService = new DbServiceUserImpl(userDao, null);
+        dbUserService.getUserByName("Name");
+        Mockito.verify(userDao, Mockito.times(1)).getSessionManager();
+        Mockito.verify(userDao, Mockito.times(1)).findByName("Name");
+    }
+
+    @Test
     public void saveUserTest() {
         Mockito.when(userDao.getSessionManager()).thenReturn(sessionManager);
-        System.out.println(userDao);
         final DBServiceUser dbUserService = new DbServiceUserImpl(userDao, null);
         dbUserService.saveUser(new User("name"));
         Mockito.verify(userDao, Mockito.times(1)).getSessionManager();

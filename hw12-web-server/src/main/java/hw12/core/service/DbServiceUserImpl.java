@@ -75,6 +75,27 @@ public class DbServiceUserImpl implements DBServiceUser {
         }
     }
 
+	@Override
+	public Optional<User> getUserByName(String name) {
+        try (SessionManager sessionManager = userDao.getSessionManager()) {
+            sessionManager.beginSession();
+            try {
+                Optional<User> userOptional = userDao.findByName(name);
+                if ((cache != null) && (userOptional.isPresent())) {
+                    cache.put(String.valueOf(userOptional.get().getId()), userOptional.get());
+                }
+
+                logger.info("user: {}", userOptional.orElse(null));
+                return userOptional;
+            } catch (Exception e) {
+                logger.error(e.getMessage(), e);
+                sessionManager.rollbackSession();
+            }
+            return Optional.empty();
+        }
+	}
+
+    @Override
     public List<User> getAllUsers() {
         try (SessionManager sessionManager = userDao.getSessionManager()) {
             sessionManager.beginSession();
@@ -93,4 +114,5 @@ public class DbServiceUserImpl implements DBServiceUser {
         }
         return new ArrayList<>();
     }
+
 }

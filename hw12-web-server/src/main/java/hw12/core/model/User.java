@@ -34,6 +34,9 @@ public class User {
     @Column(name = "name")
     private String name;
 
+    @Column(name = "password")
+    private String password;
+
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = true, orphanRemoval = true)
     private AdressDataSet adress;
 
@@ -66,6 +69,14 @@ public class User {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getPassword() {
+        return password;
     }
 
     public void setAdress(AdressDataSet adress) {
@@ -116,6 +127,7 @@ public class User {
         int result = 17;
         result = 31 * result + (int) (id ^ (id >>> 32));
         result = 31 * result + (name != null ? name.hashCode() : 0);
+        result = 31 * result + (password != null ? password.hashCode() : 0);
         result = 31 * result + (adress != null ? adress.hashCode() : 0);
         result = 31 * result + phones.hashCode();
         return result;
@@ -134,11 +146,12 @@ public class User {
             return false;
         if (!Objects.equals(name, object.name))
             return false;
+        if (!Objects.equals(password, object.password))
+            return false;
         if (!Objects.equals(adress, object.adress))
             return false;
 
         return Objects.deepEquals(this.getPhones() != null ? this.getPhones().toArray() : this.getPhones(),
                 object.getPhones() != null ? object.getPhones().toArray() : object.getPhones());
     }
-
 }
