@@ -10,6 +10,8 @@ public class WebServerDemo {
             return;
         }
 
+        // UserAuthService authService = new UserAuthServiceImpl();
+
         final UsersWebServer usersWebServer = new UsersWebServer(Integer.valueOf(args[0]));
         usersWebServer.start();
         usersWebServer.join();
