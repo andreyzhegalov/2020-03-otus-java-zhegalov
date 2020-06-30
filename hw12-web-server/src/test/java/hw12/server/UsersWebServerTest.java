@@ -8,7 +8,7 @@ public class UsersWebServerTest {
 
     @Test
     public void ctrTest(){
-        assertDoesNotThrow(()-> new UsersWebServer(8080));
+        assertDoesNotThrow(()-> new UsersWebServer(8080, null, null));
     }
 
     // @Test

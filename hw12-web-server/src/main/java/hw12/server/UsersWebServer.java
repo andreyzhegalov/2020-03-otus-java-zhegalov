@@ -1,19 +1,32 @@
 package hw12.server;
 
+import java.util.Arrays;
+
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.HandlerList;
 import org.eclipse.jetty.server.handler.ResourceHandler;
+import org.eclipse.jetty.servlet.FilterHolder;
+import org.eclipse.jetty.servlet.ServletContextHandler;
+import org.eclipse.jetty.servlet.ServletHolder;
 
 import hw12.helpers.FileSystemHelper;
+import hw12.services.TemplateProcessor;
+import hw12.services.UserAuthService;
+import hw12.servlet.AuthorizationFilter;
+import hw12.servlet.LoginServlet;
 
 public class UsersWebServer implements WebServer {
     private final Server server;
+    private final TemplateProcessor templateProcessor;
+    private final UserAuthService authService;
 
     private static final String START_PAGE_NAME = "index.html";
     private static final String COMMON_RESOURCES_DIR = "static";
 
-    public UsersWebServer(int port) {
+    public UsersWebServer(int port, TemplateProcessor templateProcessor, UserAuthService authService) {
         server = new Server(port);
+        this.templateProcessor = templateProcessor;
+        this.authService = authService;
     }
 
     @Override
@@ -37,12 +50,12 @@ public class UsersWebServer implements WebServer {
     private Server initContext() {
 
         final var resourceHandler = createResourceHandler();
-        // final var servletContextHandler = createServletContextHandler();
+        final var servletContextHandler = createServletContextHandler();
 
         final var handlers = new HandlerList();
         handlers.addHandler(resourceHandler);
-        // handlers.addHandler(applySecurity(servletContextHandler, "/users", "/api/user/*"));
-
+        handlers.addHandler(applySecurity(servletContextHandler, "/users"));
+        // "/api/user/*"));
 
         server.setHandler(handlers);
         return server;
@@ -51,8 +64,23 @@ public class UsersWebServer implements WebServer {
     private ResourceHandler createResourceHandler() {
         ResourceHandler resourceHandler = new ResourceHandler();
         resourceHandler.setDirectoriesListed(false);
-        resourceHandler.setWelcomeFiles(new String[]{START_PAGE_NAME});
+        resourceHandler.setWelcomeFiles(new String[] { START_PAGE_NAME });
         resourceHandler.setResourceBase(FileSystemHelper.localFileNameOrResourceNameToFullPath(COMMON_RESOURCES_DIR));
         return resourceHandler;
+    }
+
+    private ServletContextHandler createServletContextHandler() {
+        ServletContextHandler servletContextHandler = new ServletContextHandler(ServletContextHandler.SESSIONS);
+        // servletContextHandler.addServlet(new ServletHolder(new UsersServlet(templateProcessor, userDao)), "/users");
+        // servletContextHandler.addServlet(new ServletHolder(new UsersApiServlet(userDao, gson)), "/api/user/*");
+        return servletContextHandler;
+    }
+
+    private ServletContextHandler applySecurity(ServletContextHandler servletContextHandler, String... paths) {
+        servletContextHandler.addServlet(new ServletHolder(new LoginServlet(authService)), "/login");
+        final AuthorizationFilter authorizationFilter = new AuthorizationFilter();
+        Arrays.stream(paths).forEachOrdered(
+                path -> servletContextHandler.addFilter(new FilterHolder(authorizationFilter), path, null));
+        return servletContextHandler;
     }
 }
