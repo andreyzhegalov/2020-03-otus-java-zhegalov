@@ -34,13 +34,13 @@ public class WebServerDemo {
         final var admin = new User("admin");
         admin.setPassword("11111");
         dbServiceUser.saveUser(admin);
+        dbServiceUser.saveUser(new User("user1"));
 
         final UserAuthService authService = new UserAuthServiceImpl(dbServiceUser);
         final TemplateProcessor templateProcessor = new TemplateProcessorImpl(TEMPLATES_DIR);
 
-
         final UsersWebServer usersWebServer = new UsersWebServer(Integer.valueOf(args[0]), templateProcessor,
-                authService);
+                authService, dbServiceUser);
         usersWebServer.start();
         usersWebServer.join();
 

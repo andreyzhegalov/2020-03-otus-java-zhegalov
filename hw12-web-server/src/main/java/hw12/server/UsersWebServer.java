@@ -9,9 +9,11 @@ import org.eclipse.jetty.servlet.FilterHolder;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 
+import hw12.core.service.DBServiceUser;
 import hw12.helpers.FileSystemHelper;
 import hw12.services.TemplateProcessor;
 import hw12.services.UserAuthService;
+import hw12.servlet.AdminServlet;
 import hw12.servlet.AuthorizationFilter;
 import hw12.servlet.LoginServlet;
 
@@ -19,14 +21,15 @@ public class UsersWebServer implements WebServer {
     private final Server server;
     private final TemplateProcessor templateProcessor;
     private final UserAuthService authService;
-
+    private final DBServiceUser dbServiceUser;
     private static final String START_PAGE_NAME = "index.html";
     private static final String COMMON_RESOURCES_DIR = "static";
 
-    public UsersWebServer(int port, TemplateProcessor templateProcessor, UserAuthService authService) {
+    public UsersWebServer(int port, TemplateProcessor templateProcessor, UserAuthService authService, DBServiceUser dbUserService) {
         server = new Server(port);
         this.templateProcessor = templateProcessor;
         this.authService = authService;
+        this.dbServiceUser = dbUserService;
     }
 
     @Override
@@ -54,7 +57,7 @@ public class UsersWebServer implements WebServer {
 
         final var handlers = new HandlerList();
         handlers.addHandler(resourceHandler);
-        handlers.addHandler(applySecurity(servletContextHandler, "/users"));
+        handlers.addHandler(applySecurity(servletContextHandler, "/admin"));
         // "/api/user/*"));
 
         server.setHandler(handlers);
@@ -71,8 +74,7 @@ public class UsersWebServer implements WebServer {
 
     private ServletContextHandler createServletContextHandler() {
         ServletContextHandler servletContextHandler = new ServletContextHandler(ServletContextHandler.SESSIONS);
-        // servletContextHandler.addServlet(new ServletHolder(new UsersServlet(templateProcessor, userDao)), "/users");
-        // servletContextHandler.addServlet(new ServletHolder(new UsersApiServlet(userDao, gson)), "/api/user/*");
+        servletContextHandler.addServlet(new ServletHolder(new AdminServlet(templateProcessor, dbServiceUser)), "/admin");
         return servletContextHandler;
     }
 
