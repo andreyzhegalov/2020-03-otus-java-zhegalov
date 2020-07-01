@@ -1,21 +1,36 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
-<h4>Добавить пользователя</h4>
+
+<p><h4>Добавить пользователя</h4>
+<form action="users" method="post">
+    <label>
+    <input type="text" name = "name" size=40  placeholder="Введите имя пользователя"><br>
+    </label>
+    <br/>
+    <label>
+    <input type="text" name = "password" size=40 placeholder="Введите пароль пользователя"><br>
+    </label>
+    <br>
+    <input type="submit" value="Сохранить">
+</form>
+</p>
+
 
 <h4>Список пользователей</h4>
+
 <table style="width: 400px">
     <thead>
         <tr>
             <td style="width: 50px">Id</td>
             <td style="width: 150px">Имя</td>
-            <td style="width: 100px">Логин</td>
             <td style="width: 100px">Пароль</td>
         </tr>
     </thead>
     <tbody>
         <#list users as user>
-        <tr><td>${user.id}<td>${user.name}</tr>
+        <tr><td>${user.id}<td>${user.name}<td>${user.password}</tr>
         </#list>
     </tbody>
 </table>
 </body>
 </html>
+

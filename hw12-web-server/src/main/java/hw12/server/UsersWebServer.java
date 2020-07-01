@@ -16,6 +16,7 @@ import hw12.services.UserAuthService;
 import hw12.servlet.AdminServlet;
 import hw12.servlet.AuthorizationFilter;
 import hw12.servlet.LoginServlet;
+import hw12.servlet.UsersServlet;
 
 public class UsersWebServer implements WebServer {
     private final Server server;
@@ -75,6 +76,7 @@ public class UsersWebServer implements WebServer {
     private ServletContextHandler createServletContextHandler() {
         ServletContextHandler servletContextHandler = new ServletContextHandler(ServletContextHandler.SESSIONS);
         servletContextHandler.addServlet(new ServletHolder(new AdminServlet(templateProcessor, dbServiceUser)), "/admin");
+        servletContextHandler.addServlet(new ServletHolder(new UsersServlet(dbServiceUser)), "/users");
         return servletContextHandler;
     }
 

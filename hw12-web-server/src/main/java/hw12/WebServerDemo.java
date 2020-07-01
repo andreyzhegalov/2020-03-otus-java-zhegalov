@@ -34,7 +34,9 @@ public class WebServerDemo {
         final var admin = new User("admin");
         admin.setPassword("11111");
         dbServiceUser.saveUser(admin);
-        dbServiceUser.saveUser(new User("user1"));
+        final var user1 = new User("user1");
+        user1.setPassword("22222");
+        dbServiceUser.saveUser(user1);
 
         final UserAuthService authService = new UserAuthServiceImpl(dbServiceUser);
         final TemplateProcessor templateProcessor = new TemplateProcessorImpl(TEMPLATES_DIR);
