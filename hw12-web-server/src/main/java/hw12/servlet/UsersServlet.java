@@ -11,7 +11,7 @@ import hw12.core.service.DBServiceUser;
 
 public class UsersServlet extends HttpServlet {
 
-    private static final String ADMIN_PAGE = "/admin";
+    private static final String ADMIN_URI = "/admin";
     private static final String PARAM_NAME = "name";
     private static final String PARAM_PASSWORD = "password";
 
@@ -27,7 +27,7 @@ public class UsersServlet extends HttpServlet {
         final String name = request.getParameter(PARAM_NAME);
         final String password = request.getParameter(PARAM_PASSWORD);
         if (name.isEmpty() || password.isEmpty()) {
-            response.sendRedirect(ADMIN_PAGE);
+            response.sendRedirect(ADMIN_URI);
             return;
         }
 
@@ -36,7 +36,7 @@ public class UsersServlet extends HttpServlet {
         user.setPassword(password);
         dbServiceUser.saveUser(user);
 
-        response.sendRedirect(ADMIN_PAGE);
+        response.sendRedirect(ADMIN_URI);
     }
 
 }

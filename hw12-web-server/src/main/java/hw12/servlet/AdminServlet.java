@@ -12,7 +12,7 @@ import hw12.core.service.DBServiceUser;
 import hw12.services.TemplateProcessor;
 
 public class AdminServlet extends HttpServlet {
-    private static final String USERS_PAGE_TEMPLATE = "admin.html";
+    private static final String ADMIN_PAGE_TEMPLATE = "admin.html";
 
     private final DBServiceUser dbServiceUser;
     private final TemplateProcessor templateProcessor;
@@ -29,7 +29,7 @@ public class AdminServlet extends HttpServlet {
         paramsMap.put("users", users);
 
         response.setContentType("text/html");
-        response.getWriter().println(templateProcessor.getPage(USERS_PAGE_TEMPLATE, paramsMap));
+        response.getWriter().println(templateProcessor.getPage(ADMIN_PAGE_TEMPLATE, paramsMap));
     }
 
 }
