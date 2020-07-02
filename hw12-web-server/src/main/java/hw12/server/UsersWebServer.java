@@ -23,10 +23,14 @@ public class UsersWebServer implements WebServer {
     private final TemplateProcessor templateProcessor;
     private final UserAuthService authService;
     private final DBServiceUser dbServiceUser;
+    private static final String ADMIN_URI = "/admin";
+    private static final String LOGIN_URI = "/login";
+    private static final String USERS_URI = "/users";
     private static final String START_PAGE_NAME = "index.html";
     private static final String COMMON_RESOURCES_DIR = "static";
 
-    public UsersWebServer(int port, TemplateProcessor templateProcessor, UserAuthService authService, DBServiceUser dbUserService) {
+    public UsersWebServer(int port, TemplateProcessor templateProcessor, UserAuthService authService,
+            DBServiceUser dbUserService) {
         server = new Server(port);
         this.templateProcessor = templateProcessor;
         this.authService = authService;
@@ -52,15 +56,12 @@ public class UsersWebServer implements WebServer {
     }
 
     private Server initContext() {
-
         final var resourceHandler = createResourceHandler();
         final var servletContextHandler = createServletContextHandler();
 
         final var handlers = new HandlerList();
         handlers.addHandler(resourceHandler);
-        handlers.addHandler(applySecurity(servletContextHandler, "/admin"));
-        // "/api/user/*"));
-
+        handlers.addHandler(applySecurity(servletContextHandler, ADMIN_URI));
         server.setHandler(handlers);
         return server;
     }
@@ -75,13 +76,14 @@ public class UsersWebServer implements WebServer {
 
     private ServletContextHandler createServletContextHandler() {
         ServletContextHandler servletContextHandler = new ServletContextHandler(ServletContextHandler.SESSIONS);
-        servletContextHandler.addServlet(new ServletHolder(new AdminServlet(templateProcessor, dbServiceUser)), "/admin");
-        servletContextHandler.addServlet(new ServletHolder(new UsersServlet(dbServiceUser)), "/users");
+        servletContextHandler.addServlet(new ServletHolder(new AdminServlet(templateProcessor, dbServiceUser)),
+                ADMIN_URI);
+        servletContextHandler.addServlet(new ServletHolder(new UsersServlet(dbServiceUser)), USERS_URI);
         return servletContextHandler;
     }
 
     private ServletContextHandler applySecurity(ServletContextHandler servletContextHandler, String... paths) {
-        servletContextHandler.addServlet(new ServletHolder(new LoginServlet(authService)), "/login");
+        servletContextHandler.addServlet(new ServletHolder(new LoginServlet(authService)), LOGIN_URI);
         final AuthorizationFilter authorizationFilter = new AuthorizationFilter();
         Arrays.stream(paths).forEachOrdered(
                 path -> servletContextHandler.addFilter(new FilterHolder(authorizationFilter), path, null));

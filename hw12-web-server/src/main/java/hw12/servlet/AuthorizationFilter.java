@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 public class AuthorizationFilter implements Filter {
+    private static final String INDEX_PAGE =  "index.html";
 
     private ServletContext context;
 
@@ -34,7 +35,7 @@ public class AuthorizationFilter implements Filter {
         HttpSession session = request.getSession(false);
 
         if (session == null) {
-            response.sendRedirect("/index");
+            response.sendRedirect(INDEX_PAGE);
         } else {
             filterChain.doFilter(servletRequest, servletResponse);
         }

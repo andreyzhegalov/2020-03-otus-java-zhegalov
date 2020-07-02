@@ -20,17 +20,13 @@ import hw12.services.UserAuthServiceImpl;
 public class WebServerDemo {
     private static final String TEMPLATES_DIR = "/templates/";
 
-    public static void main(String[] args) throws Exception {
-        if (args.length != 1) {
-            System.out.println("Server port not defined. Setup port argument");
-            return;
-        }
-
+    private static DBServiceUser prepareDbUsersService() {
         final SessionFactory sessionFactory = HibernateUtils.buildSessionFactory("hibernate.cfg.xml", User.class,
                 AdressDataSet.class, PhoneDataSet.class);
         final SessionManagerHibernate sessionManager = new SessionManagerHibernate(sessionFactory);
         final UserDao userDao = new UserDaoHibernate(sessionManager);
         final DBServiceUser dbServiceUser = new DbServiceUserImpl(userDao, null);
+
         final var admin = new User("admin");
         admin.setPassword("11111");
         dbServiceUser.saveUser(admin);
@@ -38,11 +34,23 @@ public class WebServerDemo {
         user1.setPassword("22222");
         dbServiceUser.saveUser(user1);
 
+        return dbServiceUser;
+    }
+
+    public static void main(String[] args) throws Exception {
+        if (args.length != 1) {
+            System.out.println("Server port not defined. Setup port argument");
+            return;
+        }
+
+        final var dbServiceUser = prepareDbUsersService();
+
         final UserAuthService authService = new UserAuthServiceImpl(dbServiceUser);
         final TemplateProcessor templateProcessor = new TemplateProcessorImpl(TEMPLATES_DIR);
 
         final UsersWebServer usersWebServer = new UsersWebServer(Integer.valueOf(args[0]), templateProcessor,
                 authService, dbServiceUser);
+
         usersWebServer.start();
         usersWebServer.join();
 
