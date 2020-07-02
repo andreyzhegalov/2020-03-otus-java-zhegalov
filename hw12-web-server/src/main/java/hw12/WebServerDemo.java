@@ -48,7 +48,7 @@ public class WebServerDemo {
         final UserAuthService authService = new UserAuthServiceImpl(dbServiceUser);
         final TemplateProcessor templateProcessor = new TemplateProcessorImpl(TEMPLATES_DIR);
 
-        final UsersWebServer usersWebServer = new UsersWebServer(Integer.valueOf(args[0]), templateProcessor,
+        final UsersWebServer usersWebServer = new UsersWebServer(Integer.parseInt(args[0]), templateProcessor,
                 authService, dbServiceUser);
 
         usersWebServer.start();
