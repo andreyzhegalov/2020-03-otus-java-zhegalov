@@ -58,7 +58,12 @@ public class AppComponentsContainerImpl implements AppComponentsContainer {
     }
 
     private Object[] getMethodArgs(Method method) {
-        return null;
+        final Class<?>[] argsTypes = method.getParameterTypes();
+        final List<Object> args = new ArrayList<>();
+        for (Class<?> type : argsTypes) {
+            args.add(getAppComponent(type));
+        }
+        return args.toArray();
     }
 
     @Override
@@ -66,7 +71,7 @@ public class AppComponentsContainerImpl implements AppComponentsContainer {
     public <C> C getAppComponent(Class<C> componentClass) {
         for (Object object : appComponents) {
             final Method method = (Method) object;
-            final var returnMethodType = method.getReturnType();
+            final Class<?> returnMethodType = method.getReturnType();
             if (returnMethodType.isAssignableFrom(componentClass)) {
                 final var args = getMethodArgs(method);
                 try {
