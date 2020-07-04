@@ -17,17 +17,10 @@ public class AppComponentsContainerImpl implements AppComponentsContainer {
 
     private final List<Object> appComponents = new ArrayList<>();
     private final Map<String, Object> appComponentsByName = new HashMap<>();
-    private Class<?> initialConfigClass;
-    private final Object configIstance;
 
-    public AppComponentsContainerImpl(Class<?> initialConfigClass) {
-        processConfig(initialConfigClass);
-        this.initialConfigClass = initialConfigClass;
-        try {
-            this.configIstance = this.initialConfigClass.getDeclaredConstructor().newInstance();
-        } catch (Exception e) {
-            System.out.println(e);
-            throw new IllegalArgumentException("Config istance not created");
+    public AppComponentsContainerImpl(Class<?>... configClasses) {
+        for (Class<?> config : configClasses) {
+            processConfig(config);
         }
     }
 
@@ -57,8 +50,7 @@ public class AppComponentsContainerImpl implements AppComponentsContainer {
         }
     }
 
-    private Object[] getMethodArgs(Method method) {
-        final Class<?>[] argsTypes = method.getParameterTypes();
+    private Object[] getArgsObject(Class<?>[] argsTypes) {
         final List<Object> args = new ArrayList<>();
         for (Class<?> type : argsTypes) {
             args.add(getAppComponent(type));
@@ -68,9 +60,12 @@ public class AppComponentsContainerImpl implements AppComponentsContainer {
 
     @SuppressWarnings("unchecked")
     private <C> C getComponent(Method method) {
-        final var args = getMethodArgs(method);
+        final Class<?>[] argsTypes = method.getParameterTypes();
+        final var args = getArgsObject(argsTypes);
         try {
-            return (C) method.invoke(configIstance, args);
+            final var classWithMethod = method.getDeclaringClass();
+            final var instance = classWithMethod.getDeclaredConstructor().newInstance();
+            return (C) method.invoke(instance, args);
         } catch (Exception e) {
             return null;
         }
@@ -91,6 +86,6 @@ public class AppComponentsContainerImpl implements AppComponentsContainer {
     @Override
     public <C> C getAppComponent(String componentName) {
         final Method method = (Method) appComponentsByName.get(componentName);
-        return getComponent(method);
+        return (method == null) ? null : getComponent(method);
     }
 }

@@ -12,12 +12,12 @@ import ru.otus.services.GameProcessorImpl;
 import ru.otus.services.IOService;
 import ru.otus.services.IOServiceConsole;
 import ru.otus.testconfig.AppConfig;
+import ru.otus.testconfig.components.EquationPrepareConfig;
+import ru.otus.testconfig.components.GameProcessorConfig;
+import ru.otus.testconfig.components.IOServiceConfig;
+import ru.otus.testconfig.components.PlayerServiveConfig;
 
 public class AppComponentsContainerImplTest {
-    @Test
-    public void ctrTestWithNullClassConfig() {
-        assertThrows(IllegalArgumentException.class, () -> new AppComponentsContainerImpl(null));
-    }
 
     @Test
     public void ctrTestWithNotValidClassConfig() {
@@ -54,10 +54,32 @@ public class AppComponentsContainerImplTest {
     }
 
     @Test
-    public void getComponentByNameWithArgs(){
+    public void getComponentNotFromConfig() {
+        final String someObject = (String) new AppComponentsContainerImpl(AppConfig.class)
+                .getAppComponent(String.class);
+        assertThat(someObject).isNull();
+    }
+
+    @Test
+    public void getComponentByNameWithArgs() {
         final GameProcessorImpl gameProcessor = (GameProcessorImpl) new AppComponentsContainerImpl(AppConfig.class)
                 .getAppComponent("gameProcessor");
         assertNotNull(gameProcessor);
+        assertThat(gameProcessor).isInstanceOf(GameProcessorImpl.class);
+    }
+
+    @Test
+    public void getComponentByNameNotFromConfig() {
+        final String someObject = (String) new AppComponentsContainerImpl(AppConfig.class).getAppComponent("String");
+        assertThat(someObject).isNull();
+    }
+
+    @Test
+    public void loadConfigFromManyFiles() {
+        final var appComponentContainerImpl = new AppComponentsContainerImpl(PlayerServiveConfig.class,
+                IOServiceConfig.class, EquationPrepareConfig.class, GameProcessorConfig.class);
+        final var gameProcessor = appComponentContainerImpl.getAppComponent(GameProcessor.class);
+        assertThat(gameProcessor).isNotNull();
         assertThat(gameProcessor).isInstanceOf(GameProcessorImpl.class);
     }
 }
