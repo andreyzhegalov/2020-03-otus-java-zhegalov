@@ -52,4 +52,12 @@ public class AppComponentsContainerImplTest {
         assertNotNull(gameProcessor);
         assertThat(gameProcessor).isInstanceOf(GameProcessorImpl.class);
     }
+
+    @Test
+    public void getComponentByNameWithArgs(){
+        final GameProcessorImpl gameProcessor = (GameProcessorImpl) new AppComponentsContainerImpl(AppConfig.class)
+                .getAppComponent("gameProcessor");
+        assertNotNull(gameProcessor);
+        assertThat(gameProcessor).isInstanceOf(GameProcessorImpl.class);
+    }
 }

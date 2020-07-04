@@ -66,19 +66,23 @@ public class AppComponentsContainerImpl implements AppComponentsContainer {
         return args.toArray();
     }
 
-    @Override
     @SuppressWarnings("unchecked")
+    private <C> C getComponent(Method method) {
+        final var args = getMethodArgs(method);
+        try {
+            return (C) method.invoke(configIstance, args);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    @Override
     public <C> C getAppComponent(Class<C> componentClass) {
         for (Object object : appComponents) {
             final Method method = (Method) object;
             final Class<?> returnMethodType = method.getReturnType();
             if (returnMethodType.isAssignableFrom(componentClass)) {
-                final var args = getMethodArgs(method);
-                try {
-                    return (C) method.invoke(configIstance, args);
-                } catch (Exception e) {
-                    return null;
-                }
+                return getComponent(method);
             }
         }
         return null;
@@ -86,7 +90,7 @@ public class AppComponentsContainerImpl implements AppComponentsContainer {
 
     @Override
     public <C> C getAppComponent(String componentName) {
-        // Получение по имени идентификатора
-        return null;
+        final Method method = (Method) appComponentsByName.get(componentName);
+        return getComponent(method);
     }
 }
