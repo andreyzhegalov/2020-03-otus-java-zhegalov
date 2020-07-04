@@ -5,9 +5,16 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
+
+import org.reflections.Reflections;
+import org.reflections.scanners.SubTypesScanner;
+import org.reflections.scanners.TypeAnnotationsScanner;
+import org.reflections.util.ClasspathHelper;
+import org.reflections.util.ConfigurationBuilder;
 
 import ru.otus.appcontainer.api.AppComponent;
 import ru.otus.appcontainer.api.AppComponentsContainer;
@@ -20,6 +27,17 @@ public class AppComponentsContainerImpl implements AppComponentsContainer {
 
     public AppComponentsContainerImpl(Class<?>... configClasses) {
         for (Class<?> config : configClasses) {
+            processConfig(config);
+        }
+    }
+
+    public AppComponentsContainerImpl(String packageName) {
+        final ConfigurationBuilder reflectionConfig = new ConfigurationBuilder()
+                .setScanners(new SubTypesScanner(false), new TypeAnnotationsScanner())
+                .setUrls(ClasspathHelper.forPackage(packageName));
+        final Reflections reflections = new Reflections(reflectionConfig);
+        final Set<Class<?>> annotated = reflections.getTypesAnnotatedWith(AppComponentsContainerConfig.class);
+        for (Class<?> config : annotated) {
             processConfig(config);
         }
     }

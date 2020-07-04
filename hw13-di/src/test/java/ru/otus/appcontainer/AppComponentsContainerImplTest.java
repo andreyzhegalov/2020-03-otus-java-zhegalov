@@ -54,14 +54,14 @@ public class AppComponentsContainerImplTest {
     }
 
     @Test
-    public void getComponentNotFromConfig() {
+    public void getComponentNotFromConfigTest() {
         final String someObject = (String) new AppComponentsContainerImpl(AppConfig.class)
                 .getAppComponent(String.class);
         assertThat(someObject).isNull();
     }
 
     @Test
-    public void getComponentByNameWithArgs() {
+    public void getComponentByNameWithArgsTest() {
         final GameProcessorImpl gameProcessor = (GameProcessorImpl) new AppComponentsContainerImpl(AppConfig.class)
                 .getAppComponent("gameProcessor");
         assertNotNull(gameProcessor);
@@ -69,15 +69,23 @@ public class AppComponentsContainerImplTest {
     }
 
     @Test
-    public void getComponentByNameNotFromConfig() {
+    public void getComponentByNameNotFromConfigTest() {
         final String someObject = (String) new AppComponentsContainerImpl(AppConfig.class).getAppComponent("String");
         assertThat(someObject).isNull();
     }
 
     @Test
-    public void loadConfigFromManyFiles() {
+    public void loadConfigFromManyFilesTest() {
         final var appComponentContainerImpl = new AppComponentsContainerImpl(PlayerServiveConfig.class,
                 IOServiceConfig.class, EquationPrepareConfig.class, GameProcessorConfig.class);
+        final var gameProcessor = appComponentContainerImpl.getAppComponent(GameProcessor.class);
+        assertThat(gameProcessor).isNotNull();
+        assertThat(gameProcessor).isInstanceOf(GameProcessorImpl.class);
+    }
+
+    @Test
+    public void loadConfigFromPackageNameTest() {
+        final var appComponentContainerImpl = new AppComponentsContainerImpl("ru.otus.testconfig.components");
         final var gameProcessor = appComponentContainerImpl.getAppComponent(GameProcessor.class);
         assertThat(gameProcessor).isNotNull();
         assertThat(gameProcessor).isInstanceOf(GameProcessorImpl.class);
