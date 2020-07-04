@@ -61,7 +61,7 @@ public class UsersWebServer implements WebServer {
 
         final var handlers = new HandlerList();
         handlers.addHandler(resourceHandler);
-        handlers.addHandler(applySecurity(servletContextHandler, ADMIN_URI));
+        handlers.addHandler(applySecurity(servletContextHandler, ADMIN_URI, USERS_URI));
         server.setHandler(handlers);
         return server;
     }
