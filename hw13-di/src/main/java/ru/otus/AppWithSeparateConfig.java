@@ -7,7 +7,6 @@ import ru.otus.config.components.IOServiceConfig;
 import ru.otus.config.components.PlayerServiveConfig;
 import ru.otus.services.GameProcessor;
 
-
 public class AppWithSeparateConfig {
 
     public static void main(String[] args) throws Exception {

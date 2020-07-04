@@ -2,11 +2,11 @@ package ru.otus.appcontainer;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
+import ru.otus.appcontainer.api.AppComponentsContainer;
 import ru.otus.services.GameProcessor;
 import ru.otus.services.GameProcessorImpl;
 import ru.otus.services.IOService;
@@ -31,62 +31,65 @@ public class AppComponentsContainerImplTest {
 
     @Test
     public void getComponentWithOutArgsByImplementationTest() {
-        final IOServiceConsole ioServiceConsole = new AppComponentsContainerImpl(AppConfig.class)
-                .getAppComponent(IOServiceConsole.class);
-        assertNotNull(ioServiceConsole);
+        final AppComponentsContainer container = new AppComponentsContainerImpl(AppConfig.class);
+        final IOService ioServiceConsole = container.getAppComponent(IOServiceConsole.class);
+        assertThat(ioServiceConsole).isNotNull();
         assertThat(ioServiceConsole).isInstanceOf(IOServiceConsole.class);
     }
 
     @Test
     public void getComponentWithOutArgsByInterfaceTest() {
-        final IOServiceConsole ioServiceConsole = (IOServiceConsole) new AppComponentsContainerImpl(AppConfig.class)
-                .getAppComponent(IOService.class);
-        assertNotNull(ioServiceConsole);
+        final AppComponentsContainer container = new AppComponentsContainerImpl(AppConfig.class);
+        final IOService ioServiceConsole = container.getAppComponent(IOService.class);
+        assertThat(ioServiceConsole).isNotNull();
         assertThat(ioServiceConsole).isInstanceOf(IOServiceConsole.class);
     }
 
     @Test
     public void getComponentWithArgsTest() {
-        final GameProcessorImpl gameProcessor = (GameProcessorImpl) new AppComponentsContainerImpl(AppConfig.class)
-                .getAppComponent(GameProcessor.class);
-        assertNotNull(gameProcessor);
+        final AppComponentsContainer container = new AppComponentsContainerImpl(AppConfig.class);
+        final GameProcessor gameProcessor = container.getAppComponent(GameProcessor.class);
+        assertThat(gameProcessor).isNotNull();
         assertThat(gameProcessor).isInstanceOf(GameProcessorImpl.class);
     }
 
     @Test
     public void getComponentNotFromConfigTest() {
-        final String someObject = (String) new AppComponentsContainerImpl(AppConfig.class)
-                .getAppComponent(String.class);
+        final AppComponentsContainer container = new AppComponentsContainerImpl(AppConfig.class);
+        final String someObject = container.getAppComponent(String.class);
         assertThat(someObject).isNull();
     }
 
     @Test
     public void getComponentByNameWithArgsTest() {
-        final GameProcessorImpl gameProcessor = (GameProcessorImpl) new AppComponentsContainerImpl(AppConfig.class)
-                .getAppComponent("gameProcessor");
-        assertNotNull(gameProcessor);
+        final AppComponentsContainer container = new AppComponentsContainerImpl(AppConfig.class);
+        final GameProcessor gameProcessor = container.getAppComponent("gameProcessor");
+        assertThat(gameProcessor).isNotNull();
         assertThat(gameProcessor).isInstanceOf(GameProcessorImpl.class);
     }
 
     @Test
     public void getComponentByNameNotFromConfigTest() {
-        final String someObject = (String) new AppComponentsContainerImpl(AppConfig.class).getAppComponent("String");
+        final AppComponentsContainer container = new AppComponentsContainerImpl(AppConfig.class);
+        final String someObject = container.getAppComponent("String");
         assertThat(someObject).isNull();
     }
 
     @Test
     public void loadConfigFromManyFilesTest() {
-        final var appComponentContainerImpl = new AppComponentsContainerImpl(PlayerServiveConfig.class,
-                IOServiceConfig.class, EquationPrepareConfig.class, GameProcessorConfig.class);
-        final var gameProcessor = appComponentContainerImpl.getAppComponent(GameProcessor.class);
+        final AppComponentsContainer appComponentContainerImpl = new AppComponentsContainerImpl(
+                PlayerServiveConfig.class, IOServiceConfig.class, EquationPrepareConfig.class,
+                GameProcessorConfig.class);
+        final GameProcessor gameProcessor = appComponentContainerImpl.getAppComponent(GameProcessor.class);
         assertThat(gameProcessor).isNotNull();
         assertThat(gameProcessor).isInstanceOf(GameProcessorImpl.class);
     }
 
     @Test
     public void loadConfigFromPackageNameTest() {
-        final var appComponentContainerImpl = new AppComponentsContainerImpl("ru.otus.testconfig.components");
-        final var gameProcessor = appComponentContainerImpl.getAppComponent(GameProcessor.class);
+        final AppComponentsContainer appComponentContainerImpl = new AppComponentsContainerImpl(
+                "ru.otus.testconfig.components");
+        final GameProcessor gameProcessor = appComponentContainerImpl.getAppComponent(GameProcessor.class);
         assertThat(gameProcessor).isNotNull();
         assertThat(gameProcessor).isInstanceOf(GameProcessorImpl.class);
     }

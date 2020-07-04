@@ -7,9 +7,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.google.common.collect.ArrayListMultimap;
-import com.google.common.collect.Multimap;
-
 import org.reflections.Reflections;
 import org.reflections.scanners.SubTypesScanner;
 import org.reflections.scanners.TypeAnnotationsScanner;
@@ -45,18 +42,15 @@ public class AppComponentsContainerImpl implements AppComponentsContainer {
     private void processConfig(Class<?> configClass) {
         checkConfigClass(configClass);
         final var methods = configClass.getDeclaredMethods();
-        Multimap<Integer, Object> map = ArrayListMultimap.create();
         for (final var method : methods) {
             final var findedAnnotation = AppComponent.class;
             if (!method.isAnnotationPresent(findedAnnotation)) {
                 continue;
             }
+            appComponents.add(method);
             final var annotation = method.getAnnotation(findedAnnotation);
-            final int order = annotation.order();
-            map.put(order, method);
             appComponentsByName.put(annotation.name(), method);
         }
-        map.forEach((key, valueCollection) -> appComponents.add(valueCollection));
     }
 
     private void checkConfigClass(Class<?> configClass) {
