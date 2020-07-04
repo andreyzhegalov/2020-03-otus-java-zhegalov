@@ -74,8 +74,8 @@ public class AppComponentsContainerImpl implements AppComponentsContainer {
     private <C> C getComponent(Method method) {
         final Class<?>[] argsTypes = method.getParameterTypes();
         final var args = getArgsObject(argsTypes);
+        final var classWithMethod = method.getDeclaringClass();
         try {
-            final var classWithMethod = method.getDeclaringClass();
             final var instance = classWithMethod.getDeclaredConstructor().newInstance();
             return (C) method.invoke(instance, args);
         } catch (Exception e) {
