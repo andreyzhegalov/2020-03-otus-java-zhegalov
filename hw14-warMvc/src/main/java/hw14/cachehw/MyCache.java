@@ -8,10 +8,11 @@ import java.util.List;
 import java.util.Objects;
 import java.util.WeakHashMap;
 
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
+@Component
 public class MyCache<K, V> implements HwCache<K, V> {
     private static final Logger logger = LoggerFactory.getLogger(MyCache.class);
 
@@ -73,7 +74,7 @@ public class MyCache<K, V> implements HwCache<K, V> {
             throw new HwCacheException("Remove failed. Has no one listener");
         }
         final var refListener = listeners.stream().filter(l -> Objects.equals(l.get(), listener)).findFirst();
-        if(refListener.isEmpty()){
+        if (refListener.isEmpty()) {
             throw new HwCacheException("Remove listener not found.");
         }
         listeners.remove(refListener.get());

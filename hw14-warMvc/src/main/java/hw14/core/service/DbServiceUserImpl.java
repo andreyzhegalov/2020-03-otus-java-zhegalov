@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Repository;
 
 import hw14.cachehw.HwCache;
 import hw14.cachehw.HwCacheException;
@@ -13,6 +14,7 @@ import hw14.core.dao.UserDao;
 import hw14.core.model.User;
 import hw14.core.sessionmanager.SessionManager;
 
+@Repository
 public class DbServiceUserImpl implements DBServiceUser {
     private static final Logger logger = LoggerFactory.getLogger(DbServiceUserImpl.class);
 
@@ -75,8 +77,8 @@ public class DbServiceUserImpl implements DBServiceUser {
         }
     }
 
-	@Override
-	public Optional<User> getUserByName(String name) {
+    @Override
+    public Optional<User> getUserByName(String name) {
         try (SessionManager sessionManager = userDao.getSessionManager()) {
             sessionManager.beginSession();
             try {
@@ -93,7 +95,7 @@ public class DbServiceUserImpl implements DBServiceUser {
             }
             return Optional.empty();
         }
-	}
+    }
 
     @Override
     public List<User> getAllUsers() {

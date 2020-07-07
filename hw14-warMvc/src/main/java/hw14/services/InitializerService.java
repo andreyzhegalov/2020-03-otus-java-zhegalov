@@ -1,8 +1,11 @@
 package hw14.services;
 
+import org.springframework.stereotype.Service;
+
 import hw14.core.model.User;
 import hw14.core.service.DBServiceUser;
 
+@Service
 public class InitializerService {
     private final DBServiceUser dbServiceUser;
 

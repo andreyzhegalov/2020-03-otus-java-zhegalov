@@ -14,6 +14,7 @@ import javax.persistence.criteria.Root;
 import org.hibernate.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
 import hw14.core.dao.UserDao;
 import hw14.core.dao.UserDaoException;
@@ -22,6 +23,7 @@ import hw14.core.sessionmanager.SessionManager;
 import hw14.hibernate.sessionmanager.DatabaseSessionHibernate;
 import hw14.hibernate.sessionmanager.SessionManagerHibernate;
 
+@Component
 public class UserDaoHibernate implements UserDao {
     private static final Logger logger = LoggerFactory.getLogger(UserDaoHibernate.class);
 
