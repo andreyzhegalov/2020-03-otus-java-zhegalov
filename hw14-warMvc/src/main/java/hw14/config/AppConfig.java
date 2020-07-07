@@ -8,6 +8,8 @@ import hw14.core.dao.UserDao;
 import hw14.core.model.AdressDataSet;
 import hw14.core.model.PhoneDataSet;
 import hw14.core.model.User;
+import hw14.core.service.DBServiceUser;
+import hw14.core.service.DbServiceUserImpl;
 import hw14.core.sessionmanager.SessionManager;
 import hw14.hibernate.HibernateUtils;
 import hw14.hibernate.dao.UserDaoHibernate;
@@ -31,6 +33,11 @@ public class AppConfig {
     @Bean
     public UserDao userDao(SessionManagerHibernate sessionManager){
         return new UserDaoHibernate(sessionManager);
+    }
+
+    @Bean
+    public DBServiceUser dbServiceUser(UserDao userDao){
+        return new DbServiceUserImpl(userDao, null);
     }
 
     // @Bean
