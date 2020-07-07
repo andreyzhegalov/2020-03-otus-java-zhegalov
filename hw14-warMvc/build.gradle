@@ -8,30 +8,32 @@ sourceCompatibility = JavaVersion.VERSION_13
 targetCompatibility = JavaVersion.VERSION_13
 
 dependencies {
-    dependencies {
-        implementation 'com.google.guava:guava'
-        implementation 'org.hibernate:hibernate-core'
-        implementation 'com.h2database:h2'
-        implementation 'ch.qos.logback:logback-classic'
-        implementation 'org.ehcache:ehcache'
+    implementation 'com.google.guava:guava'
+    implementation 'org.hibernate:hibernate-core'
+    implementation 'com.h2database:h2'
+    implementation 'ch.qos.logback:logback-classic'
+    implementation 'org.ehcache:ehcache'
 
-        implementation("org.eclipse.jetty:jetty-server:${Versions.jetty}")
-        implementation("org.eclipse.jetty:jetty-webapp:${Versions.jetty}")
-        implementation("org.eclipse.jetty:jetty-security:${Versions.jetty}")
-        implementation("org.freemarker:freemarker:${Versions.freemarker}")
+    implementation("org.springframework:spring-context")
+    implementation("org.springframework:spring-webmvc")
+    implementation("org.springframework:spring-web")
 
-        testImplementation 'org.assertj:assertj-core'
-        testImplementation group: 'org.mockito', name: 'mockito-junit-jupiter'
-        testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-engine'
-    }
+    implementation("org.eclipse.jetty:jetty-server:${Versions.jetty}")
+    implementation("org.eclipse.jetty:jetty-webapp:${Versions.jetty}")
+    implementation("org.eclipse.jetty:jetty-security:${Versions.jetty}")
+    implementation("org.freemarker:freemarker:${Versions.freemarker}")
+
+    testImplementation 'org.assertj:assertj-core'
+    testImplementation group: 'org.mockito', name: 'mockito-junit-jupiter'
+    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-engine'
 }
 
 shadowJar {
-    archiveBaseName.set('hw12-web-server')
+    archiveBaseName.set('hw14-web-server')
     archiveVersion.set('0.1')
     archiveClassifier.set('')
     manifest {
-        attributes 'Main-Class': 'hw12.WebServerDemo'
+        attributes 'Main-Class': 'hw14.WebServerDemo'
     }
 }
 
