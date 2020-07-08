@@ -2,13 +2,13 @@ package ru.otus.appcontainer;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
-import com.google.common.collect.ArrayListMultimap;
-import com.google.common.collect.Multimap;
+import java.util.stream.Collectors;
 
 import org.reflections.Reflections;
 import org.reflections.scanners.SubTypesScanner;
@@ -59,36 +59,15 @@ public class AppComponentsContainerImpl implements AppComponentsContainer {
     }
 
     private List<Class<?>> sortConfigClasses(Class<?>[] configClasses) {
-        final Multimap<Integer, Class<?>> map = ArrayListMultimap.create();
-        for (final var configClass : configClasses) {
-            checkConfigClass(configClass);
-            final var findedAnnotation = AppComponentsContainerConfig.class;
-            if (!configClass.isAnnotationPresent(findedAnnotation)) {
-                continue;
-            }
-            final var annotation = configClass.getAnnotation(findedAnnotation);
-            final int order = annotation.order();
-            map.put(order, configClass);
-        }
-        final List<Class<?>> result = new ArrayList<>();
-        map.forEach((key, valueCollection) -> result.add(valueCollection));
-        return result;
+        return Arrays.stream(configClasses).peek(this::checkConfigClass)
+                .sorted(Comparator.comparingInt(c -> c.getAnnotation(AppComponentsContainerConfig.class).order()))
+                .collect(Collectors.toList());
     }
 
     private List<Method> loadAllAnnotatedMethods(Method[] methods) {
-        final Multimap<Integer, Method> map = ArrayListMultimap.create();
-        for (final var method : methods) {
-            final var findedAnnotation = AppComponent.class;
-            if (!method.isAnnotationPresent(findedAnnotation)) {
-                continue;
-            }
-            final var annotation = method.getAnnotation(findedAnnotation);
-            final int order = annotation.order();
-            map.put(order, method);
-        }
-        final List<Method> result = new ArrayList<>();
-        map.forEach((key, valueCollection) -> result.add(valueCollection));
-        return result;
+        return Arrays.stream(methods).filter(method -> method.isAnnotationPresent(AppComponent.class))
+                .sorted(Comparator.comparingInt(c -> c.getAnnotation(AppComponent.class).order()))
+                .collect(Collectors.toList());
     }
 
     @SuppressWarnings("unchecked")
