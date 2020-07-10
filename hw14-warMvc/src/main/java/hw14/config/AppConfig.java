@@ -14,7 +14,6 @@ import hw14.hibernate.HibernateUtils;
 @Configuration
 public class AppConfig {
     private static final String HIBERNATE_CONF = "hibernate.cfg.xml";
-    private static final String TEMPLATES_DIR = "/templates/";
 
     @Bean
     public SessionFactory sessionFactory() {

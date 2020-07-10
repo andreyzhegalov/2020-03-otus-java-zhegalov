@@ -14,11 +14,11 @@ public class AdminController {
         this.dbServiceUser = dbServiceUser;
     }
 
-    @GetMapping({"/admin"})
+    @GetMapping({ "/admin" })
     public String userListView(Model model) {
         final var users = dbServiceUser.getAllUsers();
         model.addAttribute("users", users);
         return "admin.html";
     }
-}
 
+}
