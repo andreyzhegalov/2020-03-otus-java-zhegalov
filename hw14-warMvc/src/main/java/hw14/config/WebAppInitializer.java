@@ -1,4 +1,4 @@
-package hw14;
+package hw14.config;
 
 import javax.servlet.Filter;
 

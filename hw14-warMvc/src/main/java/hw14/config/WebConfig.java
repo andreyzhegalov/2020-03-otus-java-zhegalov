@@ -1,4 +1,4 @@
-package hw14;
+package hw14.config;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
