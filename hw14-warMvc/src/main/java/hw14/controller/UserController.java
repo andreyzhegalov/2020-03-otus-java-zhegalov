@@ -5,8 +5,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.view.RedirectView;
 
-import hw14.core.model.User;
 import hw14.core.service.DBServiceUser;
+import hw14.dto.UserDto;
 
 @Controller
 public class UserController {
@@ -17,9 +17,9 @@ public class UserController {
     }
 
     @PostMapping("/users")
-    public RedirectView userSave(@ModelAttribute User user) {
-        if (!(user.getName().isEmpty() || user.getPassword().isEmpty())) {
-            dbServiceUser.saveUser(user);
+    public RedirectView userSave(@ModelAttribute UserDto userDto) {
+        if (!(userDto.getName().isEmpty() || userDto.getPassword().isEmpty())) {
+            dbServiceUser.saveUser(userDto.toUser());
         }
         return new RedirectView("/admin", true);
     }
