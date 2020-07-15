@@ -1,6 +1,8 @@
 package hw14.controller;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.view.RedirectView;
@@ -21,6 +23,13 @@ public class UserController {
         if (!(userDto.getName().isEmpty() || userDto.getPassword().isEmpty())) {
             dbServiceUser.saveUser(userDto.toUser());
         }
-        return new RedirectView("/admin", true);
+        return new RedirectView("/users", true);
+    }
+
+    @GetMapping({ "/users" })
+    public String userListView(Model model) {
+        final var users = dbServiceUser.getAllUsers();
+        model.addAttribute("users", users);
+        return "users.html";
     }
 }

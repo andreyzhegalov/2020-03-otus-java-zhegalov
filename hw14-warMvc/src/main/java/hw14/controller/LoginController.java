@@ -32,7 +32,7 @@ public class LoginController {
         final boolean isAdmin = dbServiceUser.getUserByName(login).map(user -> user.getPassword().equals(password))
                 .orElse(false);
         if (isAdmin) {
-            return new RedirectView("/admin", true);
+            return new RedirectView("/users", true);
         } else {
             return new RedirectView("/", true);
         }
