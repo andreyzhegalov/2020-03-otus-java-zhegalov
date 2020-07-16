@@ -16,7 +16,6 @@ public class LoginController {
     private final DBServiceUser dbServiceUser;
 
     public LoginController(InitializerService initializerService, DBServiceUser dbServiceUser) {
-        initializerService.prepareUsers();
         this.dbServiceUser = dbServiceUser;
     }
 
