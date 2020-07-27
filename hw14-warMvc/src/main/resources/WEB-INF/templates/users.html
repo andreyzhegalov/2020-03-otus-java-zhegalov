@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<body>
+
+<p><h4>Добавить пользователя</h4>
+<form action="users" method="post">
+    <label>
+    <input type="text" name = "name" size=40  placeholder="Введите имя пользователя"><br>
+    </label>
+    <br/>
+    <label>
+    <input type="text" name = "password" size=40 placeholder="Введите пароль пользователя"><br>
+    </label>
+    <br>
+    <input type="submit" value="Сохранить">
+</form>
+</p>
+
+<h4>Список пользователей</h4>
+
+<table class="users">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr th:each="user : ${users}">
+            <td th:text="${user.id}">1</td>
+            <td th:text="${user.name}">John Doe</td>
+        </tr>
+    </tbody>
+</table>
+
+</body>
+</html>
+
