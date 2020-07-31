@@ -28,10 +28,12 @@ public class ShiftedSequence {
 
         Thread t1 = new Thread(() -> criticalSection(1_000));
         t1.setName("t1");
-        t1.start();
 
         Thread t2 = new Thread(() -> criticalSection(2_000));
         t2.setName("t2");
+
+        t1.start();
+        sleep(10);
         t2.start();
 
         t1.join();
