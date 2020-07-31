@@ -12,8 +12,8 @@ dependencies {
     implementation 'javax.persistence:javax.persistence-api'
 
     implementation 'org.hibernate:hibernate-core'
-    implementation 'org.thymeleaf:thymeleaf'
-    implementation 'org.thymeleaf:thymeleaf-spring5'
+    // implementation 'org.thymeleaf:thymeleaf'
+    // implementation 'org.thymeleaf:thymeleaf-spring5'
 
     implementation("org.springframework.boot:spring-boot-starter-websocket")
 

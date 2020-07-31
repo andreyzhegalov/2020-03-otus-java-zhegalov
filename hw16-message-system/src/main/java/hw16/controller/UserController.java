@@ -28,8 +28,8 @@ public class UserController {
 
     @GetMapping({ "/users" })
     public String userListView(Model model) {
-        final var users = dbServiceUser.getAllUsers();
-        model.addAttribute("users", users);
+        // final var users = dbServiceUser.getAllUsers();
+        // model.addAttribute("users", users);
         return "users.html";
     }
 }

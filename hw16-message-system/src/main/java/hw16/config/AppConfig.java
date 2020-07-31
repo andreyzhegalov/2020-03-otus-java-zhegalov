@@ -10,7 +10,6 @@ import hw16.core.model.PhoneDataSet;
 import hw16.core.model.User;
 import hw16.hibernate.HibernateUtils;
 
-@ComponentScan("hw16")
 @Configuration
 public class AppConfig {
     private static final String HIBERNATE_CONF = "hibernate.cfg.xml";
