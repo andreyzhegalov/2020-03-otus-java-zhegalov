@@ -3,27 +3,20 @@ package hw16.dto;
 import hw16.core.model.User;
 
 public class UserDto {
+    private final Long id;
     private final String name;
-    private final String password;
 
-    public UserDto(String name, String password) {
-        this.name = name;
-        this.password = password;
+    public UserDto(User user) {
+        this.id = user.getId();
+        this.name = user.getName();
+    }
+
+    public Long getId() {
+        return id;
     }
 
     public String getName() {
         return name;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public User toUser(){
-        final var user = new User();
-        user.setName(getName());
-        user.setPassword(getPassword());
-        return user;
     }
 }
 

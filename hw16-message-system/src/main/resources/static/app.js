@@ -16,8 +16,9 @@ const connect = () => {
   stompClient.connect({}, (frame) => {
     setConnected(true);
     console.log("Connected: " + frame);
-    stompClient.subscribe("/topic/users", (greeting) =>
-      showGreeting(JSON.parse(greeting.body).messageStr)
+    sendMsg();
+    stompClient.subscribe("/topic/users", (message) =>
+      showUsers(JSON.parse(message.body))
     );
   });
 };
@@ -34,11 +35,15 @@ const sendMsg = () =>
   stompClient.send(
     "/app/message",
     {},
-    JSON.stringify({'name': $('#name').val(), 'password': $('#password').val()})
+    JSON.stringify({ name: $("#name").val(), password: $("#password").val() })
   );
 
-const showGreeting = (messageStr) =>
-  $("#chatLine").append("<tr><td>" + messageStr + "</td></tr>");
+const showUsers = (usersJson) => {
+  $("#usersTable").bootstrapTable("destroy");
+  $("#usersTable").bootstrapTable({
+    data: usersJson,
+  });
+};
 
 $(function () {
   $("form").on("submit", (event) => {
