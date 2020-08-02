@@ -4,11 +4,10 @@ const setConnected = (connected) => {
   $("#connect").prop("disabled", connected);
   $("#disconnect").prop("disabled", !connected);
   if (connected) {
-    $("#chatLine").show();
+    $("#users-actions").show();
   } else {
-    $("#chatLine").hide();
+    $("#users-actions").hide();
   }
-  $("#message").html("");
 };
 
 const connect = () => {
@@ -31,12 +30,13 @@ const disconnect = () => {
   console.log("Disconnected");
 };
 
-const sendMsg = () =>
+const sendMsg = () => {
   stompClient.send(
-    "/app/message",
+    "/app/newUser",
     {},
     JSON.stringify({ name: $("#name").val(), password: $("#password").val() })
   );
+};
 
 const showUsers = (usersJson) => {
   $("#usersTable").bootstrapTable("destroy");
@@ -52,4 +52,5 @@ $(function () {
   $("#connect").click(connect);
   $("#disconnect").click(disconnect);
   $("#send").click(sendMsg);
+  connect();
 });

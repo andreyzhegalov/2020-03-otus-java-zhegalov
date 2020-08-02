@@ -23,9 +23,9 @@ public class MessageController {
         this.dbServiceUser = dbServiceUser;
     }
 
-    @MessageMapping("/message")
+    @MessageMapping("/newUser")
     @SendTo("/topic/users")
-    public List<UserDto> getMessage(User user) {
+    public List<UserDto> onNewUser(User user) {
         logger.info("got new user :{}", user);
         if (!(user.getName().isEmpty() || user.getPassword().isEmpty())) {
             dbServiceUser.saveUser(user);
