@@ -32,9 +32,9 @@ const disconnect = () => {
 
 const sendMsg = () =>
   stompClient.send(
-    "/app/users",
+    "/app/message",
     {},
-    JSON.stringify({ messageStr: "HELLO!!!!!!"})
+    JSON.stringify({'name': $('#name').val(), 'password': $('#password').val()})
   );
 
 const showGreeting = (messageStr) =>

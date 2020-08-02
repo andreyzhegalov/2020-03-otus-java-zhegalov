@@ -117,12 +117,6 @@ public class User {
     }
 
     @Override
-    public String toString() {
-        return "User{" + "id = " + getId() + ", name = " + getName() + ", adress = " + getAdress() + ", phones = "
-                + getPhones() + "}";
-    }
-
-    @Override
     public int hashCode() {
         int result = 17;
         result = 31 * result + (int) (id ^ (id >>> 32));
@@ -154,4 +148,16 @@ public class User {
         return Objects.deepEquals(this.getPhones() != null ? this.getPhones().toArray() : this.getPhones(),
                 object.getPhones() != null ? object.getPhones().toArray() : object.getPhones());
     }
+
+    @Override
+    public String toString() {
+        return "User{" +
+            "id = " + getId() +
+            ", name = " + getName() +
+            ", password = " + getPassword() +
+            ", adress = " + getAdress() +
+            ", phones = " + getPhones() +
+            "}";
+    }
+
 }

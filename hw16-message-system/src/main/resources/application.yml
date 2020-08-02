@@ -4,5 +4,6 @@ server:
 logging:
     level:
         root: ERROR
+        hw16: INFO
         org.springframework.web: DEBUG
         org.hibernate: ERROR
