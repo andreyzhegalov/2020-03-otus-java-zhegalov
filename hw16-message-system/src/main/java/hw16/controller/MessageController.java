@@ -12,15 +12,18 @@ import org.springframework.stereotype.Controller;
 import hw16.core.model.User;
 import hw16.core.service.DBServiceUser;
 import hw16.dto.UserDto;
+import ru.otus.messagesystem.MessageSystem;
 
 @Controller
 public class MessageController {
     private static final Logger logger = LoggerFactory.getLogger(MessageController.class);
 
     private final DBServiceUser dbServiceUser;
+    private final MessageSystem messageSystem;
 
-    public MessageController(DBServiceUser dbServiceUser) {
+    public MessageController(DBServiceUser dbServiceUser, MessageSystem messageSystem) {
         this.dbServiceUser = dbServiceUser;
+        this.messageSystem = messageSystem;
     }
 
     @MessageMapping("/newUser")
