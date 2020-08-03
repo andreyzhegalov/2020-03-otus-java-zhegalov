@@ -33,7 +33,8 @@ public class ShiftedSequence {
         t2.setName("t2");
 
         t1.start();
-        sleep(10);
+        t1.join(100);
+
         t2.start();
 
         t1.join();
