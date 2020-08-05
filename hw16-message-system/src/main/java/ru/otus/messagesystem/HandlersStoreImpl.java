@@ -1,14 +1,14 @@
 package ru.otus.messagesystem;
 
-import ru.otus.messagesystem.client.ResultDataType;
-import ru.otus.messagesystem.message.MessageType;
-
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Repository;
 
-@Service
+import ru.otus.messagesystem.client.ResultDataType;
+import ru.otus.messagesystem.message.MessageType;
+
+@Repository
 public class HandlersStoreImpl implements HandlersStore {
     private final Map<String, RequestHandler<? extends ResultDataType>> handlers = new ConcurrentHashMap<>();
 
