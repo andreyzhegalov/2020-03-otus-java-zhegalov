@@ -1,16 +1,17 @@
-package hw16.front.handlers;
+package hw16.messageservice.handler;
+
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import hw16.dto.UserDto;
+import ru.otus.messagesystem.RequestHandler;
 import ru.otus.messagesystem.client.CallbackRegistry;
 import ru.otus.messagesystem.client.MessageCallback;
 import ru.otus.messagesystem.client.ResultDataType;
-import ru.otus.messagesystem.message.MessageHelper;
 import ru.otus.messagesystem.message.Message;
-import ru.otus.messagesystem.RequestHandler;
-
-import java.util.Optional;
+import ru.otus.messagesystem.message.MessageHelper;
 
 public class GetUserDataResponseHandler implements RequestHandler<UserDto> {
     private static final Logger logger = LoggerFactory.getLogger(GetUserDataResponseHandler.class);
@@ -25,7 +26,7 @@ public class GetUserDataResponseHandler implements RequestHandler<UserDto> {
     public Optional<Message> handle(Message msg) {
         logger.info("new message:{}", msg);
         try {
-            MessageCallback<? extends ResultDataType> callback = callbackRegistry.getAndRemove(msg.getCallbackId());
+            final MessageCallback<? extends ResultDataType> callback = callbackRegistry.getAndRemove(msg.getCallbackId());
             if (callback != null) {
                 callback.accept(MessageHelper.getPayload(msg));
             } else {

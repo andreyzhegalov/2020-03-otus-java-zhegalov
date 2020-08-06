@@ -5,14 +5,6 @@ import hw16.core.model.User;
 public class UserSecureDto extends UserDto {
     private final String password;
 
-    @Override
-    public String toString() {
-        return "UserSecureDto{" +
-            "password = " + getPassword() +
-            "}";
-    }
-
-
     public UserSecureDto(User user) {
         super(user);
         this.password = user.getPassword();
@@ -22,12 +14,17 @@ public class UserSecureDto extends UserDto {
         return password;
     }
 
-    public User toUser(){
+    public User toUser() {
         final var user = new User();
         user.setId(super.getId());
         user.setName(super.getName());
         user.setPassword(this.password);
         return user;
+    }
+
+    @Override
+    public String toString() {
+        return "UserSecureDto{" + "password = " + getPassword() + "}";
     }
 
     @Override
@@ -39,8 +36,10 @@ public class UserSecureDto extends UserDto {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
 
         UserSecureDto object = (UserSecureDto) o;
 

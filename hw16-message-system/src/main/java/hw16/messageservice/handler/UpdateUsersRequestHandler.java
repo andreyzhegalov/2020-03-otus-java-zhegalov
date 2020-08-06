@@ -22,7 +22,7 @@ public class UpdateUsersRequestHandler implements RequestHandler<ResultDataType>
 
     @Override
     public Optional<Message> handle(Message msg) {
-        UserSecureDto userSecureDto = MessageHelper.getPayload(msg);
+        final UserSecureDto userSecureDto = MessageHelper.getPayload(msg);
         if (!(userSecureDto.getName().isEmpty() || userSecureDto.getPassword().isEmpty())) {
             dbServiceUser.saveUser(userSecureDto.toUser());
         }

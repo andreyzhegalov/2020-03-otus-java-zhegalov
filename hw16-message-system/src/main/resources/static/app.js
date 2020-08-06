@@ -6,12 +6,14 @@ const setConnected = (connected) => {
   if (connected) {
     $("#users-actions").show();
   } else {
+    console.log("name value: " + $("#name").val());
+    clean();
     $("#users-actions").hide();
   }
 };
 
 const connect = () => {
-  stompClient = Stomp.over(new SockJS("/gs-guide-websocket"));
+  stompClient = Stomp.over(new SockJS("/users-service-websocket"));
   stompClient.connect({}, (frame) => {
     setConnected(true);
     console.log("Connected: " + frame);
@@ -30,12 +32,18 @@ const disconnect = () => {
   console.log("Disconnected");
 };
 
+const clean = () => {
+  $("#name").val("");
+  $("#password").val("");
+};
+
 const sendMsg = () => {
   stompClient.send(
     "/app/newUser",
     {},
     JSON.stringify({ name: $("#name").val(), password: $("#password").val() })
   );
+  clean();
 };
 
 const showUsers = (usersJson) => {
