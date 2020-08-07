@@ -1,6 +1,7 @@
 plugins {
     id 'java'
     id 'org.springframework.boot' version '2.3.1.RELEASE'
+    id 'jacoco'
 }
 
 
@@ -12,8 +13,6 @@ dependencies {
     implementation 'javax.persistence:javax.persistence-api'
 
     implementation 'org.hibernate:hibernate-core'
-    // implementation 'org.thymeleaf:thymeleaf'
-    // implementation 'org.thymeleaf:thymeleaf-spring5'
 
     implementation("org.springframework.boot:spring-boot-starter-websocket")
 
@@ -27,6 +26,12 @@ dependencies {
     testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-engine'
 }
 
+jacocoTestReport {
+    reports {
+        xml.enabled true
+        html.enabled true
+    }
+}
 
 test {
     useJUnitPlatform()
@@ -34,3 +39,5 @@ test {
         events "passed", "skipped", "failed"
     }
 }
+
+check.dependsOn jacocoTestReport

@@ -20,6 +20,8 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import javax.annotation.PreDestroy;
+
 
 @Service
 public final class MessageSystemImpl implements MessageSystem {
@@ -39,6 +41,12 @@ public final class MessageSystemImpl implements MessageSystem {
         thread.setName("msg-processor-thread");
         return thread;
     });
+
+    @PreDestroy
+    public void onDestroy() throws Exception {
+        dispose();
+        logger.info("message system disposed");
+    }
 
     private final ExecutorService msgHandler = Executors.newFixedThreadPool(MSG_HANDLER_THREAD_LIMIT,
             new ThreadFactory() {
