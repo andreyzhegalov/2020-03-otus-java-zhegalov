@@ -1,6 +1,5 @@
 package hw15;
 
-import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -12,11 +11,12 @@ import hw15.generator.TriangleGenerator;
 
 public class ShiftedSequence {
     private static final Logger logger = LoggerFactory.getLogger(ShiftedSequence.class);
+    private static final String THREAD1_NAME = "t1";
+    private static final String THREAD2_NAME = "t2";
 
     private final Lock lock = new ReentrantLock();
-    private final CountDownLatch callingThreadBlocker = new CountDownLatch(1);
     private final Condition otherThread;
-    private String lastThreadName;
+    private String lastThreadName = THREAD2_NAME;
 
     public ShiftedSequence() {
         otherThread = lock.newCondition();
@@ -28,11 +28,11 @@ public class ShiftedSequence {
 
     private void go() throws InterruptedException {
 
-        Thread t1 = new Thread(() -> criticalSection(1_000, true));
-        t1.setName("t1");
+        Thread t1 = new Thread(() -> criticalSection(1_000));
+        t1.setName(THREAD1_NAME);
 
-        Thread t2 = new Thread(() -> criticalSection(2_000, false));
-        t2.setName("t2");
+        Thread t2 = new Thread(() -> criticalSection(2_000));
+        t2.setName(THREAD2_NAME);
 
         t1.start();
         t2.start();
@@ -41,20 +41,11 @@ public class ShiftedSequence {
         t2.join();
     }
 
-    private void criticalSection(long sleepMs, boolean startFirst) {
+    private void criticalSection(long sleepMs) {
         final var generator = new TriangleGenerator(1, 10);
         final var currentThreadName = Thread.currentThread().getName();
-        if (!startFirst) {
-            try {
-                callingThreadBlocker.await();
-            } catch (InterruptedException e) {
-                logger.error(e.getMessage());
-                Thread.currentThread().interrupt();
-            }
-        }
         while (!Thread.currentThread().isInterrupted()) {
             lock.lock();
-            callingThreadBlocker.countDown();
             try {
                 while (currentThreadName.equals(lastThreadName)) {
                     try {
