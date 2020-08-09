@@ -6,7 +6,7 @@ import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 
 import hw16.cachehw.HwCache;
 import hw16.cachehw.HwCacheException;
@@ -14,7 +14,7 @@ import hw16.core.dao.UserDao;
 import hw16.core.model.User;
 import hw16.core.sessionmanager.SessionManager;
 
-@Repository
+@Service
 public class DbServiceUserImpl implements DBServiceUser {
     private static final Logger logger = LoggerFactory.getLogger(DbServiceUserImpl.class);
 

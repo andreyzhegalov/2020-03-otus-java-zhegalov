@@ -1,7 +1,5 @@
 package hw16.messageservice;
 
-import org.springframework.stereotype.Service;
-
 import ru.otus.messagesystem.MessageSystem;
 import ru.otus.messagesystem.client.CallbackRegistry;
 import ru.otus.messagesystem.client.MessageCallback;
@@ -9,11 +7,10 @@ import ru.otus.messagesystem.client.ResultDataType;
 import ru.otus.messagesystem.message.Message;
 import ru.otus.messagesystem.message.MessageType;
 
-@Service
 public class FrontMessageService extends MessageService {
     private static final String FRONTEND_SERVICE_CLIENT_NAME = "frontendService";
 
-    FrontMessageService(MessageSystem messageSystem, CallbackRegistry callbackRegistry) {
+    public FrontMessageService(MessageSystem messageSystem, CallbackRegistry callbackRegistry) {
         super(FRONTEND_SERVICE_CLIENT_NAME, messageSystem, callbackRegistry);
     }
 
