@@ -9,11 +9,23 @@ import hw16.messageservice.FrontMessageService;
 import hw16.messageservice.handler.GetUserDataResponseHandler;
 import hw16.messageservice.handler.UpdateUsersRequestHandler;
 import ru.otus.messagesystem.MessageSystem;
+import ru.otus.messagesystem.MessageSystemImpl;
 import ru.otus.messagesystem.client.CallbackRegistry;
+import ru.otus.messagesystem.client.CallbackRegistryImpl;
 import ru.otus.messagesystem.message.MessageType;
 
 @Configuration
 public class MessageSystemConfig {
+    @Bean
+    public MessageSystem messageSystem() {
+        return new MessageSystemImpl();
+    }
+
+    @Bean
+    public CallbackRegistry callbackRegistry() {
+        return new CallbackRegistryImpl();
+    }
+
     @Bean
     public DbMessageService dbMessageService(DBServiceUser dbServiceUser, MessageSystem messageSystem,
             CallbackRegistry callbackRegistry) {

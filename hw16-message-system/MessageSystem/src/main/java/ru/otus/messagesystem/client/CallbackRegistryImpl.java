@@ -3,9 +3,6 @@ package ru.otus.messagesystem.client;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.springframework.stereotype.Repository;
-
-@Repository
 public class CallbackRegistryImpl implements CallbackRegistry {
 
     private final Map<CallbackId, MessageCallback<? extends ResultDataType>> callbackRegistry = new ConcurrentHashMap<>();
