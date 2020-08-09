@@ -8,6 +8,8 @@ import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBr
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
 
+import hw16.cachehw.HwCache;
+import hw16.cachehw.MyCache;
 import hw16.core.model.AdressDataSet;
 import hw16.core.model.PhoneDataSet;
 import hw16.core.model.User;
@@ -21,6 +23,11 @@ public class AppConfig implements WebSocketMessageBrokerConfigurer {
     @Bean
     public SessionFactory sessionFactory() {
         return HibernateUtils.buildSessionFactory(HIBERNATE_CONF, User.class, AdressDataSet.class, PhoneDataSet.class);
+    }
+
+    @Bean
+    public HwCache<String, User> hwCache() {
+        return new MyCache<String, User>();
     }
 
     @Override
