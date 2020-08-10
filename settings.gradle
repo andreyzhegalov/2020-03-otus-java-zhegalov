@@ -13,3 +13,6 @@ include 'hw11-cache-engine'
 include 'hw12-web-server'
 include 'hw13-di'
 include 'hw14-warMvc'
+
+include 'hw17-multiprocess:MessageSystem'
+include 'hw17-multiprocess:MessageServer'
