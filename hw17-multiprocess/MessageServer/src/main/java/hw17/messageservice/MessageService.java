@@ -23,8 +23,8 @@ public class MessageService {
         this.handlersStore = new HandlersStoreImpl();
     }
 
-    public void addHandler(MessageType messageType, RequestHandler<? extends ResultDataType> handler) {
-        this.handlersStore.addHandler(messageType, handler);
+    public void addHandler( RequestHandler<? extends ResultDataType> handler) {
+        this.handlersStore.addHandler(MessageType.USER_DATA, handler);
     }
 
     public MsClient addClient(String clientName){

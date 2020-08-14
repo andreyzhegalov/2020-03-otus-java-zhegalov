@@ -5,6 +5,8 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -13,21 +15,22 @@ import org.slf4j.LoggerFactory;
 
 import hw17.messageservice.MessageService;
 import hw17.messageservice.handler.MessageHandler;
-import ru.otus.messagesystem.message.MessageType;
 
 public class Server {
     private static final Logger logger = LoggerFactory.getLogger(Server.class);
     private final ExecutorService executor = Executors.newFixedThreadPool(10);
     private final MessageService messageService;
+    private final Map<SocketHandler, Socket> clientMap = new ConcurrentHashMap<>();
 
     public Server(MessageService messageService) {
         this.messageService = messageService;
-        final var handler = new MessageHandler();
-        this.messageService.addHandler(MessageType.USER_DATA, handler);
+        final var handler = new MessageHandler(clientMap);
+        this.messageService.addHandler(handler);
     }
 
-    private void clientHandler1(Socket clientSocket) {
+    private void clientHandler(Socket clientSocket) {
         final var socketHanlder = new SocketHandler(messageService);
+        clientMap.put(socketHanlder, clientSocket);
         try (PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
                 BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()))) {
             String input = null;
@@ -49,7 +52,7 @@ public class Server {
             while (!Thread.currentThread().isInterrupted()) {
                 Socket clientSocket = serverSocket.accept();
                 logger.info("connected {}", clientSocket);
-                executor.submit(() -> clientHandler1(clientSocket));
+                executor.submit(() -> clientHandler(clientSocket));
             }
         } catch (Exception ex) {
             logger.error("error", ex);
