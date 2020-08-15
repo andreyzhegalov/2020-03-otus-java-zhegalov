@@ -12,7 +12,8 @@ import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import hw17.server.SocketHandler;
+import hw17.server.ClientHandler;
+import hw17.server.SocketChannelHelper;
 import hw17.server.message.ReciveMessage;
 import ru.otus.messagesystem.RequestHandler;
 import ru.otus.messagesystem.client.ResultDataType;
@@ -21,9 +22,9 @@ import ru.otus.messagesystem.message.MessageHelper;
 
 public class MessageHandler implements RequestHandler<ResultDataType> {
     private final Logger logger = LoggerFactory.getLogger(MessageHandler.class);
-    private final Map<SocketChannel, SocketHandler> clientMap;
+    private final Map<SocketChannel, ClientHandler> clientMap;
 
-    public MessageHandler(Map<SocketChannel, SocketHandler> clientMap) {
+    public MessageHandler(Map<SocketChannel, ClientHandler> clientMap) {
         this.clientMap = clientMap;
     }
 
@@ -44,28 +45,11 @@ public class MessageHandler implements RequestHandler<ResultDataType> {
         final String reciveMessageJson = reciveMessage.toJson();
         logger.debug("send to message {}", reciveMessageJson);
         try {
-            sendResponse(clientChannel, reciveMessageJson);
+            SocketChannelHelper.send(clientChannel, reciveMessageJson);
         } catch (Exception e) {
             throw new RuntimeException("Failed send message:" + reciveMessageJson);
         }
 
         return Optional.empty();
-    }
-
-    private void sendResponse(SocketChannel socketChannel, String requestFromClient) throws IOException {
-        ByteBuffer buffer = ByteBuffer.allocate(5);
-        byte[] response = requestFromClient.getBytes();
-        for (byte b : response) {
-            buffer.put(b);
-            if (buffer.position() == buffer.limit()) {
-                buffer.flip();
-                socketChannel.write(buffer);
-                buffer.flip();
-            }
-        }
-        if (buffer.hasRemaining()) {
-            buffer.flip();
-            socketChannel.write(buffer);
-        }
     }
 }

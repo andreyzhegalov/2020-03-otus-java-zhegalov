@@ -12,7 +12,6 @@ public class MessageServer {
         ApplicationContext ctx = new AnnotationConfigApplicationContext(MessageServerConfig.class,
                 MessageSystemConfig.class);
         final var server = ctx.getBean(ServerNIO.class);
-
         server.start(8080);
     }
 }

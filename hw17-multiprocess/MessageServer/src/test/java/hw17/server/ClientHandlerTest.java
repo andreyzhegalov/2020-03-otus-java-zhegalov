@@ -11,30 +11,30 @@ import hw17.messageservice.MessageService;
 import hw17.server.message.ResponseMessage;
 import hw17.server.message.ResponseType;
 
-public class SocketHandlerTest {
+public class ClientHandlerTest {
     @Test
     public void constructorTest() {
-        assertDoesNotThrow(() -> new SocketHandler(null));
+        assertDoesNotThrow(() -> new ClientHandler(null));
     }
 
     @Test
-    public void reciveWithEmptyMessage() {
-        assertEquals(new ResponseMessage(ResponseType.ERROR).toJson(), new SocketHandler(null).recive(""));
+    public void reciveWithEmptyMessageTest() {
+        assertEquals(new ResponseMessage(ResponseType.ERROR).toJson(), new ClientHandler(null).recive(""));
     }
 
     @Test
-    public void reciveWithNotValidJson() {
-        assertEquals(new ResponseMessage(ResponseType.ERROR).toJson(), new SocketHandler(null).recive("{'from':}"));
+    public void reciveWithNotValidJsonTest() {
+        assertEquals(new ResponseMessage(ResponseType.ERROR).toJson(), new ClientHandler(null).recive("{'from':}"));
     }
 
     @Test
-    public void reciveRegistationClient() {
+    public void reciveRegistationClientTest() {
         final MessageService mockedMessageService = Mockito.mock(MessageService.class);
 
-        final var socket = new SocketHandler(mockedMessageService);
-        assertThat(socket.getName()).isEmpty();
-        final String response = socket.recive("{'from':'front','to':'db', 'data':'message content'}");
-        assertThat(socket.getName()).isEqualTo("front");
+        final var clientHandler = new ClientHandler(mockedMessageService);
+        assertThat(clientHandler.getName()).isEmpty();
+        final String response = clientHandler.recive("{'from':'front','to':'db', 'data':'message content'}");
+        assertThat(clientHandler.getName()).isEqualTo("front");
 
         Mockito.verify(mockedMessageService, Mockito.times(1)).addClient("front");
         assertEquals(response, new ResponseMessage(ResponseType.REGISTRED).toJson());
@@ -44,7 +44,7 @@ public class SocketHandlerTest {
     public void sendMessageToMessageSystemTest(){
         final MessageService mockedMessageService = Mockito.mock(MessageService.class);
 
-        final SocketHandler socketHandlerSpy = Mockito.spy(new SocketHandler(mockedMessageService));
+        final ClientHandler socketHandlerSpy = Mockito.spy(new ClientHandler(mockedMessageService));
         Mockito.doReturn("front").when(socketHandlerSpy).getName();
 
         final String response = socketHandlerSpy.recive("{'from':'front','to':'db', 'data':'message content'}");

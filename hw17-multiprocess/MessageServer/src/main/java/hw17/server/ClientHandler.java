@@ -6,12 +6,12 @@ import hw17.server.message.ResponseMessage;
 import hw17.server.message.ResponseType;
 import ru.otus.messagesystem.client.MsClient;
 
-public class SocketHandler {
+public class ClientHandler {
     private String clientName = new String();
     private final MessageService messageService;
     private MsClient msClient;
 
-    public SocketHandler(MessageService messageService) {
+    public ClientHandler(MessageService messageService) {
         this.messageService = messageService;
     }
 

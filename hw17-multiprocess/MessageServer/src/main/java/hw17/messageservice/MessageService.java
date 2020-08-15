@@ -37,4 +37,8 @@ public class MessageService {
         final Message outMsg = client.produceMessage(message.getTo(), message, MessageType.USER_DATA, data->{});
         client.sendMessage(outMsg);
     }
+
+    public void removeClient(String clientName){
+        messageSystem.removeClient(clientName);
+    }
 }
