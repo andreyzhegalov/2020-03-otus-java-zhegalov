@@ -9,13 +9,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.view.RedirectView;
 
 import hw16.core.service.DBServiceUser;
-import hw16.services.InitializerService;
+import hw16.services.InitializerDbService;
 
 @Controller
 public class LoginController {
     private final DBServiceUser dbServiceUser;
 
-    public LoginController(InitializerService initializerService, DBServiceUser dbServiceUser) {
+    public LoginController(InitializerDbService initializerService, DBServiceUser dbServiceUser) {
         this.dbServiceUser = dbServiceUser;
     }
 
