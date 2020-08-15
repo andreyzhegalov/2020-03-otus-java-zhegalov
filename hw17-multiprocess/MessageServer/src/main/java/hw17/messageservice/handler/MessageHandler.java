@@ -1,13 +1,13 @@
 package hw17.messageservice.handler;
 
-import static java.util.stream.Collectors.toList;
-
-import java.io.PrintWriter;
-import java.net.Socket;
+import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.channels.SocketChannel;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,9 +21,9 @@ import ru.otus.messagesystem.message.MessageHelper;
 
 public class MessageHandler implements RequestHandler<ResultDataType> {
     private final Logger logger = LoggerFactory.getLogger(MessageHandler.class);
-    private final Map<SocketHandler, Socket> clientMap;
+    private final Map<SocketChannel, SocketHandler> clientMap;
 
-    public MessageHandler(Map<SocketHandler, Socket> clientMap) {
+    public MessageHandler(Map<SocketChannel, SocketHandler> clientMap) {
         this.clientMap = clientMap;
     }
 
@@ -31,20 +31,41 @@ public class MessageHandler implements RequestHandler<ResultDataType> {
     public Optional<Message> handle(Message msg) {
         final ReciveMessage reciveMessage = MessageHelper.getPayload(msg);
         final String toClientName = reciveMessage.getTo();
-        final List<Socket> clientSocketList = clientMap.entrySet().stream()
-                .filter(e -> e.getKey().getName().startsWith(toClientName)).map(Map.Entry::getValue).collect(toList());
-        final var clientSocket = clientSocketList.get(new Random().nextInt(clientSocketList.size()));
-        if(!clientSocket.isConnected()){
-            throw new RuntimeException("Client soket is close");
+
+        final List<SocketChannel> clientChannelList = clientMap.entrySet().stream()
+                .filter(e -> e.getValue().getName().equals(toClientName)).map(Map.Entry::getKey)
+                .collect(Collectors.toList());
+
+        final var clientChannel = clientChannelList.get(new Random().nextInt(clientChannelList.size()));
+        if (!clientChannel.isConnected()) {
+            throw new RuntimeException("Client channel is close");
         }
 
-         try (PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true)){
-             // out.println(reciveMessage.toJson());
-             out.flush();
-         } catch (Exception ex) {
-             logger.error("error", ex);
-         }
+        final String reciveMessageJson = reciveMessage.toJson();
+        logger.debug("send to message {}", reciveMessageJson);
+        try {
+            sendResponse(clientChannel, reciveMessageJson);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed send message:" + reciveMessageJson);
+        }
 
         return Optional.empty();
+    }
+
+    private void sendResponse(SocketChannel socketChannel, String requestFromClient) throws IOException {
+        ByteBuffer buffer = ByteBuffer.allocate(5);
+        byte[] response = requestFromClient.getBytes();
+        for (byte b : response) {
+            buffer.put(b);
+            if (buffer.position() == buffer.limit()) {
+                buffer.flip();
+                socketChannel.write(buffer);
+                buffer.flip();
+            }
+        }
+        if (buffer.hasRemaining()) {
+            buffer.flip();
+            socketChannel.write(buffer);
+        }
     }
 }
