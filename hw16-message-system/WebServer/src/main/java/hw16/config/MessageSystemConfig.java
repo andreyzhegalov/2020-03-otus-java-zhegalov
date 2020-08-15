@@ -16,7 +16,7 @@ import ru.otus.messagesystem.message.MessageType;
 
 @Configuration
 public class MessageSystemConfig {
-    @Bean
+    @Bean(destroyMethod = "dispose")
     public MessageSystem messageSystem() {
         return new MessageSystemImpl();
     }
