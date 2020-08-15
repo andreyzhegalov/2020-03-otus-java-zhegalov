@@ -6,10 +6,10 @@ import java.nio.channels.SocketChannel;
 import java.nio.charset.StandardCharsets;
 
 public class SocketChannelHelper {
-    public static void send(SocketChannel socketChannel, String requestFromClient) throws IOException{
-        ByteBuffer buffer = ByteBuffer.allocate(5);
-        byte[] response = requestFromClient.getBytes();
-        for (byte b : response) {
+    public static void send(SocketChannel socketChannel, String message) throws IOException{
+        final ByteBuffer buffer = ByteBuffer.allocate(5);
+        final byte[] array = message.getBytes();
+        for (byte b : array) {
             buffer.put(b);
             if (buffer.position() == buffer.limit()) {
                 buffer.flip();
@@ -33,8 +33,8 @@ public class SocketChannelHelper {
             buffer.flip();
             inputBuffer.append(input);
         }
-        final String requestFromClient = inputBuffer.toString().replace("\n", "").replace("\r", "");
-        return requestFromClient;
+        final String recveMessage = inputBuffer.toString().replace("\n", "").replace("\r", "");
+        return recveMessage;
     }
 
 }

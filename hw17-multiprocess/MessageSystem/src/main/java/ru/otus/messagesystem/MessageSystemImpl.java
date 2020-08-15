@@ -1,23 +1,22 @@
 package ru.otus.messagesystem;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import ru.otus.messagesystem.client.MsClient;
-import ru.otus.messagesystem.message.Message;
-import ru.otus.messagesystem.message.MessageBuilder;
-
 import java.util.Map;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import ru.otus.messagesystem.client.MsClient;
+import ru.otus.messagesystem.message.Message;
+import ru.otus.messagesystem.message.MessageBuilder;
 
 public final class MessageSystemImpl implements MessageSystem {
     private static final Logger logger = LoggerFactory.getLogger(MessageSystemImpl.class);
@@ -40,15 +39,15 @@ public final class MessageSystemImpl implements MessageSystem {
     private final ExecutorService msgHandler = Executors.newFixedThreadPool(MSG_HANDLER_THREAD_LIMIT,
             new ThreadFactory() {
 
-        private final AtomicInteger threadNameSeq = new AtomicInteger(0);
+                private final AtomicInteger threadNameSeq = new AtomicInteger(0);
 
-        @Override
-        public Thread newThread(Runnable runnable) {
-            Thread thread = new Thread(runnable);
-            thread.setName("msg-handler-thread-" + threadNameSeq.incrementAndGet());
-            return thread;
-        }
-    });
+                @Override
+                public Thread newThread(Runnable runnable) {
+                    Thread thread = new Thread(runnable);
+                    thread.setName("msg-handler-thread-" + threadNameSeq.incrementAndGet());
+                    return thread;
+                }
+            });
 
     public MessageSystemImpl() {
         start();
@@ -148,7 +147,6 @@ public final class MessageSystemImpl implements MessageSystem {
         msgHandler.shutdown();
         logger.info("msgHandler has been shut down");
     }
-
 
     private void handleMessage(MsClient msClient, Message msg) {
         try {

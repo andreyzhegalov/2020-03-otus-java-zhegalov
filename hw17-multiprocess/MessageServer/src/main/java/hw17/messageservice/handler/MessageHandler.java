@@ -1,7 +1,5 @@
 package hw17.messageservice.handler;
 
-import java.io.IOException;
-import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
 import java.util.List;
 import java.util.Map;
@@ -34,7 +32,7 @@ public class MessageHandler implements RequestHandler<ResultDataType> {
         final String toClientName = reciveMessage.getTo();
 
         final List<SocketChannel> clientChannelList = clientMap.entrySet().stream()
-                .filter(e -> e.getValue().getName().equals(toClientName)).map(Map.Entry::getKey)
+                .filter(e -> e.getValue().getName().startsWith(toClientName)).map(Map.Entry::getKey)
                 .collect(Collectors.toList());
 
         final var clientChannel = clientChannelList.get(new Random().nextInt(clientChannelList.size()));

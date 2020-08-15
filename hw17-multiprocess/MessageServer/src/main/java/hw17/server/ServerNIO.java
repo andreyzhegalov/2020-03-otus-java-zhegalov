@@ -79,8 +79,8 @@ public class ServerNIO {
         logger.debug("read from client");
         try {
             final String requestFromClient = SocketChannelHelper.recive(socketChannel);
-            final String sendToMsStatus = sendToMessageSystemClient(socketChannel, requestFromClient);
-            SocketChannelHelper.send(socketChannel, sendToMsStatus);
+            final String sendToMsResult = sendToMessageSystemClient(socketChannel, requestFromClient);
+            SocketChannelHelper.send(socketChannel, sendToMsResult);
         } catch (Exception ex) {
             logger.error("error sending response", ex);
 
