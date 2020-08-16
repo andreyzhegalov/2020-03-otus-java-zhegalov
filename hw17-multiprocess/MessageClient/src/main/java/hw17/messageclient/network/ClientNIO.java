@@ -1,4 +1,4 @@
-package hw17.messageclient;
+package hw17.messageclient.network;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -12,19 +12,19 @@ import java.util.Iterator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class Client {
-    private static final Logger logger = LoggerFactory.getLogger(Client.class);
+public class ClientNIO {
+    private static final Logger logger = LoggerFactory.getLogger(ClientNIO.class);
     private final int port;
     private final String host;
-    private final String name;
     private final Thread thread;
     private SocketChannel channel;
     private boolean isConnected;
+    private final ResponseCallback<String> callback;
 
-    public Client(String host, int port, String name) {
+    public ClientNIO(String host, int port, ResponseCallback<String> responseCallback) {
         this.port = port;
         this.host = host;
-        this.name = name;
+        this.callback = responseCallback;
         thread = new Thread(() -> handler());
     }
 
@@ -97,6 +97,7 @@ public class Client {
             buffer.flip();
         }
         logger.info("response: {}", response);
+        callback.accept(response.toString());
     }
 
 }
