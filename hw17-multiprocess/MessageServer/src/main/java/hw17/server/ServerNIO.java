@@ -49,10 +49,10 @@ public class ServerNIO {
     }
 
     private void performIO(Selector selector) throws IOException {
-        Iterator<SelectionKey> keys = selector.selectedKeys().iterator();
+        final Iterator<SelectionKey> keys = selector.selectedKeys().iterator();
 
         while (keys.hasNext()) {
-            SelectionKey key = keys.next();
+            final SelectionKey key = keys.next();
             if (key.isAcceptable()) {
                 acceptConnection(key, selector);
             } else if (key.isReadable()) {
