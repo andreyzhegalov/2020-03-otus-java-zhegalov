@@ -1,5 +1,6 @@
 plugins {
     id 'java'
+    id 'jacoco'
     id 'com.github.johnrengelman.shadow'
 }
 
@@ -8,12 +9,14 @@ sourceCompatibility = JavaVersion.VERSION_13
 targetCompatibility = JavaVersion.VERSION_13
 
 dependencies {
+    implementation project(':hw17-multiprocess:MessageServer') // TODO delete this dependency
+    implementation project(':hw17-multiprocess:MessageSystem')
     implementation 'ch.qos.logback:logback-classic'
     implementation 'com.google.code.gson:gson'
 
-    testImplementation group: 'org.mockito', name: 'mockito-junit-jupiter'
     testImplementation 'org.assertj:assertj-core'
     testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-engine'
+    testImplementation group: 'org.mockito', name: 'mockito-junit-jupiter'
 }
 
 shadowJar {
@@ -21,7 +24,14 @@ shadowJar {
     archiveVersion.set('0.1')
     archiveClassifier.set('')
     manifest {
-        attributes 'Main-Class': 'hw17.messageclient.MessageClientDemo'
+        attributes 'Main-Class': 'hw17.MessageClientDemo'
+    }
+}
+
+jacocoTestReport {
+    reports {
+        xml.enabled true
+        html.enabled true
     }
 }
 
@@ -31,3 +41,5 @@ test {
         events "passed", "skipped", "failed"
     }
 }
+
+check.dependsOn jacocoTestReport

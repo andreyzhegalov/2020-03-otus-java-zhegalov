@@ -1,11 +1,13 @@
-package hw17.messageclient;
+package hw17;
 
 import java.util.concurrent.TimeUnit;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import hw17.messageclient.MessageClient;
 import hw17.messageclient.network.ClientNIO;
+import hw17.messageclient.network.NetworkClient;
 
 public class MessageClientDemo {
     private final static Logger logger = LoggerFactory.getLogger(MessageClientDemo.class);
@@ -13,12 +15,17 @@ public class MessageClientDemo {
     public static void main(String[] args) {
         final String HOST = "localhost";
         final int PORT = 8080;
-        final ClientNIO client = new ClientNIO(HOST, PORT, data->clientResponseHandler(data));
-        client.connect();
+        final NetworkClient client = new ClientNIO(HOST, PORT);
+        final var messageClient  = new MessageClient("front", client);
 
-        while(!client.isConnected()){
-            sleep();
-        }
+        messageClient.connect();
+
+        // client.setResponseHandler(data->clientResponseHandler(data));
+        // client.connect();
+        //
+        // while(!client.isConnected()){
+        //     sleep();
+        // }
 
         client.send("test");
     }

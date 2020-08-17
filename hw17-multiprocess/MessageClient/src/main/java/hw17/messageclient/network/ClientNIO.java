@@ -12,28 +12,47 @@ import java.util.Iterator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ClientNIO {
+public class ClientNIO implements NetworkClient{
     private static final Logger logger = LoggerFactory.getLogger(ClientNIO.class);
     private final int port;
     private final String host;
     private final Thread thread;
     private SocketChannel channel;
     private boolean isConnected;
-    private final ResponseCallback<String> callback;
+    private ResponseCallback<String> callback;
 
-    public ClientNIO(String host, int port, ResponseCallback<String> responseCallback) {
+    public ClientNIO(String host, int port) {
         this.port = port;
         this.host = host;
-        this.callback = responseCallback;
         thread = new Thread(() -> handler());
     }
 
+    @Override
     public boolean isConnected() {
         return isConnected;
     }
 
+    @Override
     public void connect() {
         thread.start();
+    }
+
+    @Override
+    public void setResponseHandler(ResponseCallback<String> response){
+        this.callback = response;
+    }
+
+    @Override
+    public void send(String request) {
+        ByteBuffer buffer = ByteBuffer.allocate(1000);
+        buffer.put(request.getBytes());
+        buffer.flip();
+        logger.info("sending to server");
+        try {
+            channel.write(buffer);
+        } catch (IOException e) {
+            logger.error("Error send request to server ");
+        }
     }
 
     private void handler() {
@@ -54,18 +73,6 @@ public class ClientNIO {
             }
         } catch (Exception ex) {
             logger.error("error", ex);
-        }
-    }
-
-    public void send(String request) {
-        ByteBuffer buffer = ByteBuffer.allocate(1000);
-        buffer.put(request.getBytes());
-        buffer.flip();
-        logger.info("sending to server");
-        try {
-            channel.write(buffer);
-        } catch (IOException e) {
-            logger.error("Error send request to server ");
         }
     }
 
@@ -96,8 +103,9 @@ public class ClientNIO {
             response.append(responsePart);
             buffer.flip();
         }
-        logger.info("response: {}", response);
-        callback.accept(response.toString());
+        final var responseStr = response.toString().replace("\n", "").replace("\r", "");
+        logger.info("response: {}", responseStr);
+        callback.accept(responseStr);
     }
 
 }
