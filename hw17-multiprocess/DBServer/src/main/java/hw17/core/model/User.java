@@ -160,4 +160,8 @@ public class User {
             "}";
     }
 
+	public User toUser() {
+		return null;
+	}
+
 }

@@ -4,7 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import hw17.server.ServerNIO;
-import hw17.server.message.ReciveMessage;
+import hw17.server.message.InterprocessMessage;
 import ru.otus.messagesystem.HandlersStore;
 import ru.otus.messagesystem.HandlersStoreImpl;
 import ru.otus.messagesystem.MessageSystem;
@@ -43,7 +43,7 @@ public class MessageService {
         return msClient;
     }
 
-    public void sendMessage(MsClient client, ReciveMessage message) {
+    public void sendMessage(MsClient client, InterprocessMessage message) {
         final Message outMsg = client.produceMessage(message.getTo(), message, MessageType.USER_DATA, data -> {
         });
         client.sendMessage(outMsg);

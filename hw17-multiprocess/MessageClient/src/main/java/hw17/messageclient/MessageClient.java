@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory;
 
 import hw17.messageclient.network.NetworkClient;
 import hw17.messageclient.network.ResponseCallback;
-import hw17.server.message.ReciveMessage;
+import hw17.server.message.InterprocessMessage;
 import hw17.server.message.ResponseMessage;
 import hw17.server.message.ResponseType;
 
@@ -22,7 +22,7 @@ public class MessageClient {
     private final NetworkClient networkClient;
     private static boolean dissableSleep = false; // for unit testing
     private ClientState currentState = ClientState.DISCONECTED;
-    private ResponseCallback<String> responseCallback;
+    private ResponseCallback<InterprocessMessage> responseCallback;
 
     public MessageClient(String name, NetworkClient networkClient) {
         this.name = name;
@@ -30,7 +30,7 @@ public class MessageClient {
         this.networkClient.setResponseHandler(data -> responseHandler(data));
     }
 
-    public void setResponseHandler(ResponseCallback<String> responseCallback) {
+    public void setResponseHandler(ResponseCallback<InterprocessMessage> responseCallback) {
         this.responseCallback = responseCallback;
     }
 
@@ -43,7 +43,7 @@ public class MessageClient {
         if (getCurrentState() != ClientState.REGISTRED) {
             throw new MessageClientException("Unable send message from state " + currentState);
         }
-        final ReciveMessage requestMessage = new ReciveMessage(name, toClient, message);
+        final InterprocessMessage requestMessage = new InterprocessMessage(name, toClient, message);
         networkClient.send(requestMessage.toJson());
     }
 
@@ -75,7 +75,7 @@ public class MessageClient {
     }
 
     private void onRegistred(String response) {
-        final var mayBeResponse = ReciveMessage.fromJson(response);
+        final var mayBeResponse = InterprocessMessage.fromJson(response);
         if (mayBeResponse.isEmpty()) {
             return;
         }
@@ -84,7 +84,7 @@ public class MessageClient {
             logger.error("recived response for another client: {}", responseMsg.getTo());
             return;
         }
-        responseCallback.accept(mayBeResponse.get().getData());
+        responseCallback.accept(responseMsg);
     }
 
     private void tryConnected() {
@@ -118,7 +118,7 @@ public class MessageClient {
     }
 
     private void tryRegistred() {
-        final ReciveMessage requestMessage = new ReciveMessage(name, "", "");
+        final InterprocessMessage requestMessage = new InterprocessMessage(name, "", "");
         networkClient.send(requestMessage.toJson());
     }
 

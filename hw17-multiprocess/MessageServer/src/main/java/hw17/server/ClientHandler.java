@@ -1,7 +1,7 @@
 package hw17.server;
 
 import hw17.messageservice.MessageService;
-import hw17.server.message.ReciveMessage;
+import hw17.server.message.InterprocessMessage;
 import hw17.server.message.ResponseMessage;
 import hw17.server.message.ResponseType;
 import ru.otus.messagesystem.client.MsClient;
@@ -16,11 +16,11 @@ public class ClientHandler {
     }
 
     public String recive(String data) {
-        final var mayBeMessage = ReciveMessage.fromJson(data);
+        final var mayBeMessage = InterprocessMessage.fromJson(data);
         if (mayBeMessage.isEmpty()) {
             return new ResponseMessage(ResponseType.ERROR).toJson();
         }
-        final ReciveMessage message = mayBeMessage.get();
+        final InterprocessMessage message = mayBeMessage.get();
 
         if (getName().isEmpty()) {
             clientName = message.getFrom();

@@ -68,7 +68,6 @@ public class MessageClientTest {
 
         final var messageClient = Mockito.spy( new MessageClient(CLIENT_NAME, networkClientMock));
         Mockito.doReturn(ClientState.CONNECTED).when(messageClient).getCurrentState();
-
         assertThatThrownBy(() -> {
             messageClient.send("db", "test");
         }).isInstanceOf(MessageClientException.class);

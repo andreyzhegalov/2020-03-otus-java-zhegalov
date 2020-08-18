@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import hw17.messageclient.MessageClient;
 import hw17.messageclient.network.ClientNIO;
 import hw17.messageclient.network.NetworkClient;
+import hw17.server.message.InterprocessMessage;
 
 public class MessageClientDemo {
     private final static Logger logger = LoggerFactory.getLogger(MessageClientDemo.class);
@@ -30,8 +31,8 @@ public class MessageClientDemo {
         messageClient.setResponseHandler(data->clientResponseHandler(data));
     }
 
-    private static void clientResponseHandler(String response){
-        logger.info("response form client {}", response);
+    private static void clientResponseHandler(InterprocessMessage response){
+        logger.info("response form client {}", response.toString());
     }
 
     private static void sleep(int seconds) {

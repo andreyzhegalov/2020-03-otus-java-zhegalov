@@ -2,21 +2,24 @@ package hw17.config;
 
 import org.hibernate.SessionFactory;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.messaging.simp.config.MessageBrokerRegistry;
-import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
-import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
-import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
 
 import hw17.cachehw.HwCache;
 import hw17.cachehw.MyCache;
 import hw17.core.model.AdressDataSet;
 import hw17.core.model.PhoneDataSet;
 import hw17.core.model.User;
+import hw17.core.service.DBServiceUser;
 import hw17.hibernate.HibernateUtils;
+import hw17.messageclient.MessageClient;
+import hw17.messageclient.network.ClientNIO;
+import hw17.messageclient.network.NetworkClient;
+import hw17.messageservice.MessageSystemClient;
 
+@ComponentScan("hw17")
 @Configuration
-public class AppConfig implements WebSocketMessageBrokerConfigurer {
+public class AppConfig {
     private static final String HIBERNATE_CONF = "hibernate.cfg.xml";
 
     @Bean
@@ -27,5 +30,19 @@ public class AppConfig implements WebSocketMessageBrokerConfigurer {
     @Bean
     public HwCache<String, User> hwCache() {
         return new MyCache<String, User>();
+    }
+
+    @Bean
+    public MessageClient messageClient() {
+        final String HOST = "localhost";
+        final int PORT = 8080;
+        final NetworkClient client = new ClientNIO(HOST, PORT);
+        final String CLIENT_NAME = "db";
+        return new MessageClient(CLIENT_NAME, client);
+    }
+
+    @Bean
+    public MessageSystemClient messageSystemClient(MessageClient messageClient, DBServiceUser dbServiceUser) {
+        return new MessageSystemClient(messageClient, dbServiceUser);
     }
 }

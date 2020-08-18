@@ -7,22 +7,22 @@ import com.google.gson.JsonSyntaxException;
 
 import ru.otus.messagesystem.client.ResultDataType;
 
-public class ReciveMessage extends ResultDataType {
+public class InterprocessMessage extends ResultDataType {
     private final String from;
     private final String to;
     private final String data;
 
-    public ReciveMessage(String from, String to, String data) {
+    public InterprocessMessage(String from, String to, String data) {
         this.from = from;
         this.to = to;
         this.data = data;
     }
 
-    public static Optional<ReciveMessage> fromJson(String jsonString){
+    public static Optional<InterprocessMessage> fromJson(String jsonString){
         final var gson = new Gson();
-        ReciveMessage message = null;
+        InterprocessMessage message = null;
         try {
-            message = gson.fromJson(jsonString, ReciveMessage.class);
+            message = gson.fromJson(jsonString, InterprocessMessage.class);
         } catch (JsonSyntaxException e) {
             e.printStackTrace();
         }
@@ -31,7 +31,7 @@ public class ReciveMessage extends ResultDataType {
 
     public String toJson(){
         final var gson = new Gson();
-        return gson.toJson(this, ReciveMessage.class);
+        return gson.toJson(this, InterprocessMessage.class);
     }
 
 
@@ -61,7 +61,7 @@ public class ReciveMessage extends ResultDataType {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        ReciveMessage object = (ReciveMessage) o;
+        InterprocessMessage object = (InterprocessMessage) o;
 
         if (from != null ? !from.equals(object.from) : object.from != null) return false;
         if (to != null ? !to.equals(object.to) : object.to != null) return false;

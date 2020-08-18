@@ -9,17 +9,17 @@ public class ReciveMessageTest {
     private final static String TEST_JSON =  "{\"from\":\"front\",\"to\":\"db\",\"data\":\"content\"}";
     @Test
     public void formJsonForEmptyStringTest() {
-        assertTrue( ReciveMessage.fromJson("").isEmpty());
+        assertTrue( InterprocessMessage.fromJson("").isEmpty());
     }
 
     @Test
     public void formJson() {
-        assertTrue( ReciveMessage.fromJson(TEST_JSON).isPresent());
+        assertTrue( InterprocessMessage.fromJson(TEST_JSON).isPresent());
     }
 
     @Test
     public void toJsonTest(){
-        final ReciveMessage message = new ReciveMessage("front", "db", "content");
+        final InterprocessMessage message = new InterprocessMessage("front", "db", "content");
         assertEquals(TEST_JSON, message.toJson());
     }
 }

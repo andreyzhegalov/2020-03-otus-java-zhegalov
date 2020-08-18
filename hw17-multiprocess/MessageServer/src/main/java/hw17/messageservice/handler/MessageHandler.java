@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
 
 import hw17.server.ClientHandler;
 import hw17.server.SocketChannelHelper;
-import hw17.server.message.ReciveMessage;
+import hw17.server.message.InterprocessMessage;
 import ru.otus.messagesystem.RequestHandler;
 import ru.otus.messagesystem.client.ResultDataType;
 import ru.otus.messagesystem.message.Message;
@@ -28,7 +28,7 @@ public class MessageHandler implements RequestHandler<ResultDataType> {
 
     @Override
     public Optional<Message> handle(Message msg) {
-        final ReciveMessage reciveMessage = MessageHelper.getPayload(msg);
+        final InterprocessMessage reciveMessage = MessageHelper.getPayload(msg);
         final String toClientName = reciveMessage.getTo();
 
         final List<SocketChannel> clientChannelList = clientMap.entrySet().stream()
