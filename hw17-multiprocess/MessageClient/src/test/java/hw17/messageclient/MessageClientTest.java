@@ -1,10 +1,12 @@
 package hw17.messageclient;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.Mockito.never;
 
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
+import hw17.messageclient.MessageClient.ClientState;
 import hw17.messageclient.network.NetworkClient;
 
 public class MessageClientTest {
@@ -45,5 +47,32 @@ public class MessageClientTest {
         messageClient.connect();
 
         Mockito.verify(networkClientMock).send("{\"from\":\"front\",\"to\":\"\",\"data\":\"\"}");
+    }
+
+    @Test
+    public void sendFromRegistredStateTest(){
+        final NetworkClient networkClientMock = Mockito.mock(NetworkClient.class);
+        Mockito.doNothing().when(networkClientMock).connect();
+
+        final var messageClient = Mockito.spy( new MessageClient(CLIENT_NAME, networkClientMock));
+        Mockito.doReturn(ClientState.REGISTRED).when(messageClient).getCurrentState();
+        messageClient.send("db", "test");
+
+        Mockito.verify(networkClientMock).send("{\"from\":\"front\",\"to\":\"db\",\"data\":\"test\"}");
+    }
+
+    @Test
+    public void sendFromNotRegistredStateTest(){
+        final NetworkClient networkClientMock = Mockito.mock(NetworkClient.class);
+        Mockito.doNothing().when(networkClientMock).connect();
+
+        final var messageClient = Mockito.spy( new MessageClient(CLIENT_NAME, networkClientMock));
+        Mockito.doReturn(ClientState.CONNECTED).when(messageClient).getCurrentState();
+
+        assertThatThrownBy(() -> {
+            messageClient.send("db", "test");
+        }).isInstanceOf(MessageClientException.class);
+
+        Mockito.verify(networkClientMock, never()).send(Mockito.anyString());;
     }
 }

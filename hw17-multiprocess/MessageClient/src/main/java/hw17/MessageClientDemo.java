@@ -20,6 +20,13 @@ public class MessageClientDemo {
 
         messageClient.connect();
 
+        // needed send response {"response":"REGISTRED"}
+        logger.info("Waiting response .... ");
+
+        sleep(5);
+
+        messageClient.send("db", "test");
+
         // client.setResponseHandler(data->clientResponseHandler(data));
         // client.connect();
         //
@@ -27,16 +34,15 @@ public class MessageClientDemo {
         //     sleep();
         // }
 
-        client.send("test");
     }
 
     private static void clientResponseHandler(String response){
         logger.info("response form client {}", response);
     }
 
-    private static void sleep() {
+    private static void sleep(int seconds) {
         try {
-            Thread.sleep(TimeUnit.SECONDS.toMillis(1));
+            Thread.sleep(TimeUnit.SECONDS.toMillis(seconds));
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }

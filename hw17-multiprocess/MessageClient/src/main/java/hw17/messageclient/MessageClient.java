@@ -12,7 +12,7 @@ import hw17.server.message.ResponseType;
 
 public class MessageClient {
 
-    private enum ClientState {
+    public enum ClientState {
         DISCONECTED, CONNECTED, REGISTRED
     }
 
@@ -33,6 +33,18 @@ public class MessageClient {
         tryRegistred();
     }
 
+    public void send(String  toClient, String message){
+        if(currentState != ClientState.REGISTRED){
+            throw new MessageClientException("Unable send message from state " + currentState);
+        }
+        final ReciveMessage requestMessage = new ReciveMessage(name, toClient, message);
+        networkClient.send(requestMessage.toJson());
+    }
+
+    public ClientState getCurrentState(){
+        return currentState;
+    }
+
     private void responseHandler(String response) {
         logger.debug("current client state {}", currentState.name());
         logger.debug("recive response {}", response);
@@ -43,7 +55,7 @@ public class MessageClient {
             case REGISTRED:
                 break;
             default:
-                throw new MessageClientException("Undefined state");
+                throw new MessageClientException("Unable handled response in state " + currentState);
         }
     }
 
