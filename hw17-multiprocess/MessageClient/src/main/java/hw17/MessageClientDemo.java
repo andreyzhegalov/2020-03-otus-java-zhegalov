@@ -27,13 +27,7 @@ public class MessageClientDemo {
 
         messageClient.send("db", "test");
 
-        // client.setResponseHandler(data->clientResponseHandler(data));
-        // client.connect();
-        //
-        // while(!client.isConnected()){
-        //     sleep();
-        // }
-
+        messageClient.setResponseHandler(data->clientResponseHandler(data));
     }
 
     private static void clientResponseHandler(String response){

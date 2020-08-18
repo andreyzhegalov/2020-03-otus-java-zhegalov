@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import hw17.messageclient.network.NetworkClient;
+import hw17.messageclient.network.ResponseCallback;
 import hw17.server.message.ReciveMessage;
 import hw17.server.message.ResponseMessage;
 import hw17.server.message.ResponseType;
@@ -21,6 +22,7 @@ public class MessageClient {
     private final NetworkClient networkClient;
     private static boolean dissableSleep = false; // for unit testing
     private ClientState currentState = ClientState.DISCONECTED;
+    private ResponseCallback<String> responseCallback;
 
     public MessageClient(String name, NetworkClient networkClient) {
         this.name = name;
@@ -28,31 +30,36 @@ public class MessageClient {
         this.networkClient.setResponseHandler(data -> responseHandler(data));
     }
 
+    public void setResponseHandler(ResponseCallback<String> responseCallback) {
+        this.responseCallback = responseCallback;
+    }
+
     public void connect() {
         tryConnected();
         tryRegistred();
     }
 
-    public void send(String  toClient, String message){
-        if(currentState != ClientState.REGISTRED){
+    public void send(String toClient, String message) {
+        if (getCurrentState() != ClientState.REGISTRED) {
             throw new MessageClientException("Unable send message from state " + currentState);
         }
         final ReciveMessage requestMessage = new ReciveMessage(name, toClient, message);
         networkClient.send(requestMessage.toJson());
     }
 
-    public ClientState getCurrentState(){
+    public ClientState getCurrentState() {
         return currentState;
     }
 
     private void responseHandler(String response) {
-        logger.debug("current client state {}", currentState.name());
-        logger.debug("recive response {}", response);
-        switch (currentState) {
+        logger.debug("current client state: {}", currentState.name());
+        logger.debug("recive response: {}", response);
+        switch (getCurrentState()) {
             case CONNECTED:
                 onConnected(response);
                 break;
             case REGISTRED:
+                onRegistred(response);
                 break;
             default:
                 throw new MessageClientException("Unable handled response in state " + currentState);
@@ -65,6 +72,19 @@ public class MessageClient {
             currentState = ClientState.REGISTRED;
             logger.debug("current state changed to {}", currentState);
         }
+    }
+
+    private void onRegistred(String response) {
+        final var mayBeResponse = ReciveMessage.fromJson(response);
+        if (mayBeResponse.isEmpty()) {
+            return;
+        }
+        final var responseMsg = mayBeResponse.get();
+        if (!this.name.equals(responseMsg.getTo())) {
+            logger.error("recived response for another client: {}", responseMsg.getTo());
+            return;
+        }
+        responseCallback.accept(mayBeResponse.get().getData());
     }
 
     private void tryConnected() {
