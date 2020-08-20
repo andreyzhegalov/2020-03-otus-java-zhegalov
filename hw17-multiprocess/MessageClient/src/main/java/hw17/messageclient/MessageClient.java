@@ -75,6 +75,9 @@ public class MessageClient {
     }
 
     private void onRegistred(String response) {
+        if(responseCallback == null){
+            return;
+        }
         final var mayBeResponse = InterprocessMessage.fromJson(response);
         if (mayBeResponse.isEmpty()) {
             return;

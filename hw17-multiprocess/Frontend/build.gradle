@@ -9,12 +9,13 @@ sourceCompatibility = JavaVersion.VERSION_13
 targetCompatibility = JavaVersion.VERSION_13
 
 dependencies {
-    implementation project(':hw16-message-system:MessageSystem')
+    implementation project(':hw17-multiprocess:MessageClient')
 
     implementation 'com.h2database:h2'
     implementation 'javax.persistence:javax.persistence-api'
 
     implementation 'org.hibernate:hibernate-core'
+    implementation 'com.google.code.gson:gson'
 
     implementation("org.springframework.boot:spring-boot-starter-websocket")
 
