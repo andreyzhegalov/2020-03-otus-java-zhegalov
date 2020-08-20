@@ -21,7 +21,7 @@ public class MessageSystemClient {
 
     public MessageSystemClient(MessageClient messageClient, DBServiceUser dbServiceUser) {
         this.messageClient = messageClient;
-        this.messageClient.setResponseHandler(data->responseHandler(data));
+        this.messageClient.setResponseHandler(this::responseHandler);
 
         this.dbServiceUser = dbServiceUser;
     }
@@ -30,46 +30,47 @@ public class MessageSystemClient {
         messageClient.connect();
     }
 
-    private void responseHandler(InterprocessMessage response){
-        logger.debug("recived message: {}", response.toString());
+    private void responseHandler(InterprocessMessage response) {
+        logger.debug("received message: {}", response);
         saveNewUser(response.getData());
         final var userListJson = getAllUsersJson();
         logger.debug("send to {} message {}", response.getFrom(), userListJson);
         send(response.getFrom(), userListJson);
     }
 
-    private Optional<User> jsonToUser(String message){
+    private Optional<User> jsonToUser(String message) {
         final Gson gson = new Gson();
-        try{
+        try {
             final User user = gson.fromJson(message, User.class);
             return Optional.of(user);
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return Optional.empty();
         }
     }
 
-    private void saveNewUser(String userJson){
+    private void saveNewUser(String userJson) {
         final Optional<User> mayBeUser = jsonToUser(userJson);
-        if(mayBeUser.isEmpty()){
+        if (mayBeUser.isEmpty()) {
             logger.error("User {} not saved", userJson);
+            return;
         }
         final var user = mayBeUser.get();
 
         if (user.getName().isEmpty() || user.getPassword().isEmpty()) {
             logger.error("User {} does not contain and required fields", user.toString());
+            return;
         }
         dbServiceUser.saveUser(user);
     }
 
-    private String getAllUsersJson(){
-        final var allUsersDto = dbServiceUser.getAllUsers().stream().map(u -> new UserDto(u))
-                .collect(Collectors.toList());
+    private String getAllUsersJson() {
+        final var allUsersDto = dbServiceUser.getAllUsers().stream().map(UserDto::new).collect(Collectors.toList());
         final Gson gson = new Gson();
         return gson.toJson(allUsersDto);
     }
 
-    public void send(String toClient, String message){
+    public void send(String toClient, String message) {
         messageClient.send(toClient, message);
     }
 }

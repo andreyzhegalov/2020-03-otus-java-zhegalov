@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 
 import hw17.messageclient.MessageClient;
 import hw17.model.User;
+import hw17.server.message.InterprocessMessage;
 
 
 @Controller
@@ -23,16 +24,18 @@ public class MessageController {
         this.template = template;
         this.messageClient = messageClient;
         this.messageClient.connect();
+        this.messageClient.setResponseHandler(data -> sendUserList(data));
     }
 
     @MessageMapping("/newUser")
     public void onNewUser(User user) {
         logger.info("got new user :{}", user);
         final Gson gson = new Gson();
-        messageClient.send("front", gson.toJson(user));
+        messageClient.send("db", gson.toJson(user));
     }
 
-    // public void sendUserList(UserListDto userList) {
-    //     this.template.convertAndSend("/topic/users", userList.getUserList());
-    // }
+    private void sendUserList(InterprocessMessage response){
+        logger.debug("recived message: {}", response.toString());
+        this.template.convertAndSend("/topic/users", response.getData());
+    }
 }

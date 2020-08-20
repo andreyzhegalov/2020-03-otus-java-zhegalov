@@ -23,6 +23,7 @@ public class MessageClient {
     private static boolean dissableSleep = false; // for unit testing
     private ClientState currentState = ClientState.DISCONECTED;
     private ResponseCallback<InterprocessMessage> responseCallback;
+    private String messageCollector = new String();
 
     public MessageClient(String name, NetworkClient networkClient) {
         this.name = name;
@@ -78,11 +79,20 @@ public class MessageClient {
         if(responseCallback == null){
             return;
         }
-        final var mayBeResponse = InterprocessMessage.fromJson(response);
+        messageCollector += response;
+        logger.debug("Message collector {}", messageCollector);
+        final var mayBeResponse = InterprocessMessage.fromJson(messageCollector);
         if (mayBeResponse.isEmpty()) {
             return;
         }
+        messageCollector = "";
+
         final var responseMsg = mayBeResponse.get();
+        if(!responseMsg.isValid())
+        {
+            return;
+        }
+
         if (!this.name.equals(responseMsg.getTo())) {
             logger.error("recived response for another client: {}", responseMsg.getTo());
             return;

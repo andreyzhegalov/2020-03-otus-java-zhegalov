@@ -24,9 +24,8 @@ public class InterprocessMessage extends ResultDataType {
         try {
             message = gson.fromJson(jsonString, InterprocessMessage.class);
         } catch (JsonSyntaxException e) {
-            e.printStackTrace();
         }
-        return (message != null) ? Optional.of(message): Optional.empty();
+        return (message!= null) ? Optional.of(message): Optional.empty();
     }
 
     public String toJson(){
@@ -45,6 +44,10 @@ public class InterprocessMessage extends ResultDataType {
 
     public String getFrom() {
         return from;
+    }
+
+    public boolean isValid(){
+        return (from != null) || (to != null) || (data != null);
     }
 
     @Override
@@ -67,7 +70,17 @@ public class InterprocessMessage extends ResultDataType {
         if (to != null ? !to.equals(object.to) : object.to != null) return false;
         return !(data != null ? !data.equals(object.data) : object.data != null);
     }
+
+    @Override
+    public String toString() {
+        return "InterprocessMessage{" +
+            "from = " + getFrom() +
+            ", to = " + getTo() +
+            ", data = " + getData() +
+            "}";
+    }
 }
+
 
 
 

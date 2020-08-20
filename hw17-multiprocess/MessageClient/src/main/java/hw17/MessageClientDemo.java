@@ -32,7 +32,7 @@ public class MessageClientDemo {
     }
 
     private static void clientResponseHandler(InterprocessMessage response){
-        logger.info("response form client {}", response.toString());
+        logger.info("response form client {}", response);
     }
 
     private static void sleep(int seconds) {

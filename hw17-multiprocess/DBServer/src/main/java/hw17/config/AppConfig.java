@@ -35,7 +35,7 @@ public class AppConfig {
     @Bean
     public MessageClient messageClient() {
         final String HOST = "localhost";
-        final int PORT = 8080;
+        final int PORT = 8081;
         final NetworkClient client = new ClientNIO(HOST, PORT);
         final String CLIENT_NAME = "db";
         return new MessageClient(CLIENT_NAME, client);
