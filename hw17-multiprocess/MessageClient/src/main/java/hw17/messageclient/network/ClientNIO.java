@@ -24,7 +24,7 @@ public class ClientNIO implements NetworkClient{
     public ClientNIO(String host, int port) {
         this.port = port;
         this.host = host;
-        thread = new Thread(() -> handler());
+        thread = new Thread(this::handler);
     }
 
     @Override

@@ -18,9 +18,7 @@ public class MessageClientTest {
         Mockito.doThrow(new RuntimeException()).when(networkClientMock).connect();
 
         final var messageClient = new MessageClient(CLIENT_NAME, networkClientMock);
-        assertThatThrownBy(() -> {
-            messageClient.connect();
-        }).isInstanceOf(MessageClientException.class);
+        assertThatThrownBy(messageClient::connect).isInstanceOf(MessageClientException.class);
     }
 
     @Test
@@ -32,9 +30,7 @@ public class MessageClientTest {
         final var messageClient = new MessageClient(CLIENT_NAME, networkClientMock);
         MessageClient.dissableSleep();
 
-        assertThatThrownBy(() -> {
-            messageClient.connect();
-        }).isInstanceOf(MessageClientException.class);
+        assertThatThrownBy(messageClient::connect).isInstanceOf(MessageClientException.class);
     }
 
     @Test
@@ -68,10 +64,8 @@ public class MessageClientTest {
 
         final var messageClient = Mockito.spy( new MessageClient(CLIENT_NAME, networkClientMock));
         Mockito.doReturn(ClientState.CONNECTED).when(messageClient).getCurrentState();
-        assertThatThrownBy(() -> {
-            messageClient.send("db", "test");
-        }).isInstanceOf(MessageClientException.class);
+        assertThatThrownBy(() -> messageClient.send("db", "test")).isInstanceOf(MessageClientException.class);
 
-        Mockito.verify(networkClientMock, never()).send(Mockito.anyString());;
+        Mockito.verify(networkClientMock, never()).send(Mockito.anyString());
     }
 }

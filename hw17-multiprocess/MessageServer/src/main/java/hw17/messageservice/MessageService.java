@@ -38,7 +38,7 @@ public class MessageService {
         try {
             messageSystem.addClient(msClient);
         } catch (IllegalArgumentException ex) {
-            logger.info("Client \"{}\" already registred in the message system");
+            logger.info("Client \"{}\" already registered in the message system", clientName);
         }
         return msClient;
     }

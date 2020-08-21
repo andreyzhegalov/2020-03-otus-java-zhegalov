@@ -23,12 +23,12 @@ public class MessageClient {
     private static boolean dissableSleep = false; // for unit testing
     private ClientState currentState = ClientState.DISCONECTED;
     private ResponseCallback<InterprocessMessage> responseCallback;
-    private String messageCollector = new String();
+    private String messageCollector = "";
 
     public MessageClient(String name, NetworkClient networkClient) {
         this.name = name;
         this.networkClient = networkClient;
-        this.networkClient.setResponseHandler(data -> responseHandler(data));
+        this.networkClient.setResponseHandler(this::responseHandler);
     }
 
     public void setResponseHandler(ResponseCallback<InterprocessMessage> responseCallback) {
@@ -68,7 +68,7 @@ public class MessageClient {
     }
 
     private void onConnected(String response) {
-        final var registredStr = new ResponseMessage(ResponseType.REGISTRED).toJson();
+        final var registredStr = new ResponseMessage(ResponseType.REGISTERED).toJson();
         if (response.equals(registredStr)) {
             currentState = ClientState.REGISTRED;
             logger.debug("current state changed to {}", currentState);

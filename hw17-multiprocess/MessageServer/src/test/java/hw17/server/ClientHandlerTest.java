@@ -37,7 +37,7 @@ public class ClientHandlerTest {
         assertThat(clientHandler.getName()).isEqualTo("front");
 
         Mockito.verify(mockedMessageService, Mockito.times(1)).addClient("front");
-        assertEquals(response, new ResponseMessage(ResponseType.REGISTRED).toJson());
+        assertEquals(response, new ResponseMessage(ResponseType.REGISTERED).toJson());
     }
 
     @Test
@@ -50,6 +50,6 @@ public class ClientHandlerTest {
         final String response = socketHandlerSpy.recive("{'from':'front','to':'db', 'data':'message content'}");
 
         Mockito.verify(mockedMessageService, Mockito.times(1)).sendMessage(Mockito.any(), Mockito.any());
-        assertEquals(response, new ResponseMessage(ResponseType.RECIVED).toJson());
+        assertEquals(response, new ResponseMessage(ResponseType.RECEIVED).toJson());
     }
 }

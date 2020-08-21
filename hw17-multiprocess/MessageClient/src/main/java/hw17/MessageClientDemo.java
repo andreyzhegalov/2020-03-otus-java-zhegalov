@@ -24,20 +24,20 @@ public class MessageClientDemo {
         // needed send response {"response":"REGISTRED"}
         logger.info("Waiting response .... ");
 
-        sleep(5);
+        sleep();
 
         messageClient.send("db", "test");
 
-        messageClient.setResponseHandler(data->clientResponseHandler(data));
+        messageClient.setResponseHandler(MessageClientDemo::clientResponseHandler);
     }
 
     private static void clientResponseHandler(InterprocessMessage response){
         logger.info("response form client {}", response);
     }
 
-    private static void sleep(int seconds) {
+    private static void sleep() {
         try {
-            Thread.sleep(TimeUnit.SECONDS.toMillis(seconds));
+            Thread.sleep(TimeUnit.SECONDS.toMillis(5));
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }

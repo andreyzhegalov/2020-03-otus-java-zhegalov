@@ -7,7 +7,7 @@ import hw17.server.message.ResponseType;
 import ru.otus.messagesystem.client.MsClient;
 
 public class ClientHandler {
-    private String clientName = new String();
+    private String clientName = "";
     private final MessageService messageService;
     private MsClient msClient;
 
@@ -25,12 +25,12 @@ public class ClientHandler {
         if (getName().isEmpty()) {
             clientName = message.getFrom();
             addMessageSystemClient(clientName);
-            return new ResponseMessage(ResponseType.REGISTRED).toJson();
+            return new ResponseMessage(ResponseType.REGISTERED).toJson();
         }
 
         messageService.sendMessage(msClient, message);
 
-        return new ResponseMessage(ResponseType.RECIVED).toJson();
+        return new ResponseMessage(ResponseType.RECEIVED).toJson();
     }
 
     public String getName() {

@@ -33,8 +33,8 @@ public class SocketChannelHelper {
             buffer.flip();
             inputBuffer.append(input);
         }
-        final String recveMessage = inputBuffer.toString().replace("\n", "").replace("\r", "");
-        return recveMessage;
+        final String receiveMessage = inputBuffer.toString().replace("\n", "").replace("\r", "");
+        return receiveMessage;
     }
 
 }

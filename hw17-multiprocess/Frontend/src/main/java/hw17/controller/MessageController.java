@@ -24,7 +24,7 @@ public class MessageController {
         this.template = template;
         this.messageClient = messageClient;
         this.messageClient.connect();
-        this.messageClient.setResponseHandler(data -> sendUserList(data));
+        this.messageClient.setResponseHandler(this::sendUserList);
     }
 
     @MessageMapping("/newUser")
