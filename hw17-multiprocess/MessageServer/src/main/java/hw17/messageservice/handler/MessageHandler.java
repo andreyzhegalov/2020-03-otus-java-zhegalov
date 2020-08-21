@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import hw17.messageservice.MsMessage;
 import hw17.server.ClientHandler;
 import hw17.server.SocketChannelHelper;
 import hw17.server.message.InterprocessMessage;
@@ -28,9 +29,9 @@ public class MessageHandler implements RequestHandler<ResultDataType> {
 
     @Override
     public Optional<Message> handle(Message msg) {
-        final InterprocessMessage reciveMessage = MessageHelper.getPayload(msg);
-        final String toClientName = reciveMessage.getTo();
+        final var reciveMessage = convertFormMsMessage(msg);
 
+        final String toClientName = reciveMessage.getTo();
         final List<SocketChannel> clientChannelList = clientMap.entrySet().stream()
                 .filter(e -> e.getValue().getName().startsWith(toClientName)).map(Map.Entry::getKey)
                 .collect(Collectors.toList());
@@ -49,5 +50,14 @@ public class MessageHandler implements RequestHandler<ResultDataType> {
         }
 
         return Optional.empty();
+    }
+
+    private InterprocessMessage convertFormMsMessage(Message message) {
+        final MsMessage msMessage = MessageHelper.getPayload(message);
+        final var mayBeMessage = InterprocessMessage.fromJson(msMessage.getData());
+        if (mayBeMessage.isEmpty()) {
+            throw new RuntimeException("Converter to InterprocessMessage failed from  " + message);
+        }
+        return mayBeMessage.get();
     }
 }

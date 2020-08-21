@@ -5,9 +5,7 @@ import java.util.Optional;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 
-import ru.otus.messagesystem.client.ResultDataType;
-
-public class InterprocessMessage extends ResultDataType {
+public class InterprocessMessage {
     private final String from;
     private final String to;
     private final String data;
