@@ -4,7 +4,6 @@ import java.nio.channels.SocketChannel;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Random;
 import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
@@ -32,24 +31,25 @@ public class MessageHandler implements RequestHandler<ResultDataType> {
         final var reciveMessage = convertFormMsMessage(msg);
 
         final String toClientName = reciveMessage.getTo();
-        final List<SocketChannel> clientChannelList = clientMap.entrySet().stream()
-                .filter(e -> e.getValue().getName().startsWith(toClientName)).map(Map.Entry::getKey)
-                .collect(Collectors.toList());
-
-        final var clientChannel = clientChannelList.get(new Random().nextInt(clientChannelList.size()));
-        if (!clientChannel.isConnected()) {
-            throw new RuntimeException("Client channel is close");
-        }
+        final var clientChannelList = getClientSocketChannels(toClientName);
 
         final String reciveMessageJson = reciveMessage.toJson();
         logger.debug("send to message {}", reciveMessageJson);
-        try {
-            SocketChannelHelper.send(clientChannel, reciveMessageJson);
-        } catch (Exception e) {
-            throw new RuntimeException("Failed send message:" + reciveMessageJson);
-        }
 
+        for (final var clientChannel : clientChannelList) {
+            try {
+                SocketChannelHelper.send(clientChannel, reciveMessageJson);
+            } catch (Exception e) {
+                throw new RuntimeException(
+                        "Failed send message: " + reciveMessageJson + " to client " + clientChannel.toString());
+            }
+        }
         return Optional.empty();
+    }
+
+    private List<SocketChannel> getClientSocketChannels(String clientName) {
+        return clientMap.entrySet().stream().filter(e -> e.getValue().getName().startsWith(clientName))
+                .map(Map.Entry::getKey).collect(Collectors.toList());
     }
 
     private InterprocessMessage convertFormMsMessage(Message message) {
