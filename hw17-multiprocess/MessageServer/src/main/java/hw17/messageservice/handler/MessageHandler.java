@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import hw17.messageservice.MessageServiceException;
 import hw17.messageservice.MsMessage;
 import hw17.server.ClientHandler;
 import hw17.server.SocketChannelHelper;
@@ -40,7 +41,7 @@ public class MessageHandler implements RequestHandler<ResultDataType> {
             try {
                 SocketChannelHelper.send(clientChannel, reciveMessageJson);
             } catch (Exception e) {
-                throw new RuntimeException(
+                throw new MessageServiceException(
                         "Failed send message: " + reciveMessageJson + " to client " + clientChannel.toString());
             }
         }
@@ -56,7 +57,7 @@ public class MessageHandler implements RequestHandler<ResultDataType> {
         final MsMessage msMessage = MessageHelper.getPayload(message);
         final var mayBeMessage = InterprocessMessage.fromJson(msMessage.getData());
         if (mayBeMessage.isEmpty()) {
-            throw new RuntimeException("Converter to InterprocessMessage failed from  " + message);
+            throw new MessageServiceException("Converter to InterprocessMessage failed from  " + message);
         }
         return mayBeMessage.get();
     }

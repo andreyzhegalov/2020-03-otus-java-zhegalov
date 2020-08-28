@@ -17,7 +17,7 @@ public class MessageClientDemo {
         final String HOST = "localhost";
         final int PORT = 8080;
         final NetworkClient client = new ClientNIO(HOST, PORT);
-        final var messageClient  = new MessageClient("front", client);
+        final var messageClient = new MessageClient("front", client);
 
         messageClient.connect();
 
@@ -31,7 +31,7 @@ public class MessageClientDemo {
         messageClient.setResponseHandler(MessageClientDemo::clientResponseHandler);
     }
 
-    private static void clientResponseHandler(InterprocessMessage response){
+    private static void clientResponseHandler(InterprocessMessage response) {
         logger.info("response form client {}", response);
     }
 
@@ -43,4 +43,3 @@ public class MessageClientDemo {
         }
     }
 }
-

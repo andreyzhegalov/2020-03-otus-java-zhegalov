@@ -43,14 +43,15 @@ public class MessageService {
         return msClient;
     }
 
+    public void removeClient(String clientName) {
+        logger.info("Remove client \"{}\" from message system", clientName);
+        messageSystem.removeClient(clientName);
+    }
+
     public void sendMessage(MsClient client, InterprocessMessage message) {
         final Message outMsg = client.produceMessage(message.getTo(), new MsMessage(message.toJson()),
                 MessageType.USER_DATA, data -> {});
         client.sendMessage(outMsg);
     }
 
-    public void removeClient(String clientName) {
-        logger.info("Remove client \"{}\" from message system", clientName);
-        messageSystem.removeClient(clientName);
-    }
 }
