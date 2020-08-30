@@ -22,7 +22,6 @@ public class MessageSystemClient {
     public MessageSystemClient(MessageClient messageClient, DBServiceUser dbServiceUser) {
         this.messageClient = messageClient;
         this.messageClient.setResponseHandler(this::responseHandler);
-
         this.dbServiceUser = dbServiceUser;
     }
 
@@ -32,7 +31,16 @@ public class MessageSystemClient {
 
     private void responseHandler(InterprocessMessage response) {
         logger.debug("received message: {}", response);
-        saveNewUser(response.getData());
+
+        final String userJson = response.getData();
+        final Optional<User> mayBeUser = jsonToUser(userJson);
+        if (mayBeUser.isEmpty()) {
+            logger.error("User {} not saved", userJson);
+            return;
+        }
+        final var user = mayBeUser.get();
+
+        saveNewUser(user);
         final var userListJson = getAllUsersJson();
         logger.debug("send to {} message {}", response.getFrom(), userListJson);
         send(response.getFrom(), userListJson);
@@ -49,14 +57,7 @@ public class MessageSystemClient {
         }
     }
 
-    private void saveNewUser(String userJson) {
-        final Optional<User> mayBeUser = jsonToUser(userJson);
-        if (mayBeUser.isEmpty()) {
-            logger.error("User {} not saved", userJson);
-            return;
-        }
-        final var user = mayBeUser.get();
-
+    private void saveNewUser(User user) {
         if (user.getName().isEmpty() || user.getPassword().isEmpty()) {
             logger.error("User {} does not contain and required fields", user.toString());
             return;

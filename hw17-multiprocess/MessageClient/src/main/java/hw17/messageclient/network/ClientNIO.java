@@ -45,11 +45,20 @@ public class ClientNIO implements NetworkClient{
     @Override
     public void send(String request) {
         ByteBuffer buffer = ByteBuffer.allocate(1000);
-        buffer.put(request.getBytes());
-        buffer.flip();
-        logger.info("sending to server");
+        final byte[] array = request.getBytes();
         try {
-            channel.write(buffer);
+            for (byte b : array) {
+                buffer.put(b);
+                if (buffer.position() == buffer.limit()) {
+                    buffer.flip();
+                    channel.write(buffer);
+                    buffer.flip();
+                }
+            }
+            if (buffer.hasRemaining()) {
+                buffer.flip();
+                channel.write(buffer);
+            }
         } catch (IOException e) {
             logger.error("Error send request to server ");
         }
@@ -95,7 +104,7 @@ public class ClientNIO implements NetworkClient{
     }
 
     private void processServerResponse(SocketChannel socketChannel) throws IOException {
-        final ByteBuffer buffer = ByteBuffer.allocate(256);
+        final ByteBuffer buffer = ByteBuffer.allocate(1000);
         final StringBuilder response = new StringBuilder();
         while (socketChannel.read(buffer) > 0) {
             buffer.flip();

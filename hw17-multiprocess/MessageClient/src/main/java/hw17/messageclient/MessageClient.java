@@ -86,13 +86,11 @@ public class MessageClient {
             return;
         }
         messageCollector = "";
-
         final var responseMsg = mayBeResponse.get();
         if(!responseMsg.isValid())
         {
             return;
         }
-
         if (!this.name.equals(responseMsg.getTo())) {
             logger.error("recived response for another client: {}", responseMsg.getTo());
             return;

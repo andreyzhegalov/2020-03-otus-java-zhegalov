@@ -11,7 +11,7 @@ import ru.otus.messagesystem.client.CallbackRegistryImpl;
 
 @Configuration
 public class MessageSystemConfig {
-    @Bean
+    @Bean(destroyMethod = "dispose")
     public MessageSystem messageSystem() {
         return new MessageSystemImpl();
     }

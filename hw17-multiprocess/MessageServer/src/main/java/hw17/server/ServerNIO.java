@@ -56,7 +56,7 @@ public class ServerNIO {
             if (key.isAcceptable()) {
                 acceptConnection(key, selector);
             } else if (key.isReadable()) {
-                final SocketChannel socketChannel = (SocketChannel) key.channel();
+                final var socketChannel = (SocketChannel) key.channel();
                 readWriteClient(socketChannel);
             }
             keys.remove();
@@ -65,8 +65,8 @@ public class ServerNIO {
 
     private void acceptConnection(SelectionKey key, Selector selector) throws IOException {
         logger.info("accept client connection");
-        final ServerSocketChannel serverSocketChannel = (ServerSocketChannel) key.channel();
-        final SocketChannel socketChannel = serverSocketChannel.accept(); // The socket channel for the new connection
+        final var serverSocketChannel = (ServerSocketChannel) key.channel();
+        final var socketChannel = serverSocketChannel.accept(); // The socket channel for the new connection
         logger.debug("New socket channel {}", socketChannel.toString());
 
         socketChannel.configureBlocking(false);
@@ -92,7 +92,7 @@ public class ServerNIO {
         }
     }
 
-    private String sendToMessageSystemClient(SocketChannel socketChannel, String message){
+    private String sendToMessageSystemClient(SocketChannel socketChannel, String message) {
         final var clientHander = clientsMap.get(socketChannel);
         return clientHander.recive(message);
     }

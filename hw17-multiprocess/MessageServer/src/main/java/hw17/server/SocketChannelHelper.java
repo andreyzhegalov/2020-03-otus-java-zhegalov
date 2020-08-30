@@ -7,7 +7,7 @@ import java.nio.charset.StandardCharsets;
 
 public class SocketChannelHelper {
     public static void send(SocketChannel socketChannel, String message) throws IOException{
-        final ByteBuffer buffer = ByteBuffer.allocate(5);
+        final ByteBuffer buffer = ByteBuffer.allocate(1000);
         final byte[] array = message.getBytes();
         for (byte b : array) {
             buffer.put(b);
@@ -24,7 +24,7 @@ public class SocketChannelHelper {
     }
 
     public static String recive(SocketChannel socketChannel) throws IOException {
-        final ByteBuffer buffer = ByteBuffer.allocate(256);
+        final ByteBuffer buffer = ByteBuffer.allocate(1000);
         final StringBuilder inputBuffer = new StringBuilder(100);
 
         while (socketChannel.read(buffer) > 0) {
