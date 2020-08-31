@@ -7,27 +7,36 @@
 5. Frontend - является клиентом MessageServer.
 
 **Описание межпроцессного обмена**
+
 Межпроцессный обмен реализован на базе сокетов и NIO. Для обмена используются JSON сообщения.
 Базовый формат сообщения
 ```json
 {"from":"db","to":"front", "data":"payload"}
 ```
 На каждое сообщение MessageServer отвечает результатом обработки
+
 ```json
 {"response":"REGISTRED"}
 {"response":"RECIVED"}
 {"response":"ERROR"}
 ```
-При первом подключении к MessageServer клиент должен зарегистрироваться. Для этого отправляется базовое сообщение с любым содержанием "data". MessageServer обрабатывает поле "from" и регистрирует нового клиента в MessageSystem. При успешной регистрации MessageServer отправляет ответ "REGISTRED". На все остальные сообщения MessageServer отправляет "RECIVED". В случае невалидного JSON сервер отправляет "ERROR".
+
+При первом подключении к MessageServer клиент должен зарегистрироваться. Для этого отправляется базовое сообщение с любым содержанием "data". MessageServer обрабатывает поле "from" и регистрирует нового клиента в MessageSystem. При успешной регистрации MessageServer отправляет ответ "REGISTRED". После регистрации на все остальные сообщения MessageServer отправляет "RECIVED". В случае невалидного JSON или ошибки обработки сервер отправляет "ERROR".
 
 Если к MessageServer будут подключены несколько клиентов с одинаковыми именами, то сообщения будут отправлены им всем. Например, если запустить два DBServer и два Frontend, то при оправке сообщения от Frontend оно попадет двум DBServer и наоборот.
 
 **Сборка**
+
 gradle hw17-multiprocess:DBServer:ShadowJar
+
 gradle hw17-multiprocess:Frontend:build
+
 gradle hw17-multiprocess:MessageServer:ShadowJar
 
 **Запуск**
+
 java -jar ./hw17-multiprocess/MessageServer/build/libs/hw17-message-server-0.1.jar
+
 java -jar ./hw17-multiprocess/DBServer/build/libs/hw17-db-server-0.1.jar
+
 java -jar ./hw17-multiprocess/Frontend/build/libs/Frontend.jar --server.port=8080
