@@ -3,8 +3,8 @@ package hw17.messageservice;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import hw17.server.ServerNIO;
 import hw17.server.message.InterprocessMessage;
+import hw17.services.ServerNIO;
 import ru.otus.messagesystem.HandlersStore;
 import ru.otus.messagesystem.HandlersStoreImpl;
 import ru.otus.messagesystem.MessageSystem;

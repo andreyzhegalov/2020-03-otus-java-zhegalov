@@ -13,6 +13,7 @@ dependencies {
     implementation 'org.springframework:spring-context'
     implementation 'ch.qos.logback:logback-classic'
     implementation 'com.google.code.gson:gson'
+    implementation 'javax.annotation:javax.annotation-api'
 
     testImplementation group: 'org.mockito', name: 'mockito-junit-jupiter'
     testImplementation 'org.assertj:assertj-core'

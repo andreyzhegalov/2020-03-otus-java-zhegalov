@@ -5,6 +5,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
+import javax.annotation.PostConstruct;
+
 import hw17.cachehw.HwCache;
 import hw17.cachehw.MyCache;
 import hw17.core.model.AdressDataSet;

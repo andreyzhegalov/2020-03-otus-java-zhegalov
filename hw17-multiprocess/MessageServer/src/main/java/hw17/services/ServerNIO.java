@@ -1,4 +1,4 @@
-package hw17.server;
+package hw17.services;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -11,12 +11,18 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import javax.annotation.PostConstruct;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 
 import hw17.messageservice.MessageService;
 import hw17.messageservice.handler.MessageHandler;
+import hw17.server.ClientHandler;
+import hw17.server.SocketChannelHelper;
 
+@Service
 public class ServerNIO {
     private static final Logger logger = LoggerFactory.getLogger(ServerNIO.class);
     private final MessageService messageService;
@@ -26,6 +32,12 @@ public class ServerNIO {
         this.messageService = messageService;
         final var handler = new MessageHandler(clientsMap);
         this.messageService.addHandler(handler);
+    }
+
+    @PostConstruct
+    public void startServer() throws IOException {
+        final int PORT = 8081;
+        start(PORT);
     }
 
     public void start(int port) throws IOException {

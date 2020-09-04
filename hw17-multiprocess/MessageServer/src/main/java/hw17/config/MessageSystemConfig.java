@@ -22,7 +22,7 @@ public class MessageSystemConfig {
     }
 
     @Bean
-    public MessageService messageService(MessageSystem messageSystem, CallbackRegistry callbackRegistry){
-        return new MessageService( messageSystem, callbackRegistry );
+    public MessageService messageService(MessageSystem messageSystem, CallbackRegistry callbackRegistry) {
+        return new MessageService(messageSystem, callbackRegistry);
     }
 }

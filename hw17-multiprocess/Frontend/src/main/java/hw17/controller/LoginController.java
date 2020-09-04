@@ -20,7 +20,7 @@ public class LoginController {
     public RedirectView handleLogin(@RequestParam Map<String, String> requestParams) {
         final var login = requestParams.get("login");
         final var password = requestParams.get("password");
-        final boolean isAdmin = true; 
+        final boolean isAdmin = true;
         if (isAdmin) {
             return new RedirectView("/users", true);
         } else {
